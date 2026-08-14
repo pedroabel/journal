@@ -11,8 +11,10 @@ index.html              casca da página (nav, cabeçalho, containers)
 assets/css/styles.css   todo o estilo
 assets/js/data.js       CONTEÚDO do plano — rotina, marcos, trilhas, checklists
 assets/js/app.js        lógica: estado, progresso e render das views
+assets/js/sync.js       sincronização entre aparelhos (cifra, fusão, transporte)
 assets/icon.svg         ícone (aba do navegador e tela de início do celular)
 site.webmanifest        permite "adicionar à tela de início" no celular
+worker/                 endpoint de sincronização (Cloudflare Worker + D1)
 ```
 
 A separação importante é `data.js` (o que o plano diz) x `app.js` (como o site
@@ -43,11 +45,31 @@ próprio depois.
 ## Onde ficam os dados marcados
 
 O progresso (dias feitos, marcos, checklists) fica no `localStorage` do
-navegador — ou seja, **por aparelho**. O site é público; os dados marcados não
-saem do seu dispositivo e não vão para o repositório.
+navegador. O site é público; os dados marcados nunca vão para o repositório.
 
-Para levar o progresso de um aparelho para outro, use os botões no rodapé:
-**baixar backup** (gera um `.json`) e **restaurar backup** no outro aparelho.
+Com a sincronização ligada, esse mesmo progresso também sobe **cifrado** para o
+Worker, e os aparelhos convergem sozinhos. Sem ela, cada aparelho é uma ilha e a
+ponte são os botões **baixar backup** / **restaurar backup** no rodapé — que
+continuam valendo como cópia de segurança em qualquer caso.
+
+## Sincronizar entre aparelhos
+
+Desligada por padrão. Para ligar, publique o Worker seguindo
+[`worker/README.md`](worker/README.md) — leva uns 10 minutos, é gratuito, e
+depois é só clicar em **ativar sincronização** no rodapé de cada aparelho e
+digitar a senha.
+
+Como funciona, resumido:
+
+- **Senha** → PBKDF2 (600 mil iterações) → duas chaves: uma autentica no
+  servidor, a outra cifra os dados. A senha em si não é guardada em lugar
+  nenhum, e a chave de cifragem fica no aparelho como `CryptoKey` não-extraível.
+- **O servidor não lê nada.** Recebe e devolve um blob AES-GCM. Sem o token,
+  responde 401 — conhecer a URL não dá acesso a coisa alguma.
+- **Conflitos** são resolvidos chave a chave, pela alteração mais recente:
+  marcar um hábito no celular e fechar uma checklist no notebook ao mesmo tempo
+  preserva as duas coisas. O mapa `state.t` guarda quando cada chave mudou.
+- **Offline** continua funcionando: grava local e sobe quando a conexão volta.
 
 ## Análise pelo Claude
 

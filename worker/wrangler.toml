@@ -1,0 +1,16 @@
+name = "journal-sync"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+# Sem rotas customizadas: o Worker responde em
+# https://journal-sync.<seu-subdominio>.workers.dev
+workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "journal"
+# Preencha com o ID que `wrangler d1 create journal` imprimir:
+database_id = "COLE_AQUI_O_DATABASE_ID"
+
+# AUTH_HASH e ALLOWED_ORIGIN são segredos, definidos por
+# `wrangler secret put ...` — nunca neste arquivo.

@@ -3,7 +3,10 @@
    Lê os dados globais definidos em data.js. Sem dependências, sem build.
    --------------------------------------------------------------------------- */
 (function(){
-var state={day:{},tracks:{},checks:{},ms:{},reduced:{},monthly:{},view:'hoje'};
+/* `t` guarda quando cada chave mudou (caminho -> timestamp). É o que permite
+   fundir alterações de dois aparelhos sem perder nada — inclusive desmarcar,
+   que apaga a chave mas deixa o carimbo. Ver sync.js. */
+var state={day:{},tracks:{},checks:{},ms:{},reduced:{},monthly:{},t:{},view:'hoje'};
 var selDay=new Date().getDay(),selMonth=new Date().getMonth(),selYear=new Date().getFullYear(),saveTimer=null,selDetail=null;
 function ds(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function today(){return ds(new Date());}
@@ -18,15 +21,27 @@ function monthKey(y,m){return y+'-'+String(m+1).padStart(2,'0');}
 function done(dstr,k){return !!(state.day[dstr]&&state.day[dstr][k]);}
 function typeDone(dstr,t){var l=state.day[dstr];if(!l)return false;for(var k in l){if(k.slice(2)===t)return true;}return false;}
 function setStatus(t){var el=document.getElementById('status');if(!el)return;el.textContent=t;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show');},1600);}
-/* Persistência: localStorage do navegador. É por dispositivo/navegador —
-   para levar o progresso de um aparelho a outro, use Baixar/Restaurar backup. */
+/* Persistência local: localStorage, sempre — é o que faz o site abrir na hora e
+   funcionar offline. Se a sincronização estiver ativa, sync.js leva o mesmo
+   estado cifrado para os outros aparelhos; se não, Baixar/Restaurar backup é a
+   ponte manual. */
 var STORE_KEY='sistema-unificado-v2';
-function save(){lsSave(JSON.stringify(state));}
+function save(){lsSave(JSON.stringify(state));Sync.push();}
+/* Carimba a alteração de uma chave. Os caminhos são os mesmos que sync.js usa
+   para fundir: grupo, e depois a chave (ou data + chave). */
+function stamp(){state.t[[].slice.call(arguments).join(STATE_SEP)]=Date.now();}
+function stampAll(){
+var n=Date.now(),g,a,b,i;
+for(i=0;i<4;i++){g=['tracks','checks','ms','reduced'][i];for(a in state[g])state.t[g+STATE_SEP+a]=n;}
+for(i=0;i<2;i++){g=['day','monthly'][i];for(a in state[g])for(b in state[g][a])state.t[g+STATE_SEP+a+STATE_SEP+b]=n;}
+}
 function lsSave(j){try{window.localStorage.setItem(STORE_KEY,j);setStatus('salvo ✓');}catch(e){setStatus('não foi possível salvar');}}
 function debSave(){clearTimeout(saveTimer);saveTimer=setTimeout(save,500);}
 function lsLoad(){try{var v=window.localStorage.getItem(STORE_KEY);return v?JSON.parse(v):null;}catch(e){return null;}}
 function load(){return Promise.resolve(lsLoad());}
-function adopt(d){state={day:d.day||{},tracks:d.tracks||{},checks:d.checks||{},ms:d.ms||{},reduced:d.reduced||{},monthly:d.monthly||{},view:d.view||state.view};}
+function adopt(d){state={day:d.day||{},tracks:d.tracks||{},checks:d.checks||{},ms:d.ms||{},reduced:d.reduced||{},monthly:d.monthly||{},t:d.t||{},view:d.view||state.view};}
+/* Estado que chegou do servidor, já fundido: grava e redesenha, sem reenviar. */
+function applyRemote(s){adopt(s);lsSave(JSON.stringify(state));renderAll();}
 function exportData(){
 var url=URL.createObjectURL(new Blob([JSON.stringify(state)],{type:'application/json'}));
 var a=document.createElement('a');a.href=url;a.download='sistema-unificado-'+today()+'.json';
@@ -40,7 +55,7 @@ var f=inp.files&&inp.files[0];if(!f)return;
 var rd=new FileReader();
 rd.onload=function(){
 try{adopt(JSON.parse(rd.result));}catch(e){setStatus('arquivo inválido');return;}
-save();renderAll();setStatus('backup restaurado ✓');
+stampAll();save();renderAll();setStatus('backup restaurado ✓');
 };
 rd.readAsText(f);
 });
@@ -462,7 +477,7 @@ h+='<div class="good"><b>Nos dias difíceis:</b> o objetivo nunca foi um dia per
 h+='<section id="decisoes"><div class="eyebrow-row"><span class="idx">◆</span><span class="tag">Consolidação</span></div><h2 class="sec">Decisões</h2>';
 h+='<p class="lead">As escolhas de projeto deste sistema, e o porquê de cada uma.</p>';
 DECISOES.forEach(function(d){h+='<div class="decision"><div class="dq">'+d[0]+'</div><div class="da">'+d[1]+'</div></div>';});
-h+='<div class="footer"><span>Fonte única de referência · revisar a cada trimestre · salvo neste navegador</span><span style="display:flex;gap:7px;flex-wrap:wrap"><button class="reset" data-a="export">baixar backup</button><button class="reset" data-a="import">restaurar backup</button><button class="reset" data-a="reset">reiniciar progresso</button></span></div></section>';
+h+='<div class="footer"><span>Fonte única de referência · revisar a cada trimestre · '+(Sync.active()?'sincronizado entre aparelhos':'salvo neste navegador')+'</span><span style="display:flex;gap:7px;flex-wrap:wrap">'+Sync.footerButton()+'<button class="reset" data-a="export">baixar backup</button><button class="reset" data-a="import">restaurar backup</button><button class="reset" data-a="reset">reiniciar progresso</button></span></div></section>';
 document.getElementById('doc').innerHTML=h;
 }
 function renderView(){
@@ -482,13 +497,13 @@ var t=e.target.closest('[data-a]');if(!t)return;
 var a=t.dataset.a,k=t.dataset.k;
 if(a==='view'){state.view=k;debSave();renderView();window.scrollTo({top:0,behavior:'smooth'});}
 else if(a==='day'){selDay=parseInt(k,10);renderView();}
-else if(a==='task'){var d=today();if(!state.day[d])state.day[d]={};if(state.day[d][k]){delete state.day[d][k];if(!Object.keys(state.day[d]).length)delete state.day[d];}else state.day[d][k]=true;save();renderAll();}
+else if(a==='task'){var d=today();if(!state.day[d])state.day[d]={};if(state.day[d][k]){delete state.day[d][k];if(!Object.keys(state.day[d]).length)delete state.day[d];}else state.day[d][k]=true;stamp('day',d,k);save();renderAll();}
 else if(a==='dayd'){selDetail=(selDetail===k)?null:k;renderView();}
-else if(a==='red'){if(state.reduced[k])delete state.reduced[k];else state.reduced[k]=true;save();renderAll();}
-else if(a==='ms'){if(state.ms[k])delete state.ms[k];else state.ms[k]=true;save();renderAll();}
-else if(a==='track'){if(state.tracks[k])delete state.tracks[k];else state.tracks[k]=true;save();renderAll();}
-else if(a==='check'){if(state.checks[k])delete state.checks[k];else state.checks[k]=true;save();renderAll();}
-else if(a==='mcq'){var p=k.split('|');if(!state.monthly[p[0]])state.monthly[p[0]]={};state.monthly[p[0]][p[1]]=p[2];save();renderView();}
+else if(a==='red'){if(state.reduced[k])delete state.reduced[k];else state.reduced[k]=true;stamp('reduced',k);save();renderAll();}
+else if(a==='ms'){if(state.ms[k])delete state.ms[k];else state.ms[k]=true;stamp('ms',k);save();renderAll();}
+else if(a==='track'){if(state.tracks[k])delete state.tracks[k];else state.tracks[k]=true;stamp('tracks',k);save();renderAll();}
+else if(a==='check'){if(state.checks[k])delete state.checks[k];else state.checks[k]=true;stamp('checks',k);save();renderAll();}
+else if(a==='mcq'){var p=k.split('|');if(!state.monthly[p[0]])state.monthly[p[0]]={};state.monthly[p[0]][p[1]]=p[2];stamp('monthly',p[0],p[1]);save();renderView();}
 else if(a==='mprev'){selDetail=null;selMonth--;if(selMonth<0){selMonth=11;selYear--;}renderView();}
 else if(a==='mnext'){selDetail=null;selMonth++;if(selMonth>11){selMonth=0;selYear++;}renderView();}
 else if(a==='yprev'){selYear--;renderView();}
@@ -496,8 +511,9 @@ else if(a==='ynext'){selYear++;renderView();}
 else if(a==='copyrep')copyReport(t);
 else if(a==='analyze')analyze(t);
 else if(a==='export')exportData();
+else if(a==='sync')Sync.toggle(t);
 else if(a==='import')importData();
-else if(a==='reset'){if(t.dataset.armed==='1'){state={day:{},tracks:{},checks:{},ms:{},reduced:{},monthly:{},view:state.view};save();renderAll();}else{t.dataset.armed='1';var pv=t.textContent;t.textContent='Confirmar reset?';t.classList.add('armed');setTimeout(function(){if(t.dataset.armed==='1'){t.dataset.armed='0';t.textContent=pv;t.classList.remove('armed');}},3500);}}
+else if(a==='reset'){if(t.dataset.armed==='1'){stampAll();state={day:{},tracks:{},checks:{},ms:{},reduced:{},monthly:{},t:state.t,view:state.view};save();renderAll();}else{t.dataset.armed='1';var pv=t.textContent;t.textContent='Confirmar reset?';t.classList.add('armed');setTimeout(function(){if(t.dataset.armed==='1'){t.dataset.armed='0';t.textContent=pv;t.classList.remove('armed');}},3500);}}
 });
 document.addEventListener('change',function(e){
 if(e.target&&e.target.id==='repRange'){var o=document.getElementById('repOut');if(o)o.textContent=buildReport(parseInt(e.target.value,10));}
@@ -505,8 +521,10 @@ if(e.target&&e.target.id==='repRange'){var o=document.getElementById('repOut');i
 var tg=document.getElementById('navToggle'),nb=document.getElementById('navBody');
 tg.addEventListener('click',function(){nb.classList.toggle('open');});
 nb.addEventListener('click',function(e){if(e.target.closest('a')&&window.innerWidth<=900)nb.classList.remove('open');});
+Sync.init({getState:function(){return state;},applyState:applyRemote,status:setStatus});
 load().then(function(l){
 if(l)adopt(l);
 renderAll();
+return Sync.start();
 });
 })();

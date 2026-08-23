@@ -155,15 +155,21 @@ async function recordFailure(env, ip) {
 /* --- utilidades ------------------------------------------------------------ */
 
 function corsHeaders(origin, env) {
-  const allowed = env.ALLOWED_ORIGIN || '';
+  // trim/barra final: ALLOWED_ORIGIN vem de configuracao digitada a mao, e um
+  // espaco invisivel derrubaria o CORS inteiro sem mensagem de erro nenhuma.
+  const allowed = norm(env.ALLOWED_ORIGIN);
   const h = {
     'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
     'Access-Control-Allow-Headers': 'Authorization, Content-Type',
     'Access-Control-Max-Age': '86400',
     Vary: 'Origin',
   };
-  if (origin && origin === allowed) h['Access-Control-Allow-Origin'] = origin;
+  if (origin && allowed && norm(origin) === allowed) h['Access-Control-Allow-Origin'] = origin;
   return h;
+}
+
+function norm(v) {
+  return String(v || '').trim().replace(/\/+$/, '');
 }
 
 function json(obj, status, cors) {

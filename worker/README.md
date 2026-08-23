@@ -34,12 +34,23 @@ hexadecimais — é o `AUTH_HASH`. Ele não permite voltar à senha nem decifrar
 
 ```bash
 npx wrangler secret put AUTH_HASH        # cole o hash do passo anterior
-npx wrangler secret put ALLOWED_ORIGIN   # https://SEU-USUARIO.github.io
 npx wrangler deploy
 ```
 
+Antes do deploy, ajuste `ALLOWED_ORIGIN` no `wrangler.toml` para a URL do seu
+site. Ela nao e segredo — e endereco publico — e fica versionada de proposito:
+como `wrangler secret`, um espaco colado junto derrubaria o CORS sem erro
+visivel, e o valor nao pode ser lido de volta para conferir.
+
 O deploy imprime a URL, algo como
 `https://journal-sync.SEU-SUBDOMINIO.workers.dev`.
+
+Se o Worker ja tiver um segredo `ALLOWED_ORIGIN` de uma configuracao antiga,
+apague-o — `secret` tem precedencia sobre `vars`:
+
+```bash
+npx wrangler secret delete ALLOWED_ORIGIN
+```
 
 ## 4. Ligar o site na URL
 

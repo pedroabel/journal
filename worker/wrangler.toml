@@ -5,12 +5,15 @@ compatibility_date = "2026-01-01"
 # Sem rotas customizadas: o Worker responde em
 # https://journal-sync.<seu-subdominio>.workers.dev
 workers_dev = true
+# Sem URLs de preview: cada versao publicada ganharia um endpoint publico a
+# mais, apontando para os mesmos segredos. Superficie desnecessaria.
+preview_urls = false
 
 [[d1_databases]]
 binding = "DB"
 database_name = "journal"
 # Preencha com o ID que `wrangler d1 create journal` imprimir:
-database_id = "COLE_AQUI_O_DATABASE_ID"
+database_id = "ee4145f7-6b72-4ee2-bc60-797932c90d40"
 
 # AUTH_HASH e ALLOWED_ORIGIN são segredos, definidos por
 # `wrangler secret put ...` — nunca neste arquivo.

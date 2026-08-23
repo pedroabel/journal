@@ -21,7 +21,7 @@
    explica). Com SYNC_URL vazio o site funciona exatamente como antes, só local.
    --------------------------------------------------------------------------- */
 
-var SYNC_URL = ''; // ex.: 'https://journal-sync.seu-usuario.workers.dev'
+var SYNC_URL = 'https://journal-sync.pa-sync.workers.dev'; // ex.: 'https://journal-sync.seu-usuario.workers.dev'
 
 /* Separador de caminho no mapa de timestamps. Fora do alfabeto dos dados
    (é um caractere de controle), então nunca colide com uma chave real. */

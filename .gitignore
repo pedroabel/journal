@@ -3,3 +3,9 @@ Thumbs.db
 
 # Backups do progresso (botão "baixar backup"): dados pessoais em texto claro.
 sistema-unificado-*.json
+
+# Wrangler: estado local, credenciais e segredos de desenvolvimento.
+.wrangler/
+.dev.vars
+.dev.vars.*
+node_modules/

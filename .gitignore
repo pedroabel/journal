@@ -1,2 +1,5 @@
 .DS_Store
 Thumbs.db
+
+# Backups do progresso (botão "baixar backup"): dados pessoais em texto claro.
+sistema-unificado-*.json

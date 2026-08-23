@@ -257,3 +257,16 @@ button.reset.armed{color:var(--accent);border-color:var(--accent-deep)}
 .grid2,.msplit{grid-template-columns:1fr}
 .wrap{padding:0 16px}
 }
+
+/* --- tela de senha da sincronização --- */
+.lock{position:fixed;inset:0;z-index:80;background:rgba(10,22,24,.82);display:flex;align-items:center;justify-content:center;padding:20px}
+.lockbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 24px;max-width:400px;width:100%}
+.lockbox h3{margin:0 0 8px;font-size:17px}
+.lockbox p{font-size:12.5px;color:var(--ink-dim);line-height:1.5;margin-bottom:14px}
+.lockbox input{width:100%;background:var(--bg-2);border:1px solid var(--line-soft);border-radius:9px;padding:11px 13px;color:var(--ink);font-family:var(--mono);font-size:14px}
+.lockbox input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.lockmsg{font-family:var(--mono);font-size:11px;color:var(--accent);min-height:15px;margin-top:8px}
+.lockbtns{display:flex;gap:8px;margin-top:6px}
+.lockgo{flex:1;font-family:var(--body);font-weight:600;font-size:13px;color:var(--bg);background:var(--accent);border:none;padding:10px 15px;border-radius:9px;cursor:pointer}
+.lockgo:disabled{opacity:.55;cursor:default}
+.lockx{font-family:var(--mono);font-size:12px;color:var(--ink-dim);background:var(--surface-2);border:1px solid var(--line);padding:10px 15px;border-radius:9px;cursor:pointer}

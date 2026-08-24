@@ -9,3 +9,16 @@ sistema-unificado-*.json
 .dev.vars
 .dev.vars.*
 node_modules/
+
+# Next.js
+/.next/
+/out/
+next-env.d.ts
+
+# Variaveis de ambiente: AUTH_SECRET e o hash da senha vivem aqui.
+.env
+.env.local
+.env*.local
+
+# TypeScript incremental build
+*.tsbuildinfo

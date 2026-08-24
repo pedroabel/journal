@@ -1,0 +1,14 @@
+{
+  "name": "Sistema Unificado · 2026–2029",
+  "short_name": "Sistema",
+  "description": "Rotina, marcos e acompanhamento — 2026 a 2029.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0E1C1E",
+  "theme_color": "#0E1C1E",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

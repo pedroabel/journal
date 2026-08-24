@@ -225,7 +225,7 @@ h+='<h3>Taxa de consistência</h3><div class="card">';
 var order=['sono','en_write','en_speak','calistenia','roadmap','cs50','dsa','carreira','leitura','caminhada','en_tutor'],any=false;
 order.forEach(function(t){
 var r=rateFor(t,st);if(!r||r.exp===0)return;any=true;
-var c=r.pct>=80?'--accent':(r.pct>=50?'--ink':'--ink-faint');
+var c=r.pct>=80?'--accent':(r.pct>=50?'--ink-dim':'--ink-faint');
 h+='<div class="rate" style="--rc:var('+c+')"><span class="rn">'+TYPE_LABEL[t]+'</span><span class="rbar"><i style="width:'+r.pct+'%"></i></span><span class="rv">'+r.did+'/'+r.exp+' · '+r.pct+'%</span></div>';
 });
 if(!any)h+='<p class="body" style="margin:0;font-size:13px">Sem dados ainda neste mês.</p>';

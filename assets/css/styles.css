@@ -1,4 +1,4 @@
-:root{--bg:#0D1B2A;--bg-2:#091420;--surface:#172234;--surface-2:#1B263B;--line:#415A77;--line-soft:#2A3852;--ink:#E0E1DD;--ink-dim:#9FB3C8;--ink-faint:#778DA9;--accent:#F8F9FA;--accent-deep:#778DA9;--sage:#E0E1DD;--blue:#778DA9;--flag:#9FB3C8;--violet:#E0E1DD;--display:'Space Grotesk',sans-serif;--body:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;--nav-w:242px}
+:root{--bg:#0D1B2A;--bg-2:#1B263B;--surface:#1B263B;--surface-2:#0D1B2A;--line:#778DA9;--line-soft:#415A77;--ink:#F8F9FA;--ink-dim:#E0E1DD;--ink-faint:#778DA9;--accent:#F8F9FA;--accent-deep:#778DA9;--sage:#E0E1DD;--blue:#778DA9;--flag:#E0E1DD;--violet:#778DA9;--display:'Space Grotesk',sans-serif;--body:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;--nav-w:242px}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}
@@ -21,7 +21,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16p
 .navlist a.active,.navlist button.active{background:var(--surface-2);color:var(--ink)}
 .navlist a.active .n,.navlist button.active .n{color:var(--accent)}
 .navtoggle{display:none}
-.hero{background:radial-gradient(120% 90% at 82% -10%,rgba(65,90,119,.38),transparent 60%),var(--bg-2);border-bottom:1px solid var(--line-soft);padding:38px 0 30px}
+.hero{background:radial-gradient(120% 90% at 82% -10%,rgba(119,141,169,.20),transparent 60%),var(--bg-2);border-bottom:1px solid var(--line-soft);padding:38px 0 30px}
 .hero .eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
 .hero h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,5vw,42px);line-height:1;letter-spacing:-.025em;margin:12px 0 0}
 #status{font-family:var(--mono);font-size:11px;color:var(--sage);opacity:0;transition:opacity .3s;margin-top:8px;display:inline-block;height:14px}
@@ -42,7 +42,7 @@ h3{font-family:var(--display);font-weight:600;font-size:16.5px;margin:22px 0 8px
 p.body{color:var(--ink-dim);margin-bottom:12px;max-width:66ch}
 p.body b{color:var(--ink);font-weight:600}
 p.lead{font-size:16.5px;color:var(--ink);max-width:64ch;margin-bottom:16px}
-.hl{color:var(--accent);font-weight:600}
+.hl{color:var(--accent);font-weight:600;background:rgba(119,141,169,.22);border-radius:4px;padding:0 4px}
 .card{background:var(--surface);border:1px solid var(--line-soft);border-radius:13px;padding:18px 20px;margin-bottom:12px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .daytabs{display:flex;gap:4px;margin:2px 0 10px;overflow-x:auto;padding-bottom:3px}
@@ -220,7 +220,7 @@ ul.msl li b{color:var(--ink);font-weight:600}
 .dep .chain-line{font-family:var(--mono);font-size:12px;color:var(--ink);line-height:1.8}
 .dep .chain-line .arw{color:var(--accent);margin:0 4px}
 .dep .note{font-size:12px;color:var(--ink-dim);margin-top:6px}
-.blocker-tag{display:inline-block;font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--flag);border:1px solid rgba(159,179,200,.45);border-radius:20px;padding:1px 7px;margin-left:5px}
+.blocker-tag{display:inline-block;font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--flag);border:1px solid rgba(224,225,221,.45);border-radius:20px;padding:1px 7px;margin-left:5px}
 .msplit{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .metric .tp{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px}
 .metric.leading .tp{color:var(--sage)}
@@ -259,11 +259,11 @@ button.reset.armed{color:var(--accent);border-color:var(--accent-deep)}
 }
 
 /* --- tela de senha da sincronização --- */
-.lock{position:fixed;inset:0;z-index:80;background:rgba(9,20,32,.86);display:flex;align-items:center;justify-content:center;padding:20px}
+.lock{position:fixed;inset:0;z-index:80;background:rgba(13,27,42,.90);display:flex;align-items:center;justify-content:center;padding:20px}
 .lockbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 24px;max-width:400px;width:100%}
 .lockbox h3{margin:0 0 8px;font-size:17px}
 .lockbox p{font-size:12.5px;color:var(--ink-dim);line-height:1.5;margin-bottom:14px}
-.lockbox input{width:100%;background:var(--bg-2);border:1px solid var(--line-soft);border-radius:9px;padding:11px 13px;color:var(--ink);font-family:var(--mono);font-size:14px}
+.lockbox input{width:100%;background:var(--surface-2);border:1px solid var(--line-soft);border-radius:9px;padding:11px 13px;color:var(--ink);font-family:var(--mono);font-size:14px}
 .lockbox input:focus{outline:2px solid var(--accent);outline-offset:1px}
 .lockmsg{font-family:var(--mono);font-size:11px;color:var(--accent);min-height:15px;margin-top:8px}
 .lockbtns{display:flex;gap:8px;margin-top:6px}

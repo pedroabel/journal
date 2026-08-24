@@ -176,6 +176,29 @@ export function merge(a: JournalState, b: JournalState): JournalState {
   return out;
 }
 
+/**
+ * JSON com as chaves ordenadas, para comparar dois estados por conteúdo.
+ *
+ * `merge` monta um objeto novo, então a ordem das chaves quase nunca bate com
+ * a do original mesmo quando nada mudou. Sem isto, o cliente gravaria e
+ * anunciaria "sincronizado" a cada verificação, e o servidor gravaria uma
+ * revisão nova a cada requisição de cada aparelho.
+ *
+ * `view` fica de fora: é preferência local e não deve contar como diferença.
+ */
+export function canonical(doc: unknown): string {
+  const walk = (v: unknown): unknown => {
+    if (v === null || typeof v !== 'object' || Array.isArray(v)) return v;
+    const o = v as Record<string, unknown>;
+    return Object.fromEntries(Object.keys(o).sort().map((k) => [k, walk(o[k])]));
+  };
+  if (doc !== null && typeof doc === 'object' && !Array.isArray(doc)) {
+    const { view: _local, ...rest } = doc as Record<string, unknown>;
+    return JSON.stringify(walk(rest));
+  }
+  return JSON.stringify(walk(doc));
+}
+
 /** Um minuto de folga para relógio de aparelho fora de hora. */
 const SKEW_MS = 60 * 1000;
 

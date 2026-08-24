@@ -17,7 +17,7 @@
  */
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { clampFuture, merge, pruneTombstones } from './merge';
+import { canonical, clampFuture, merge, pruneTombstones } from './merge';
 import { emptyState, STATE_SEP, type JournalState } from './state';
 
 /* --- utilidades ----------------------------------------------------------- */
@@ -277,6 +277,37 @@ describe('payload torto não derruba nem entope', () => {
   it('sobrevive a grupos com o tipo errado', () => {
     const torto = { ...emptyState(), day: 'nao sou objeto', tracks: null } as never as JournalState;
     assert.doesNotThrow(() => merge(torto, emptyState()));
+  });
+});
+
+/* --- canonical ------------------------------------------------------------ */
+
+describe('canonical', () => {
+  it('ignora a ordem das chaves — é o que evita gravação e aviso à toa', () => {
+    const a = { tracks: { cs50: true, roadmap: true }, t: { x: 1 } };
+    const b = { t: { x: 1 }, tracks: { roadmap: true, cs50: true } };
+    assert.equal(canonical(a), canonical(b));
+  });
+
+  it('ignora `view`, que é preferência local', () => {
+    assert.equal(
+      canonical({ ...emptyState(), view: 'hoje' }),
+      canonical({ ...emptyState(), view: 'jornada' })
+    );
+  });
+
+  it('mas enxerga diferença de conteúdo', () => {
+    assert.notEqual(
+      canonical(build([[`ms${SEP}passport`, T0, true]])),
+      canonical(build([[`ms${SEP}passport`, T0]]))
+    );
+  });
+
+  it('o resultado de merge é canonicamente igual ao próprio merge refeito', () => {
+    const a = build([[`day${SEP}2026-08-20${SEP}sono`, T0, true]]);
+    const b = build([[`checks${SEP}docs-3`, T0 + 10, true]]);
+    const m = merge(a, b);
+    assert.equal(canonical(merge(m, m)), canonical(m));
   });
 });
 

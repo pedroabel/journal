@@ -12,48 +12,24 @@
  * isso exige conexão com sessão; o driver HTTP do Neon é uma requisição por
  * consulta, que é o que serve bem numa função serverless.
  */
-import { neon } from '@neondatabase/serverless';
+import { once, sql } from './sql';
 
 const ROW_ID = 'me';
 
-type Sql = ReturnType<typeof neon>;
-
-let cached: Sql | null = null;
-
-function sql(): Sql {
-  if (cached) return cached;
-  const url = process.env.DATABASE_URL;
-  if (!url) throw new Error('DATABASE_URL ausente');
-  cached = neon(url);
-  return cached;
-}
-
 /**
- * `create table if not exists` a cada instância fria. É uma consulta a mais
- * na primeira requisição de cada instância, e poupa um passo manual de
- * migração num projeto de uma tabela só.
- *
  * `rev` é `integer` e não `bigint` de propósito: `bigint` volta como string no
  * driver, e 2 bilhões de sincronizações não vão acontecer.
  */
-let schema: Promise<void> | null = null;
-
-function ensureSchema(): Promise<void> {
-  schema ??= (async () => {
-    await sql()`
-      create table if not exists journal_state (
-        id         text primary key,
-        rev        integer not null default 0,
-        doc        jsonb not null,
-        updated_at timestamptz not null default now()
-      )
-    `;
-  })().catch((e) => {
-    schema = null; // falhou: a próxima requisição tenta de novo
-    throw e;
-  });
-  return schema;
-}
+const ensureSchema = once(async () => {
+  await sql()`
+    create table if not exists journal_state (
+      id         text primary key,
+      rev        integer not null default 0,
+      doc        jsonb not null,
+      updated_at timestamptz not null default now()
+    )
+  `;
+});
 
 export interface StoredState {
   rev: number;

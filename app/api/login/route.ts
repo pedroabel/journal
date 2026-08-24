@@ -1,38 +1,28 @@
 import { NextResponse } from 'next/server';
 import { verifyPassword } from '@/lib/password';
 import { createSession, SESSION_COOKIE, sessionCookieOptions } from '@/lib/auth';
+import { callerIp, clearLoginFailures, loginBlocked, recordLoginFailure } from '@/lib/login-limit';
 
 // scrypt precisa do node:crypto — esta rota não roda no Edge.
 export const runtime = 'nodejs';
 
 /**
- * Uma tentativa custa um scrypt (~100ms), o que já limita força bruta online.
- * Este contador acrescenta um teto por instância: barato, e some sozinho.
+ * Duas barreiras contra quem tenta adivinhar a senha.
+ *
+ * A primeira é o custo: cada tentativa paga um `scrypt` de ~100ms, no
+ * servidor, sempre — inclusive as erradas.
+ *
+ * A segunda é o contador em `lib/login-limit.ts`, que vive no banco. Ele
+ * precisa ficar fora da memória do processo porque na Vercel cada requisição
+ * pode cair numa instância diferente, e um limite por instância não limita
+ * nada. É esse contador que permite uma senha curta ser segura: como o hash
+ * nunca sai do servidor, adivinhar só é possível pela porta da frente.
  */
-const attempts = new Map<string, { n: number; until: number }>();
-const LIMIT = 10;
-const WINDOW_MS = 15 * 60 * 1000;
-
-function tooMany(ip: string): boolean {
-  const rec = attempts.get(ip);
-  if (!rec) return false;
-  if (Date.now() > rec.until) { attempts.delete(ip); return false; }
-  return rec.n >= LIMIT;
-}
-
-function recordFailure(ip: string): void {
-  const rec = attempts.get(ip);
-  if (!rec || Date.now() > rec.until) {
-    attempts.set(ip, { n: 1, until: Date.now() + WINDOW_MS });
-  } else {
-    rec.n += 1;
-  }
-}
 
 export async function POST(request: Request): Promise<NextResponse> {
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'local';
+  const ip = callerIp(request);
 
-  if (tooMany(ip)) {
+  if (await loginBlocked(ip)) {
     return NextResponse.json({ error: 'too_many_attempts' }, { status: 429 });
   }
 
@@ -48,12 +38,12 @@ export async function POST(request: Request): Promise<NextResponse> {
   }
 
   if (!(await verifyPassword(password))) {
-    recordFailure(ip);
+    await recordLoginFailure(ip);
     // Mensagem única: não distingue "senha errada" de "servidor mal configurado".
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
   }
 
-  attempts.delete(ip);
+  await clearLoginFailures(ip);
   const response = NextResponse.json({ ok: true });
   response.cookies.set(SESSION_COOKIE, await createSession(), sessionCookieOptions);
   return response;

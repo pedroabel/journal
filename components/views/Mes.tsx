@@ -103,7 +103,7 @@ export default function Mes({
       <div className="card">
         {rates.map(({ t, r }) => {
           const pct = r!.pct;
-          const c = pct >= 80 ? '--sage' : pct >= 50 ? '--accent' : '--flag';
+          const c = pct >= 80 ? '--accent' : pct >= 50 ? '--ink' : '--ink-faint';
           return (
             <div key={t} className="rate" style={{ ['--rc' as string]: `var(${c})` }}>
               <span className="rn">{TYPE_LABEL[t]}</span>

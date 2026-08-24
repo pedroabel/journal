@@ -50,7 +50,7 @@ export default function Semana({ journal }: { journal: Journal }) {
       </div>
 
       {state.reduced[wk] && (
-        <div className="alerta" style={{ borderColor: 'var(--violet)', background: 'rgba(168,150,196,.1)' }}>
+        <div className="alerta" style={{ borderColor: 'var(--violet)', background: 'rgba(224,225,221,.08)' }}>
           <b style={{ color: 'var(--violet)' }}>Semana reduzida.</b> Ela não entra no cálculo mensal — nada aqui conta contra você.
         </div>
       )}

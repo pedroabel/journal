@@ -117,7 +117,7 @@ export default function Jornada({ journal }: { journal: Journal }) {
               {bl.length > 0 ? (
                 <span className="blocker-tag">travado</span>
               ) : (
-                <span className="blocker-tag" style={{ color: 'var(--sage)', borderColor: 'rgba(134,184,150,.4)' }}>
+                <span className="blocker-tag" style={{ color: 'var(--sage)', borderColor: 'rgba(224,225,221,.45)' }}>
                   liberado
                 </span>
               )}

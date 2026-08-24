@@ -154,7 +154,7 @@ var pct=exp?Math.round(did/exp*100):0;
 h+='<div class="wkcell'+(isT?' today':'')+'"><div class="wd">'+DAYS.filter(function(x){return x.n===d.getDay();})[0].ab+'</div><div class="wn" style="color:'+(did?'var(--sage)':'var(--ink-faint)')+'">'+did+'</div><div class="wpc">'+(d>new Date()?'—':pct+'%')+'</div></div>';
 }
 h+='</div>';
-if(state.reduced[wk])h+='<div class="alerta" style="border-color:var(--violet);background:rgba(168,150,196,.1)"><b style="color:var(--violet)">Semana reduzida.</b> Ela não entra no cálculo mensal — nada aqui conta contra você.</div>';
+if(state.reduced[wk])h+='<div class="alerta" style="border-color:var(--violet);background:rgba(224,225,221,.08)"><b style="color:var(--violet)">Semana reduzida.</b> Ela não entra no cálculo mensal — nada aqui conta contra você.</div>';
 h+='<h3>Corrente por hábito</h3>';
 ['sono','en_write','en_speak','calistenia','roadmap','cs50','leitura'].forEach(function(t){
 var p=PROTO[t],st=typeStreak(t),per=expectedPerWeek(t),wdid=0;
@@ -225,7 +225,7 @@ h+='<h3>Taxa de consistência</h3><div class="card">';
 var order=['sono','en_write','en_speak','calistenia','roadmap','cs50','dsa','carreira','leitura','caminhada','en_tutor'],any=false;
 order.forEach(function(t){
 var r=rateFor(t,st);if(!r||r.exp===0)return;any=true;
-var c=r.pct>=80?'--sage':(r.pct>=50?'--accent':'--flag');
+var c=r.pct>=80?'--accent':(r.pct>=50?'--ink':'--ink-faint');
 h+='<div class="rate" style="--rc:var('+c+')"><span class="rn">'+TYPE_LABEL[t]+'</span><span class="rbar"><i style="width:'+r.pct+'%"></i></span><span class="rv">'+r.did+'/'+r.exp+' · '+r.pct+'%</span></div>';
 });
 if(!any)h+='<p class="body" style="margin:0;font-size:13px">Sem dados ainda neste mês.</p>';
@@ -308,7 +308,7 @@ h+='</div>';
 h+='<h3>Dependências entre marcos</h3><p class="body" style="font-size:13px">O que trava o quê. Marcos sem dependência podem ser atacados a qualquer momento.</p>';
 MS.filter(function(m){return (m.dep||[]).length;}).forEach(function(m){
 var bl=blockedBy(m);
-h+='<div class="dep"><div class="chain-line">'+m.dep.map(function(d){return esc(msTitle(d));}).join('<span class="arw">+</span>')+'<span class="arw">→</span><b>'+esc(m.t)+'</b>'+(bl.length?'<span class="blocker-tag">travado</span>':'<span class="blocker-tag" style="color:var(--sage);border-color:rgba(134,184,150,.4)">liberado</span>')+'</div></div>';
+h+='<div class="dep"><div class="chain-line">'+m.dep.map(function(d){return esc(msTitle(d));}).join('<span class="arw">+</span>')+'<span class="arw">→</span><b>'+esc(m.t)+'</b>'+(bl.length?'<span class="blocker-tag">travado</span>':'<span class="blocker-tag" style="color:var(--sage);border-color:rgba(224,225,221,.45)">liberado</span>')+'</div></div>';
 });
 h+='<div class="good" style="margin-top:14px"><b>Um marco de experiência por trimestre, sempre.</b> Você faz essa jornada sozinho — se a única recompensa estivesse em 2029, três anos seria tempo demais para aguentar. Os marcos de experiência não servem para o currículo. Servem para a viagem valer a pena enquanto ela acontece.</div>';
 h+='</section>';

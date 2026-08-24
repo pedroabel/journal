@@ -12,8 +12,12 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: '#0D1B2A',
+  colorScheme: 'dark',
   width: 'device-width',
   initialScale: 1,
+  // Sem isto a tela não vai até a borda em aparelhos com entalhe, e
+  // env(safe-area-inset-*) no CSS devolve sempre zero.
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

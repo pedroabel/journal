@@ -45,7 +45,7 @@ export default function Relatorio({ journal }: { journal: Journal }) {
       setNote(
         <>
           Prompt copiado. Abra{' '}
-          <a href="https://claude.ai/new" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>
+          <a href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">
             claude.ai
           </a>{' '}
           e cole (Ctrl+V / ⌘V) para receber a análise.
@@ -67,61 +67,24 @@ export default function Relatorio({ journal }: { journal: Journal }) {
       </p>
 
       <div className="card">
-        <div style={{ display: 'flex', gap: 9, alignItems: 'center', flexWrap: 'wrap', marginBottom: 12 }}>
-          <span style={{ fontFamily: 'var(--mono)', fontSize: 10.5, color: 'var(--ink-faint)' }}>período</span>
-          <select
-            value={range}
-            onChange={(e) => setRange(Number(e.target.value))}
-            style={{
-              background: 'var(--bg-2)', border: '1px solid var(--line-soft)', color: 'var(--ink)',
-              borderRadius: 8, padding: '6px 10px', fontFamily: 'var(--mono)', fontSize: 12,
-            }}
-          >
+        <div className="repctl">
+          <span className="replab">período</span>
+          <select className="repsel" value={range} onChange={(e) => setRange(Number(e.target.value))} aria-label="período do relatório">
             <option value={7}>7 dias</option>
             <option value={30}>30 dias</option>
             <option value={90}>90 dias</option>
           </select>
-          <button
-            onClick={onPreparePrompt}
-            style={{
-              fontFamily: 'var(--body)', fontWeight: 600, fontSize: 13, color: 'var(--bg)',
-              background: 'var(--accent)', border: 'none', padding: '9px 15px', borderRadius: 8, cursor: 'pointer',
-            }}
-          >
+          <button className="repgo" onClick={onPreparePrompt}>
             {copied === 'prompt' ? 'Copiado ✓' : 'Preparar análise (copiar prompt)'}
           </button>
-          <button
-            onClick={onCopyReport}
-            style={{
-              fontFamily: 'var(--body)', fontWeight: 600, fontSize: 13, color: 'var(--ink)',
-              background: 'var(--surface-2)', border: '1px solid var(--line)', padding: '9px 15px',
-              borderRadius: 8, cursor: 'pointer',
-            }}
-          >
+          <button className="repalt" onClick={onCopyReport}>
             {copied === 'report' ? 'Copiado ✓' : 'Copiar relatório'}
           </button>
         </div>
 
-        {note && (
-          <div
-            style={{
-              background: 'var(--bg-2)', border: '1px solid var(--line-soft)', borderRadius: 10,
-              padding: '14px 16px', fontSize: 13, color: 'var(--ink-dim)', lineHeight: 1.6, marginBottom: 12,
-            }}
-          >
-            {note}
-          </div>
-        )}
+        {note && <div className="repnote">{note}</div>}
 
-        <pre
-          style={{
-            background: 'var(--bg-2)', border: '1px solid var(--line-soft)', borderRadius: 10,
-            padding: '14px 16px', fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--ink-dim)',
-            lineHeight: 1.65, whiteSpace: 'pre-wrap', overflowX: 'auto', margin: 0,
-          }}
-        >
-          {report}
-        </pre>
+        <pre className="repout">{report}</pre>
       </div>
 
       <div className="card">

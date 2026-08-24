@@ -22,3 +22,5 @@ next-env.d.ts
 
 # TypeScript incremental build
 *.tsbuildinfo
+.vercel
+.env*

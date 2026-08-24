@@ -26,5 +26,5 @@ export async function proxy(request: NextRequest) {
 export const config = {
   // Tudo é protegido, menos o próprio login, os endpoints de sessão e os
   // estáticos do build (que não contêm dado nenhum do plano).
-  matcher: ['/((?!login|api/login|api/logout|_next/static|_next/image|favicon.ico|icon.svg).*)'],
+  matcher: ['/((?!login|api/auth|api/logout|_next/static|_next/image|favicon.ico|icon.svg).*)'],
 };

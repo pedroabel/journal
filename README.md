@@ -31,44 +31,55 @@ o resto é maquinaria. Quase toda atualização futura é só nesse arquivo.
 
 ```bash
 npm install
-npm run hash        # digite a senha; copie as duas linhas para .env.local
 npm run dev         # http://localhost:3000
+npm test            # testes da fusão entre aparelhos
 ```
 
 O `.env.local` precisa de:
 
 ```
-AUTH_PASSWORD_HASH=scrypt:...
-AUTH_SECRET=...
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+ALLOWED_EMAILS=voce@gmail.com
+AUTH_SECRET=...            # 32+ caracteres aleatórios; assina a sessão
+DATABASE_URL=postgresql://...
 ```
 
-Está no `.gitignore` — nenhum dos dois pode ir para o repositório.
+Está no `.gitignore` — nada disso pode ir para o repositório. Para rodar
+localmente, cadastre também `http://localhost:3000/api/auth/callback` como
+URI de redirecionamento no mesmo cliente OAuth.
 
 ## Autenticação
 
-Não há cadastro nem banco de usuários: existe uma senha, e ela nunca é
-guardada — só o hash `scrypt`, em variável de ambiente.
+Não há senha. Quem confirma a identidade é o Google; o site só decide se
+aquela identidade é a do dono, comparando com `ALLOWED_EMAILS`.
 
 | Camada | O que faz |
 |---|---|
-| `POST /api/login` | compara a senha com `scrypt`, em tempo constante |
+| `/api/auth/start` | manda para o Google com `state` (anti-CSRF) e PKCE |
+| `/api/auth/callback` | troca o código, verifica o `id_token` contra as chaves públicas do Google e confere o e-mail |
 | Sessão | JWT assinado (`jose`), cookie `httpOnly` + `secure` + `sameSite=lax`, 30 dias |
 | `proxy.ts` | valida o cookie na borda: sem sessão, o HTML não é gerado |
-| Limite | 10 tentativas erradas por IP a cada 15 minutos |
 
 A diferença para uma tela de senha em JavaScript: aqui o conteúdo **não é
 entregue** sem sessão. Numa página estática, esconder com JS é teatro — o
 arquivo já foi baixado.
 
-Trocar a senha: `npm run hash` de novo e atualizar as variáveis. Trocar o
+Tirar a senha não foi só conveniência. Some o hash para guardar, some o que
+memorizar e digitar no celular, e some o que adivinhar — por isso não existe
+limite de tentativas nem como ficar trancado do lado de fora. O Google
+participa do login e de mais nada: não guarda a sessão nem enxerga o diário,
+e o escopo pedido é só `openid email`.
+
+Trocar quem tem acesso: edite `ALLOWED_EMAILS` na Vercel. Trocar o
 `AUTH_SECRET` desconecta todos os aparelhos de uma vez.
 
 ## Publicar (Vercel)
 
 1. Importe o repositório em [vercel.com/new](https://vercel.com/new) — o Next é
    detectado sozinho, sem configuração.
-2. Em **Settings → Environment Variables**, adicione `AUTH_PASSWORD_HASH` e
-   `AUTH_SECRET` (gerados por `npm run hash`) para Production.
+2. Em **Settings → Environment Variables**, adicione `GOOGLE_CLIENT_ID`,
+   `GOOGLE_CLIENT_SECRET`, `ALLOWED_EMAILS` e `AUTH_SECRET` para Production.
 3. Deploy. Todo push na `main` republica.
 
 > **Depois que o Vercel estiver no ar, desligue o GitHub Pages**
@@ -77,15 +88,21 @@ Trocar a senha: `npm run hash` de novo e atualizar as variáveis. Trocar o
 
 ## Onde ficam os dados marcados
 
-No `localStorage` do navegador: por aparelho. O conteúdo do plano vem do
-servidor; o que você marcou fica no dispositivo.
+No `localStorage` do navegador **e** no Postgres, e os dois convergem sozinhos.
+Marcar algo grava local na hora — instantâneo e sem depender de rede — e sobe
+em segundo plano.
 
-Os botões no rodapé (**baixar backup** / **restaurar backup**) movem o
-progresso entre aparelhos e servem como cópia de segurança.
+A fusão é chave a chave, pelo carimbo em `state.t`: marcar um hábito no celular
+e fechar uma checklist no notebook não são alterações concorrentes, e as duas
+sobrevivem. Sem essa regra, "o último que salvou manda" apagaria trabalho toda
+vez que os dois aparelhos mexessem em coisas diferentes. Ver `lib/merge.ts`,
+cujas propriedades (comutativa, idempotente, associativa) têm teste em
+`lib/merge.test.ts` — são elas que permitem sincronizar com uma chamada só,
+sem versão, sem conflito e sem fila de pendências offline.
 
-Sincronizar automaticamente entre aparelhos é o próximo passo natural: com a
-sessão já validada no servidor, basta uma rota de API e um banco — sem senha
-extra e sem a criptografia ponta a ponta que a versão anterior exigia.
+Os botões no rodapé (**baixar backup** / **restaurar backup**) deixam de ser a
+ponte entre aparelhos e passam a ser o que sempre deveriam ter sido: cópia de
+segurança, e a saída caso você queira levar os dados para outro lugar.
 
 ## Atualizar com o Claude Code
 

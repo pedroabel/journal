@@ -269,6 +269,7 @@ button.reset.armed{color:var(--accent);border-color:var(--accent-deep)}
 .lockbtns{display:flex;gap:8px;margin-top:6px}
 .lockgo{flex:1;font-family:var(--body);font-weight:600;font-size:13px;color:var(--bg);background:var(--accent);border:none;padding:10px 15px;border-radius:9px;cursor:pointer}
 .lockgo:disabled{opacity:.55;cursor:default}
+a.lockgo{text-align:center;text-decoration:none;display:block}
 .lockx{font-family:var(--mono);font-size:12px;color:var(--ink-dim);background:var(--surface-2);border:1px solid var(--line);padding:10px 15px;border-radius:9px;cursor:pointer}
 
 /* --- tela de login --- */

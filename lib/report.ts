@@ -83,7 +83,7 @@ export function buildReport(st: JournalState, nDays = 30): string {
   out.push('TRILHAS');
   for (const tr of TRACKS) {
     let dc = 0;
-    tr.items.forEach((_, i) => { if (st.tracks[tr.id + '#' + i]) dc++; });
+    tr.items.forEach(([k]) => { if (st.tracks[tr.id + '#' + k]) dc++; });
     const c = curTrack(st, tr);
     out.push(`- ${tr.name}: ${dc}/${tr.items.length}` + (c ? ` · atual: ${c.txt}` : ' · CONCLUÍDA'));
   }
@@ -126,9 +126,9 @@ export function buildReport(st: JournalState, nDays = 30): string {
   for (const cl of CHECKS) {
     let dc = 0;
     let next: string | null = null;
-    cl.items.forEach((_, i) => { if (st.checks[cl.id + '#' + i]) dc++; });
-    for (let i = 0; i < cl.items.length; i++) {
-      if (!st.checks[cl.id + '#' + i]) { next = cl.items[i][0]; break; }
+    cl.items.forEach(([k]) => { if (st.checks[cl.id + '#' + k]) dc++; });
+    for (const [k, label] of cl.items) {
+      if (!st.checks[cl.id + '#' + k]) { next = label; break; }
     }
     out.push(`- ${cl.name}: ${dc}/${cl.items.length}` + (next ? ` · próximo: ${next}` : ' · COMPLETO'));
   }

@@ -96,7 +96,7 @@ export const CORPO: Trilha = {
       nota:'Almoço de quinta, dia sem calistenia. É pausa, não treino — sem fone de estudo.',
       saber:['15–20min depois de comer','sem transformar em mais um bloco de produtividade'] },
     { id:'corpo.per.nut', t:'Proteína e refeição em torno do treino', min:25, pre:['corpo.per.reg'],
-      nota:'Marmita de fim de semana já está na rotina. Falta o alvo.',
-      saber:['alvo diário de proteína calculado','marmita cobrindo a semana'] },
+      nota:'Sem marmita fixa na rotina agora, o alvo passa a depender do que se come de fato.',
+      saber:['alvo diário de proteína calculado','saber de onde ele sai num dia comum, sem preparo prévio'] },
   ]},
 ]};

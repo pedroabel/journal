@@ -26,10 +26,10 @@ export default function Trilhas({ journal }: { journal: Journal }) {
             colorToken={tr.color}
             countLabel={(d, t, pct) => `${d} de ${t} · ${pct}%`}
             onToggle={(key) => toggleFlag('tracks', key)}
-            entries={tr.items.map((it, i) => ({
-              key: `${tr.id}#${i}`,
-              label: it,
-              done: !!state.tracks[`${tr.id}#${i}`],
+            entries={tr.items.map(([k, label], i) => ({
+              key: `${tr.id}#${k}`,
+              label,
+              done: !!state.tracks[`${tr.id}#${k}`],
               current: cur?.i === i,
             }))}
           />

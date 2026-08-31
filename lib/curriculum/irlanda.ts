@@ -12,7 +12,7 @@ import type { Trilha } from './types';
 
 export const IRLANDA: Trilha = {
   id: 'irl', t: 'Irlanda', tipos: [], cor: '--chart-1', marco: 'firstday',
-  nota: 'Intake alvo set/2028, plano B jan/2029. O que tem prazo longo começa cedo: passaporte e cães.',
+  nota: 'Intake alvo set/2028, ou o seguinte se a conta não fechar — a data escorrega sem virar falha. O que tem prazo longo começa cedo mesmo assim: passaporte e cachorras.',
   filhos: [
 
   { id:'irl.map', t:'Mapear o terreno', marco:'costs', nota:'2026–2027. Barato, e evita descobrir em 2028 que a rota estava errada.', filhos:[
@@ -40,9 +40,10 @@ export const IRLANDA: Trilha = {
       saber:['3 programas escolhidos, com prazo de aplicação de cada anotado'] },
   ]},
 
-  { id:'irl.fin', t:'Financeiro', nota:'A conta que torna tudo viável. R$2.500/mês automático + SinPro como alavanca.', filhos:[
-    { id:'irl.fin.auto', t:'Automatizar a poupança', min:60,
-      saber:['transferência automática no dia do salário, configurada uma vez'] },
+  { id:'irl.fin', t:'Financeiro', nota:'R$3.700/mês saindo: R$1.200 para a reserva pessoal, que tem prioridade, e R$2.500 para a escada do visto, que é quem cede num mês apertado.', filhos:[
+    { id:'irl.fin.auto', t:'Automatizar as duas saídas', min:60,
+      nota:'Separadas de propósito: juntas, a que cede num mês ruim seria decidida na hora, e a decisão já está tomada.',
+      saber:['R$1.200 e R$2.500 saindo em transferências distintas no dia do salário'] },
     { id:'irl.fin.onde', t:'Onde guardar dinheiro com data marcada', min:60, pre:['irl.fin.auto'],
       nota:'Dinheiro com uso definido em 2028 não vai para renda variável.',
       saber:['produto escolhido com liquidez na data certa','entender o imposto na saída'] },
@@ -84,12 +85,12 @@ export const IRLANDA: Trilha = {
       saber:['todos os documentos do checklist reunidos','carta de intenção escrita'] },
     { id:'irl.visa.sub', t:'Submeter e acompanhar', min:60, pre:['irl.visa.doc'],
       saber:['pedido submetido dentro da janela','prazo médio de decisão conhecido'] },
-    { id:'irl.visa.dec', t:'Decisão e plano B', min:60, pre:['irl.visa.sub'],
+    { id:'irl.visa.dec', t:'Decisão e recurso', min:60, pre:['irl.visa.sub'],
       nota:'Recusa tem prazo de recurso. Saber disso antes evita perder o intake.',
       saber:['visto emitido — ou recurso protocolado dentro do prazo'] },
   ]},
 
-  { id:'irl.dog', t:'Os cachorros', marco:'dogs', nota:'Começa 6+ meses antes. É a parte mais fácil de subestimar e a mais impossível de acelerar.', filhos:[
+  { id:'irl.dog', t:'As cachorras', marco:'dogs', nota:'Começa 6+ meses antes. É a parte mais fácil de subestimar e a mais impossível de acelerar.', filhos:[
     { id:'irl.dog.reg', t:'Regras de entrada de animais na Irlanda', min:60,
       saber:['a sequência exigida e a ordem obrigatória entre as etapas','se há exigência de titulação de anticorpos para o Brasil'] },
     { id:'irl.dog.chip', t:'Microchip antes da vacina', min:60, pre:['irl.dog.reg'],
@@ -102,7 +103,7 @@ export const IRLANDA: Trilha = {
     { id:'irl.dog.voo', t:'Voo, transportadora e rota autorizada', min:60, pre:['irl.dog.exam'],
       nota:'Nem toda companhia leva; nem todo aeroporto é ponto de entrada autorizado.',
       saber:['companhia e rota confirmadas','caixa de transporte no padrão exigido'] },
-    { id:'irl.dog.chega', t:'Chegada e primeiros dias com eles', min:60, pre:['irl.dog.voo'],
+    { id:'irl.dog.chega', t:'Chegada e primeiros dias com elas', min:60, pre:['irl.dog.voo'],
       saber:['moradia que aceita animais confirmada ANTES do voo','veterinário local mapeado'] },
   ]},
 

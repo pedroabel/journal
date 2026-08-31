@@ -1,8 +1,7 @@
 # Sistema Unificado · 2026–2029
 
-Diário privado de rotina, marcos e acompanhamento até 2029. Next.js com
-autenticação por senha: o conteúdo só sai do servidor para quem tem sessão
-válida.
+Diário privado de rotina, marcos e acompanhamento até 2029. Next.js com login
+pelo Google: o conteúdo só sai do servidor para quem tem sessão válida.
 
 ## Estrutura
 
@@ -12,26 +11,69 @@ app/
   globals.css           tokens do tema (cor, raio, tipografia)
   page.tsx              a aplicação (protegida)
   login/                tela de entrada
-  api/login|logout/     sessão
+  api/auth/             ida e volta do login com o Google
+  api/logout/           encerra a sessão
+  api/state/            leitura e gravação do progresso
 proxy.ts                barreira: valida a sessão antes de qualquer rota
 lib/
   plan.ts               CONTEÚDO do plano — rotina, marcos, trilhas, checklists
+  curriculum/           CONTEÚDO do percurso — a árvore de temas a estudar
+  ritmo.ts              conteúdo que falta × prazo do marco
   derive.ts             cálculos: sequências, taxas, situação dos marcos
-  state.ts              estado e persistência local
+  state.ts              estado local e a migração das chaves antigas
+  merge.ts              fusão entre aparelhos, chave a chave
+  db.ts / sql.ts        o progresso no Postgres (Neon)
+  auth.ts / oauth.ts    sessão JWT e o handshake com o Google
   report.ts             relatório em texto e prompt de análise
-  auth.ts / password.ts sessão JWT e verificação da senha
   utils.ts              `cn()` — junção de classes do shadcn/ui
 components/
   ui/                   componentes do shadcn/ui (não editar à mão)
   layout/               barra lateral e navegação
-  views/                hoje, semana, mês, ano, jornada
+  views/                hoje, semana, mês, ano, jornada, estudar
   sections/             seções de referência
   Section.tsx           casca única de seção: rótulo, título, apoio
-scripts/hash-password.mjs   gera as variáveis de ambiente
 ```
 
-A separação que importa: **`lib/plan.ts` é o conteúdo** (o que o plano diz),
-o resto é maquinaria. Quase toda atualização futura é só nesse arquivo.
+A separação que importa: **o conteúdo vive em dois lugares e o resto é
+maquinaria.** `lib/plan.ts` diz *quando* (a rotina da semana, os marcos, as
+checklists); `lib/curriculum/` diz *o quê* (os temas, na ordem de estudo).
+Quase toda atualização futura é só nesses dois.
+
+## O percurso
+
+`lib/curriculum/` é uma árvore de profundidade livre: trilha → módulo → tema →
+subtema → ... → folha. A folha é a unidade estudável — cabe num bloco da
+rotina e termina num critério binário (`saber`), o que você tem que conseguir
+fazer, sem olhar, para marcá-la.
+
+São oito trilhas e ~380 folhas: inglês, CS50, algoritmos, engenharia e
+portfólio, carreira, corpo, Irlanda e base.
+
+**A árvore não guarda links, e isso é a regra, não um esquecimento:**
+
+> A árvore guarda o que o site precisa para **agendar e cobrar** — não o que a
+> fonte já ensina.
+
+Por ela o roadmap.sh ficou de fora inteiro: ele já traz o conteúdo detalhado e
+na ordem, e não tem entregável com data para o site agendar. O CS50 ficou só
+com os psets, os labs e os conceitos que o trabalho dele não dá — o sumário das
+aulas saiu. Link apodrece em três anos; taxonomia não.
+
+`Trilha.tipos` casa com o `t` dos blocos em `WEEK`: é o que faz um bloco da
+rotina resolver sozinho qual tema estudar hoje, e quanto dele cabe na sessão.
+
+`lib/ritmo.ts` cruza as duas metades — quantas horas faltam num ramo contra
+quando vence o marco que ele alimenta (`Node.marco`). Devolve três velocidades
+separadas de propósito: o que o **prazo exige**, o que a **rotina oferece** e o
+que você **fez de fato** nos últimos 28 dias. Rotina abaixo do necessário é
+problema de desenho da semana; real abaixo da rotina é problema de execução, e
+a correção de cada um é diferente.
+
+`Trilha.fecha: false` marca as trilhas em que concluir a árvore é condição
+necessária e não suficiente — inglês, algoritmos e carreira. Sem essa marca o
+ritmo projetaria o inglês pronto em nov/2026 com folga larga: um número correto
+sobre o conteúdo e falso sobre a banda 7, que depende de prática repetida e de
+uma prova.
 
 ## Interface
 
@@ -65,7 +107,7 @@ Três peças evitam que telas de mesma finalidade divirjam:
 ```bash
 npm install
 npm run dev         # http://localhost:3000
-npm test            # testes da fusão entre aparelhos
+npm test            # fusão, migração de chaves, a árvore e o ritmo
 ```
 
 O `.env.local` precisa de:
@@ -115,9 +157,9 @@ Trocar quem tem acesso: edite `ALLOWED_EMAILS` na Vercel. Trocar o
    `GOOGLE_CLIENT_SECRET`, `ALLOWED_EMAILS` e `AUTH_SECRET` para Production.
 3. Deploy. Todo push na `main` republica.
 
-> **Depois que o Vercel estiver no ar, desligue o GitHub Pages**
-> (*Settings → Pages → Source: None*). Enquanto ele servir a versão antiga, o
-> plano continua público — que é exatamente o que a autenticação veio resolver.
+> Confira em *Settings → Pages* que a fonte está em **None**. O site estático
+> que o Pages servia saiu do repositório, mas uma publicação antiga segue no ar
+> até ser desligada na mão — e aquela versão não tem login nenhum.
 
 ## Onde ficam os dados marcados
 
@@ -133,9 +175,16 @@ cujas propriedades (comutativa, idempotente, associativa) têm teste em
 `lib/merge.test.ts` — são elas que permitem sincronizar com uma chamada só,
 sem versão, sem conflito e sem fila de pendências offline.
 
-Os botões no rodapé (**baixar backup** / **restaurar backup**) deixam de ser a
-ponte entre aparelhos e passam a ser o que sempre deveriam ter sido: cópia de
-segurança, e a saída caso você queira levar os dados para outro lugar.
+Não há backup manual nem botão de reiniciar. O backup existia porque o diário
+só vivia no navegador: era a única ponte entre aparelhos e a única rede de
+segurança. Com o Postgres replicando para todos eles, ele resolvia um caso que
+deixou de existir — e o reset foi junto, porque dependia do backup como
+desfazer e propagava a limpeza para todo aparelho.
+
+Cada item de trilha e de checklist carrega uma **chave própria** (`fin#k42`), e
+é ela que fica gravada. Já foi a posição na lista, e aí inserir uma linha no
+meio de `lib/plan.ts` movia as marcações para o item errado, em silêncio.
+`state.ts` guarda a tabela congelada que traduz o que foi marcado antes disso.
 
 ## Atualizar com o Claude Code
 
@@ -144,3 +193,8 @@ Exemplos que caem em um arquivo só:
 - "adicione um marco de X em `lib/plan.ts`, com data-alvo e critério"
 - "mude os blocos de terça-feira em `WEEK`, em `lib/plan.ts`"
 - "acrescente um item na checklist de documentos"
+
+Uma regra só, ao mexer em `TRACKS` e `CHECKS`: **chave existente não muda.** É
+ela que liga o texto ao que já foi marcado. Reescrever o texto de um item é
+livre; trocar a chave dele zera aquele item. Item novo entra com chave nova, em
+qualquer posição da lista.

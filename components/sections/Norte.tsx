@@ -35,7 +35,8 @@ export default function Norte() {
           <mark className="bg-primary/10 text-foreground rounded px-1 font-medium">24 meses</mark>{' '}
           trabalhando em tempo integral sem patrocínio. Com emprego nessa janela, migra para
           autorização de longo prazo e, com o tempo, residência.{' '}
-          <B>Intake alvo: setembro/2028. Plano B: janeiro/2029.</B>
+          <B>Intake alvo: setembro/2028</B> — e o seguinte, janeiro/2029, se a conta não
+          fechar. Adiar é saída prevista, não atraso.
         </p>
 
         <Alert variant="warning">

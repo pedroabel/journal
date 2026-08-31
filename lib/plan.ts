@@ -11,16 +11,26 @@ export type MsType = 'cap' | 'cred' | 'exp';
 export type ViewId = 'hoje' | 'semana' | 'mes' | 'ano' | 'jornada' | 'estudar';
 
 export interface Area { n: string; c: string; t: string[] }
-export interface Track { id: string; name: string; color: string; items: string[] }
+/**
+ * Item de trilha e de checklist. A chave vem primeiro e é ela que fica
+ * gravada no progresso — nunca a posição na lista. Antes era o índice, e aí
+ * inserir uma linha no meio deste arquivo movia todas as marcações abaixo
+ * dela para o item errado: justamente a edição que este arquivo mais recebe.
+ * Chave nova pode ser qualquer coisa estável; chave existente não se altera,
+ * porque ela é o que liga o texto ao que já foi marcado.
+ */
+export type Step = [k: string, t: string];
+export type Check = [k: string, t: string, when: string];
+export interface Track { id: string; name: string; color: string; items: Step[] }
 export interface Milestone { id: string; t: string; ty: MsType; d: string; crit: string; dep: string[] }
-export interface Phase { n: string; d: string; c: string; qs: string[] }
+export interface Phase { n: string; d: string; c: string; qs: string[]; prioridade: string; itens: string[] }
 export interface Proto {
   title: string; color: string; steps: string[][];
   metodo: string; porque: string; recursos: string[]; sucesso: string; revisao: string;
 }
 export interface Block { t: string; s: string; d: string; label?: string; track?: string }
 export interface DaySchedule { note: string; lunch: Block | null; night: Block[] }
-export interface Checklist { id: string; name: string; color: string; items: string[][] }
+export interface Checklist { id: string; name: string; color: string; items: Check[] }
 export interface Mcq { id: string; q: string; o: string[] }
 export interface View { id: ViewId; n: string; q: string }
 
@@ -34,26 +44,26 @@ base:{n:'Base',c:'--chart-5',t:['sono','leitura','review']}
 export const TYPE_LABEL: Record<string, string> ={sono:'Sono',calistenia:'Calistenia',caminhada:'Caminhada',en_speak:'Inglês fala',en_write:'Inglês escrita',en_tutor:'Tutor inglês',roadmap:'Programação',cs50:'CS50',cs50_light:'CS50 leve',dsa:'DSA',carreira:'Carreira',leitura:'Leitura',review:'Revisão'};
 export const TRACKS: Track[] =[
 {id:'ingles',name:'Inglês — do C2 passivo ao ativo',color:'--chart-1',items:[
-'Rotina diária de output rodando (fala + escrita)','Gravação e auto-avaliação viraram hábito',
-'Tutor 1:1 semanal contratado e constante','Escrita com correção → cards de erro no Anki',
-'Simulados IELTS — foco Speaking e Writing','IELTS feito — banda exigida atingida']},
+['out','Rotina diária de output rodando (fala + escrita)'],['rec','Gravação e auto-avaliação viraram hábito'],
+['tutor','Tutor 1:1 semanal contratado e constante'],['cards','Escrita com correção → cards de erro no Anki'],
+['mock','Simulados IELTS — foco Speaking e Writing'],['ielts','IELTS feito — banda exigida atingida']]},
 {id:'cs50',name:'CS50 — sprint do certificado',color:'--chart-2',items:[
-'Week 0 — Scratch','Week 1 — C','Week 2 — Arrays','Week 3 — Algorithms','Week 4 — Memory',
-'Week 5 — Data Structures','Week 6 — Python','Week 7 — SQL','Week 8 — HTML/CSS/JS','Week 9 — Flask',
-'Projeto Final → Certificado emitido']},
+['w0','Week 0 — Scratch'],['w1','Week 1 — C'],['w2','Week 2 — Arrays'],['w3','Week 3 — Algorithms'],['w4','Week 4 — Memory'],
+['w5','Week 5 — Data Structures'],['w6','Week 6 — Python'],['w7','Week 7 — SQL'],['w8','Week 8 — HTML/CSS/JS'],['w9','Week 9 — Flask'],
+['final','Projeto Final → Certificado emitido']]},
 {id:'dsa',name:'DSA — preparação de entrevista',color:'--chart-3',items:[
-'Arrays & Hashing','Two Pointers','Sliding Window','Stack','Binary Search','Linked List',
-'Trees','Heap / Priority Queue','Backtracking','Graphs','Dynamic Programming (intro)']},
+['arrays','Arrays & Hashing'],['twoptr','Two Pointers'],['window','Sliding Window'],['stack','Stack'],['bsearch','Binary Search'],['list','Linked List'],
+['trees','Trees'],['heap','Heap / Priority Queue'],['backtrack','Backtracking'],['graphs','Graphs'],['dp','Dynamic Programming (intro)']]},
 {id:'portfolio',name:'Portfólio & Presença profissional',color:'--chart-4',items:[
-'LinkedIn reformulado em inglês','GitHub organizado com README de perfil',
-'Projeto 1 — pequeno, resolve um problema real','Projeto 2 — médio, com testes e documentação',
-'Projeto 3 — com deploy online funcionando','CV em inglês, formato internacional',
-'Rotina de aplicações ativa (BR + remoto internacional)']}
+['linkedin','LinkedIn reformulado em inglês'],['github','GitHub organizado com README de perfil'],
+['p1','Projeto 1 — pequeno, resolve um problema real'],['p2','Projeto 2 — médio, com testes e documentação'],
+['p3','Projeto 3 — com deploy online funcionando'],['cv','CV em inglês, formato internacional'],
+['apply','Rotina de aplicações ativa (BR + remoto internacional)']]}
 ];
 export const MS: Milestone[] =[
 {id:'passport',t:'Passaporte conferido (renovado se vence antes de 2030)',ty:'cred',d:'2026-08-31',crit:'Validade confirmada além de 2030 — ou protocolo de renovação aberto.',dep:[]},
 {id:'costs',t:'Custos reais do PgDip e do visto planilhados',ty:'cred',d:'2026-09-30',crit:'Planilha com mensalidade de 3 escolas, exigência de fundos do visto e custo de vida mensal em euros.',dep:[]},
-{id:'dogtrail',t:'Trilha longa nova com os cachorros',ty:'exp',d:'2026-09-30',crit:'Você foi, num lugar onde nunca esteve antes.',dep:[]},
+{id:'dogtrail',t:'Trilha longa nova com as cachorras',ty:'exp',d:'2026-09-30',crit:'Você foi, num lugar onde nunca esteve antes.',dep:[]},
 {id:'write30',t:'30 sessões de escrita em inglês concluídas',ty:'cap',d:'2026-10-31',crit:'30 marcações de escrita registradas no sistema.',dep:[]},
 {id:'talk15',t:'Primeira conversa falada de 15 min em inglês',ty:'exp',d:'2026-11-30',crit:'15 minutos contínuos com outra pessoa, sem trocar para o português.',dep:['write30']},
 {id:'speak10',t:'Gravar 10 min falando inglês sem travar',ty:'cap',d:'2027-01-31',crit:'Uma gravação de 10 min contínuos, sem pausa longa nem troca de idioma.',dep:['talk15']},
@@ -75,7 +85,7 @@ export const MS: Milestone[] =[
 {id:'funds',t:'Fundos comprovados',ty:'cred',d:'2028-07-15',crit:'Extrato com o valor exigido pelo visto, no seu nome.',dep:['accept']},
 {id:'visa',t:'Visto aprovado',ty:'cred',d:'2028-08-10',crit:'Visto emitido.',dep:['accept','funds']},
 {id:'ticket',t:'Passagem comprada',ty:'cred',d:'2028-08-20',crit:'Bilhete emitido.',dep:['visa']},
-{id:'dogs',t:'Casa e cachorros resolvidos',ty:'cred',d:'2028-08-25',crit:'Moradia inicial reservada + documentação dos cães completa.',dep:['visa']},
+{id:'dogs',t:'Casa e cachorras resolvidas',ty:'cred',d:'2028-08-25',crit:'Moradia inicial reservada + documentação das cachorras completa.',dep:['visa']},
 {id:'firstday',t:'Primeiro dia de aula na Irlanda',ty:'exp',d:'2028-09-30',crit:'Você entrou na sala.',dep:['visa','ticket']},
 {id:'explore',t:'Primeiro fim de semana explorando a Irlanda',ty:'exp',d:'2028-12-31',crit:'Você saiu da cidade onde mora.',dep:['firstday']},
 {id:'local',t:'Conversa longa com um local, fora do ambiente acadêmico',ty:'exp',d:'2029-03-31',crit:'30+ minutos, em inglês, com alguém de lá.',dep:['firstday']},
@@ -85,9 +95,20 @@ export const MSTYPE: Record<MsType, { n: string; c: string }> ={cap:{n:'Capacida
 export const QUARTERS =['2026Q3','2026Q4','2027Q1','2027Q2','2027Q3','2027Q4','2028Q1','2028Q2','2028Q3','2028Q4','2029Q1','2029Q2'];
 export const QLABEL: Record<string, string> ={'2026Q3':'ago–set 26','2026Q4':'out–dez 26','2027Q1':'jan–mar 27','2027Q2':'abr–jun 27','2027Q3':'jul–set 27','2027Q4':'out–dez 27','2028Q1':'jan–mar 28','2028Q2':'abr–jun 28','2028Q3':'jul–set 28','2028Q4':'out–dez 28','2029Q1':'jan–mar 29','2029Q2':'abr–jun 29'};
 export const JPHASES: Phase[] =[
-{n:'Fase 1 — Fundação e credencial',d:'ago/2026 → jul/2027',c:'--chart-3',qs:['2026Q3','2026Q4','2027Q1','2027Q2']},
-{n:'Fase 2 — Prova e aplicação',d:'ago/2027 → jul/2028',c:'--chart-2',qs:['2027Q3','2027Q4','2028Q1','2028Q2']},
-{n:'Fase 3 — Saída e chegada',d:'ago/2028 → jun/2029',c:'--chart-4',qs:['2028Q3','2028Q4','2029Q1','2029Q2']}
+{n:'Fase 1 — Fundação e credencial',d:'ago/2026 → jul/2027',c:'--chart-3',qs:['2026Q3','2026Q4','2027Q1','2027Q2'],
+prioridade:'Consistência e destravar a fala. Nada mais importa se a rotina não pegar.',
+itens:['Rotina (almoço + noite) rodando de forma estável','Sono regular: ~23:00 / 06:30, cochilo curto',
+'Inglês: output diário + tutor até o 3º mês','CS50 em sprint · 1º projeto no ar · LinkedIn em inglês',
+'Poupança iniciada · reserva pessoal quitada · planilha de custos reais','Passaporte conferido']},
+{n:'Fase 2 — Prova e aplicação',d:'ago/2027 → jul/2028',c:'--chart-2',qs:['2027Q3','2027Q4','2028Q1','2028Q2'],
+prioridade:'Gerar as provas: uma nota, um certificado, aplicações enviadas, emprego novo.',
+itens:['IELTS feito com a banda exigida','3 escolas escolhidas e aplicações submetidas',
+'Carta de aceite até jun/2028','2º e 3º projeto no ar · DSA coberto',
+'Emprego novo assinado (ideal: remoto internacional)','SinPro faturando']},
+{n:'Fase 3 — Saída e chegada',d:'ago/2028 → jun/2029',c:'--chart-4',qs:['2028Q3','2028Q4','2029Q1','2029Q2'],
+prioridade:'Logística, não aprendizado. Começa quando o visto sai: se o intake escorregar, a fase inteira escorrega junto — e isso não é atraso.',
+itens:['Fundos comprovados · visto aprovado','Passagem comprada · casa e cachorras resolvidas',
+'Primeiro dia de aula','Explorar o país e viver a experiência','Iniciar a janela de 24 meses do Stamp 1G']}
 ];
 export const PROTO: Record<string, Proto> ={
 calistenia:{title:'Calistenia',color:'--chart-3',
@@ -149,7 +170,7 @@ export const WEEK: Record<number, DaySchedule> ={
 3:{note:'',lunch:null,night:[{t:'calistenia',s:'20:00',d:'25min'},{t:'en_write',s:'20:30',d:'20min'},{t:'roadmap',s:'20:55',d:'60min'},{t:'leitura',s:'22:00',d:'20min'},{t:'sono',s:'22:40',d:'—'}]},
 4:{note:'',lunch:{t:'caminhada',s:'12:30',d:'15–20min'},night:[{t:'en_speak',s:'20:00',d:'20min'},{t:'cs50',s:'20:25',d:'90min',track:'cs50'},{t:'leitura',s:'22:00',d:'20min'},{t:'sono',s:'22:40',d:'—'}]},
 5:{note:'Fecha a semana. Depois do bloco de carreira, a noite é sua — sem culpa.',lunch:{t:'cs50_light',s:'12:30',d:'20min'},night:[{t:'calistenia',s:'20:00',d:'25min'},{t:'en_speak',s:'20:30',d:'20min',label:'Inglês — fala (tema leve)'},{t:'carreira',s:'20:55',d:'60min',track:'portfolio'},{t:'leitura',s:'22:00',d:'20min'},{t:'sono',s:'22:40',d:'—'}]},
-6:{note:'Manhã é o bloco pesado. Tarde: marmita + faxina (~3h), passeio com os cães, desenho ou leitura.',lunch:null,night:[{t:'roadmap',s:'09:00',d:'2h',label:'Deep work — projeto de portfólio',track:'portfolio'},{t:'dsa',s:'11:15',d:'60min',track:'dsa'},{t:'leitura',s:'livre',d:'—'},{t:'sono',s:'23:00',d:'—'}]},
+6:{note:'Manhã é o bloco pesado. Tarde: passeio com as cachorras, desenho ou leitura — e o que a casa pedir.',lunch:null,night:[{t:'roadmap',s:'09:00',d:'2h',label:'Deep work — projeto de portfólio',track:'portfolio'},{t:'dsa',s:'11:15',d:'60min',track:'dsa'},{t:'leitura',s:'livre',d:'—'},{t:'sono',s:'23:00',d:'—'}]},
 0:{note:'Manhã de inglês + CS50. Tarde livre. No 1º domingo do mês, +30min para investimentos.',lunch:null,night:[{t:'en_tutor',s:'09:00',d:'50min',track:'ingles'},{t:'en_write',s:'10:05',d:'30min',label:'Inglês — escrita longa'},{t:'cs50',s:'10:45',d:'60min',track:'cs50',label:'CS50 — pset'},{t:'review',s:'20:00',d:'20min'},{t:'sono',s:'22:40',d:'—'}]}
 };
 export const REDUCED_BLOCKS: Block[] =[{t:'sono',s:'22:40',d:'—'},{t:'en_speak',s:'20:00',d:'10min',label:'Inglês — 10min mínimo'},{t:'leitura',s:'flex',d:'15min'}];
@@ -166,10 +187,10 @@ export const PLANO =[
 {area:'Inglês',color:'--chart-1',freq:'diário + 50min domingo',acoes:['Escrita de ~150 palavras com revisão e cards (seg/qua/ter-almoço)','Shadowing + monólogo gravado (ter/qui/sex)','Tutor 1:1 semanal no domingo','Anki todo dia com os próprios erros','Simulados IELTS a partir de 2027','Lazer em inglês com legenda em inglês']},
 {area:'Programação',color:'--chart-4',freq:'~5h/semana',acoes:['Trilha do roadmap.sh construindo código a cada conceito','CS50 como sprint de certificado','DSA por padrões com revisão espaçada','Deep work no projeto no sábado','Commit em toda sessão']},
 {area:'Carreira',color:'--chart-4',freq:'1h/semana (sexta)',acoes:['2–3 candidaturas por semana (BR + remoto internacional)','LinkedIn em inglês e posts de progresso','Respostas STAR gravadas em inglês','Funil de candidaturas atualizado']},
-{area:'Saúde & Energia',color:'--chart-3',freq:'diário / 3x semana',acoes:['Dormir ~23:00, acordar 06:30','Cochilo no máximo 15–20min','Calistenia 3x/semana + caminhada no almoço de quinta','Marmitas no fim de semana']},
-{area:'Finanças',color:'--chart-2',freq:'mensal',acoes:['R$2.500/mês automático no dia do salário','Investimentos 30min no 1º domingo do mês','SinPro virando receita recorrente com os primos']},
-{area:'Intercâmbio',color:'--chart-1',freq:'por fase',acoes:['Agora: passaporte + planilha de custos reais','2027: escolher escolas e levantar exigências','2028: aplicações, aceite, fundos, visto','Cães: iniciar documentação 6+ meses antes']},
-{area:'Vida & Prazer',color:'--chart-5',freq:'livre',acoes:['Leitura antes de dormir','Desenho no fim de semana','Passeio com os cães','Um marco de experiência por trimestre — obrigatório']}
+{area:'Saúde & Energia',color:'--chart-3',freq:'diário / 3x semana',acoes:['Dormir ~23:00, acordar 06:30','Cochilo no máximo 15–20min','Calistenia 3x/semana + caminhada no almoço de quinta']},
+{area:'Finanças',color:'--chart-2',freq:'mensal',acoes:['R$1.200/mês para a reserva pessoal — é o que não cede','R$2.500/mês automático no dia do salário — cede primeiro se o mês apertar','Investimentos 30min no 1º domingo do mês','SinPro virando receita recorrente com os primos']},
+{area:'Intercâmbio',color:'--chart-1',freq:'por fase',acoes:['Agora: passaporte + planilha de custos reais','2027: escolher escolas e levantar exigências','2028: aplicações, aceite, fundos, visto','Cachorras: iniciar documentação 6+ meses antes']},
+{area:'Vida & Prazer',color:'--chart-5',freq:'livre',acoes:['Leitura antes de dormir','Desenho no fim de semana','Passeio com as cachorras','Ver gente — sem hora marcada, mas sem deixar zerar','Um marco de experiência por trimestre — obrigatório']}
 ];
 export const DEPS =[
 {chain:['Sono regular','Energia','Todos os hábitos'],note:'A raiz. Se o sono não estabilizar, os blocos da noite não se sustentam.',b:true},
@@ -177,7 +198,7 @@ export const DEPS =[
 {chain:['Carta de aceite','Fundos','Visto','Passagem'],note:'Bloqueante absoluto: fundos e seguro só fazem sentido depois do aceite. Não antecipe.',b:true},
 {chain:['Passaporte válido','Visto'],note:'Maior tempo de espera e o único item urgente hoje.',b:true},
 {chain:['CS50 + Portfólio + DSA','Entrevistas','Emprego novo'],note:'Três frentes convergindo. Aplicar cedo acelera, porque entrevista se aprende entrevistando.',b:false},
-{chain:['SinPro','Renda recorrente','Fundos comprovados'],note:'Roda no expediente, não compete com o tempo pessoal — mas é o que torna a conta viável.',b:false}
+{chain:['SinPro','Renda recorrente','Fundos comprovados'],note:'Roda no expediente, não compete com o tempo pessoal — mas é o que torna a conta viável. Com R$3.700/mês saindo até mai/2027 e a dívida tendo prioridade, é o que evita que um mês apertado saia da escada do visto, que não tem folga para ceder.',b:false}
 ];
 export const METHODS =[
 ['Prática espaçada','Doses pequenas ao longo do tempo batem sessões longas concentradas. Por isso inglês e código aparecem quase todo dia, em blocos curtos.'],
@@ -198,6 +219,7 @@ export const ANTIPROC =[
 ['Progresso público','Postar avanços cobra você publicamente e constrói o perfil ao mesmo tempo.']
 ];
 export const DECISOES =[
+['A dívida é prioridade — e a escada é quem paga por isso','Os R$10.000 têm dinheiro próprio (R$1.200/mês, além dos R$2.500), então em mês normal nada atrasa e o intake de set/2028 segue de pé. Em mês apertado quem cede é o intercâmbio, não a dívida. <b>O preço disso não é vago:</b> a escada não tem folga — 24 depósitos cheios chegam aos R$60.000 em cima da hora de comprovar fundos, e cada mês sem os R$2.500 empurra a comprovação, que trava visto e passagem. E isso é aceito: quando falta dinheiro, quem escorrega é a data da Irlanda. Não a dívida, e não a rotina.'],
 ['Streak só até a visão semanal','Diária e semanal mostram corrente e sequência. <b>Mensal mostra percentual, anual mostra marcos.</b> Streak em escala de ano só destaca as quebras — mede o que te desmotiva em vez do que você construiu.'],
 ['Cada visão responde uma pergunta diferente','Sem isso as cinco viram a mesma tabela em zooms diferentes. Diária: o que faço agora. Semanal: mantive o ritmo. Mensal: o mês foi bom. Anual: saí do lugar. Jornada: onde estou.'],
 ['Contagem regressiva só para o próximo marco','Nunca para a data da Irlanda. Faltar 34 meses desmotiva; faltar 5 semanas move.'],
@@ -205,23 +227,26 @@ export const DECISOES =[
 ['Modo reduzido é parte do sistema, não exceção','Semanas atípicas existem. Declarada com antecedência, a semana sai do denominador das estatísticas e aparece marcada — em vez de virar uma falha que quebra a motivação.'],
 ['Almoço: uma atividade, no máximo 3 dias','O almoço é sua única pausa real. Cada atividade tapa o buraco da noite daquele dia: escrita na terça (noite sem escrita), caminhada na quinta (dia sem calistenia), CS50 leve na sexta (noite de carreira). Seg e qua ficam livres — são as noites mais cheias.'],
 ['Marcos precisam de critério binário','"Ser fluente" não é marco. "Gravar 10 min falando sem travar" é: ou você tem a gravação ou não tem. Todo marco aqui depende só de você.'],
-['Datas derivam do intake de set/2028','Aceite até jun/2028, visto e passagem no meio do ano, aula em setembro. O plano B de jan/2029 usa a mesma cadeia deslocada — e a Fase 3 cobre as duas.']
+['A data da Irlanda escorrega; o hábito não','Aceite até jun/2028, visto e passagem no meio do ano, aula em setembro, e o intake seguinte, jan/2029, usa a mesma cadeia deslocada — a Fase 3 cobre qualquer um deles. Mas <b>o intake é alvo, não compromisso</b>: se o dinheiro não fechar, adiar é a saída combinada, e não uma falha a recuperar correndo. O que não escorrega é a ordem (aceite antes de fundos, fundos antes de visto) e o prazo de hábito — depósito do mês, bloco da noite. A diferença é de quem depende: a data depende de dinheiro e de escola, o hábito depende só de você, e é justamente por isso que ele não pode herdar a folga do outro.'],
 ];
-export const PLAN_CTX ='Abel, dev full-stack (eng. computação), Brasil. Objetivo: emigrar para a Irlanda via curso nível 9 (PgDip/mestrado), intake alvo setembro/2028 com plano B janeiro/2029, usando o Stamp 1G de 24 meses. Rotina: janela do almoço (~20min, máx 3 dias/semana) e janela da noite 20:00-22:40 (chega 19h, dorme ~23h). Inglês: C2 na compreensão, gargalo é produção e vergonha de falar. CS50 pelo certificado. DSA para entrevistas. Poupança R$2.500/mês. SinPro roda no expediente. Mora sozinho, tem cachorros, nunca sustentou hábitos antes — consistência é o maior risco. Tem modo reduzido para semanas atípicas e um marco de experiência obrigatório por trimestre.';
+export const PLAN_CTX ='Abel, dev full-stack (eng. computação), Brasil. Objetivo: emigrar para a Irlanda via curso nível 9 (PgDip/mestrado), intake alvo setembro/2028, ou o seguinte (jan/2029) se a conta não fechar, usando o Stamp 1G de 24 meses. A data é alvo e pode ser adiada sem isso contar como falha — o que não escorrega é a ordem da cadeia e o prazo dos hábitos. Rotina: janela do almoço (~20min, máx 3 dias/semana) e janela da noite 20:00-22:40 (chega 19h, dorme ~23h). Inglês: C2 na compreensão, gargalo é produção e vergonha de falar. CS50 pelo certificado. DSA para entrevistas. Poupança R$2.500/mês para o intercâmbio, mais R$1.200/mês para uma reserva pessoal de R$10.000 tratada como dívida (fecha ~mai/2027). As duas correm juntas: R$3.700/mês saindo, e em mês normal a escada do visto não atrasa. Em mês apertado a dívida tem prioridade e quem cede é o intercâmbio — e como a escada não tem folga (24 depósitos cheios batem os R$60.000 em cima da data de comprovar fundos), cada mês assim empurra o visto. SinPro roda no expediente. Mora acompanhado: não tem mais tarefa fixa de casa nem marmita, mas ganhou demanda de convívio e ainda não sabe quanto vai ajudar em casa. Tem cachorras, nunca sustentou hábitos antes — consistência é o maior risco. Tem modo reduzido para semanas atípicas e um marco de experiência obrigatório por trimestre.';
 export const CHECKS: Checklist[] =[
 {id:'docs',name:'Documentos — por fase',color:'--chart-1',items:[
-['Conferir validade do passaporte','AGORA — renove se vence antes de 2030'],['Planilha de custos reais (curso, visto, vida)','set/2026'],
-['Pesquisar programas nível 9 e exigências','2027'],['Histórico escolar e diploma em mãos','2027–2028'],
-['Traduções juramentadas para o inglês','2027–2028'],['Personal statement / carta de motivação','2027–2028'],
-['Cartas de recomendação','2027–2028'],['Aplicações submetidas (3 escolas)','até mar/2028'],
-['Carta de aceite recebida','até jun/2028'],['Comprovação de fundos','jul/2028'],
-['Seguro-saúde privado','jul/2028'],['Pedido de visto submetido','jul–ago/2028'],
-['Documentação dos cães (microchip, antirrábica, exames)','iniciar 6+ meses antes']]},
+['passport','Conferir validade do passaporte','AGORA — renove se vence antes de 2030'],['costs','Planilha de custos reais (curso, visto, vida)','set/2026'],
+['programs','Pesquisar programas nível 9 e exigências','2027'],['records','Histórico escolar e diploma em mãos','2027–2028'],
+['sworn','Traduções juramentadas para o inglês','2027–2028'],['statement','Personal statement / carta de motivação','2027–2028'],
+['letters','Cartas de recomendação','2027–2028'],['apps','Aplicações submetidas (3 escolas)','até mar/2028'],
+['offer','Carta de aceite recebida','até jun/2028'],['funds','Comprovação de fundos','jul/2028'],
+['insurance','Seguro-saúde privado','jul/2028'],['visa','Pedido de visto submetido','jul–ago/2028'],
+['dogs','Documentação das cachorras (microchip, antirrábica, exames)','iniciar 6+ meses antes']]},
 {id:'fin',name:'Financeiro — marcos de poupança',color:'--chart-2',items:[
-['R$2.500/mês automatizado','configurar uma vez'],['R$12.500 acumulados','~dez/2026'],
-['R$25.000 acumulados','~jun/2027'],['R$42.000 acumulados','~dez/2027'],
-['R$60.000 acumulados','~ago/2028'],['SinPro gerando receita recorrente','a alavanca que fecha a conta'],
-['Pesquisar bolsas (Government of Ireland Scholarship)','2027']]}
+['reserva5','Reserva pessoal — metade (R$5.000)','~jan/2027'],
+['reserva','Reserva pessoal quitada (R$10.000)','~mai/2027 · R$1.200/mês, prioridade sobre a escada'],
+['auto','R$2.500/mês automatizado','configurar uma vez — é o que cede em mês apertado'],
+['k12','R$12.500 acumulados','~dez/2026'],['k25','R$25.000 acumulados','~jun/2027'],
+['k42','R$42.000 acumulados','~dez/2027'],['k60','R$60.000 acumulados','~ago/2028 — o valor dos fundos'],
+['sinpro','SinPro gerando receita recorrente','a alavanca que fecha a conta — e a folga dos R$3.700/mês'],
+['bolsas','Pesquisar bolsas (Government of Ireland Scholarship)','2027']]}
 ];
 
 /** Área a que um tipo de bloco pertence. */

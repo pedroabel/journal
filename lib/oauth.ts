@@ -29,7 +29,7 @@ const SCOPE = 'openid email';
 
 export const OAUTH_STATE_COOKIE = 'journal_oauth';
 
-export function clientId(): string {
+function clientId(): string {
   const v = process.env.GOOGLE_CLIENT_ID;
   if (!v) throw new Error('GOOGLE_CLIENT_ID ausente');
   return v;
@@ -59,7 +59,7 @@ function allowed(): string[] {
  * divergem. `x-forwarded-proto` porque atrás do proxy da Vercel a requisição
  * chega como http.
  */
-export function callbackUrl(request: Request): string {
+function callbackUrl(request: Request): string {
   const url = new URL(request.url);
   const host = request.headers.get('x-forwarded-host') ?? url.host;
   const proto = request.headers.get('x-forwarded-proto') ?? url.protocol.replace(':', '');

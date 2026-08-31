@@ -1,11 +1,24 @@
 /**
- * CS50 — os temas do curso, semana a semana.
+ * CS50 — o que o certificado exige, encaixado na sua semana.
  *
- * Aqui o percurso já vem pronto de fábrica: o CS50 é um currículo fechado e
- * ordenado. O que esta árvore acrescenta é o RECORTE — para você o CS50 vale
- * pelo certificado, não pelo conteúdo, e boa parte é coisa que você já usa no
- * trabalho. Cada folha diz o que precisa sair da semana; o que já é sabido
- * passa rápido, o pset é onde o tempo vai.
+ * O curso já vem ordenado de fábrica, e o site dele ensina melhor do que
+ * qualquer resumo aqui — então esta árvore NÃO repete o sumário das aulas.
+ * Segue a mesma regra do roadmap.sh: a árvore guarda o que o site precisa
+ * para agendar e cobrar, não o que a fonte já ensina.
+ *
+ * O que sobra, e é o que a fonte não faz:
+ *
+ *   Os ENTREGÁVEIS. Labs, psets e projeto final são binários e decidem o
+ *   certificado (marco `cs50c`, alvo mar/2027). Vêm quebrados no tamanho dos
+ *   SEUS blocos — Speller e Finance não cabem em 90min, então são dois cada.
+ *
+ *   O RECORTE. Você é dev full-stack: sintaxe de Python, SELECT com JOIN e
+ *   manipulação de DOM não são estudo, são revisão. Ficaram só os conceitos
+ *   que o CS50 dá e o seu trabalho não: memória e ponteiros, estruturas em C,
+ *   índices e transações, como a web funciona por baixo.
+ *
+ * O que era busca, ordenação e recursão saiu daqui: vive na trilha de
+ * algoritmos, com mais profundidade e sem duplicata.
  */
 import type { Trilha } from './types';
 
@@ -14,22 +27,16 @@ export const CS50: Trilha = {
   nota: 'Sprint de certificado. Acelere a aula, concentre esforço no pset — é o pset que o certificado exige.',
   filhos: [
 
-  { id:'cs50.w0', t:'Week 0 — Scratch', nota:'Pensamento computacional sem sintaxe.', filhos:[
-    { id:'cs50.w0.conc', t:'Abstração, algoritmo, pseudocódigo', min:20,
-      saber:['descrever um algoritmo em pseudocódigo','explicar por que representação (binário, ASCII, RGB) precede tudo'] },
-    { id:'cs50.w0.pset', t:'Pset 0 — projeto em Scratch', min:90, pre:['cs50.w0.conc'],
+  { id:'cs50.w0', t:'Week 0 — Scratch', nota:'Nada a estudar: é entregar o projeto e seguir.', filhos:[
+    { id:'cs50.w0.pset', t:'Pset 0 — projeto em Scratch', min:90,
       saber:['projeto com laço, condicional, variável e evento','submetido'] },
   ]},
 
   { id:'cs50.w1', t:'Week 1 — C', nota:'A sintaxe é trivial para você. O que é novo: compilação e tipagem estática de verdade.', filhos:[
-    { id:'cs50.w1.tipos', t:'Tipos, variáveis e conversão', min:20,
-      saber:['tamanho de int, float, char, long','o que é truncamento e overflow'] },
     { id:'cs50.w1.comp', t:'O pipeline de compilação', min:20,
       nota:'Pré-processamento, compilação, montagem, ligação. Você nunca precisou disso em JS.',
       saber:['as 4 etapas','o que o linker faz e que erro ele dá'] },
-    { id:'cs50.w1.ctrl', t:'Condicionais, laços e funções em C', min:20,
-      saber:['escrever laço com escopo correto','declarar protótipo e entender por que ele existe'] },
-    { id:'cs50.w1.lab', t:'Lab 1 — Population', min:60, pre:['cs50.w1.ctrl'],
+    { id:'cs50.w1.lab', t:'Lab 1 — Population', min:60,
       saber:['submetido e aprovado'] },
     { id:'cs50.w1.pset', t:'Pset 1 — Hello, Mario, Cash/Credit', min:90, pre:['cs50.w1.lab'],
       saber:['todos submetidos com nota ≥70%'] },
@@ -40,8 +47,6 @@ export const CS50: Trilha = {
       saber:['por que o array "vira ponteiro" ao ser passado','por que sizeof não dá o tamanho dentro da função'] },
     { id:'cs50.w2.str', t:'Strings em C e terminador nulo', min:20, pre:['cs50.w2.arr'],
       saber:['contar caracteres sem strlen','o erro clássico de esquecer o \\0'] },
-    { id:'cs50.w2.cli', t:'argc, argv e depuração', min:20, pre:['cs50.w2.arr'],
-      saber:['ler argumento de linha de comando','usar debug50 ou printf para isolar um bug'] },
     { id:'cs50.w2.lab', t:'Lab 2 — Scrabble', min:60, pre:['cs50.w2.str'],
       saber:['submetido e aprovado'] },
     { id:'cs50.w2.pset1', t:'Pset 2 — Readability', min:90, pre:['cs50.w2.lab'],
@@ -50,14 +55,8 @@ export const CS50: Trilha = {
       saber:['submetido com nota ≥70%'] },
   ]},
 
-  { id:'cs50.w3', t:'Week 3 — Algorithms', nota:'Cruza com a trilha de algoritmos. Se você já fez lá, aqui é só o pset.', filhos:[
-    { id:'cs50.w3.busca', t:'Busca linear e binária', min:20,
-      saber:['a premissa que a binária exige'] },
-    { id:'cs50.w3.ord', t:'Bubble, selection e merge sort', min:20, pre:['cs50.w3.busca'],
-      saber:['os três, com complexidade de cada'] },
-    { id:'cs50.w3.rec', t:'Recursão', min:20, pre:['cs50.w3.ord'],
-      saber:['caso base e chamada recursiva em C'] },
-    { id:'cs50.w3.lab', t:'Lab 3 — Sort', min:60, pre:['cs50.w3.ord'],
+  { id:'cs50.w3', t:'Week 3 — Algorithms', nota:'O conteúdo desta semana vive na trilha de algoritmos, com mais profundidade. Aqui fica só o que o certificado exige.', filhos:[
+    { id:'cs50.w3.lab', t:'Lab 3 — Sort', min:60,
       saber:['identificou qual algoritmo é cada binário, com justificativa'] },
     { id:'cs50.w3.plur', t:'Pset 3 — Plurality', min:90, pre:['cs50.w3.lab'],
       saber:['submetido com nota ≥70%'] },
@@ -102,12 +101,10 @@ export const CS50: Trilha = {
   ]},
 
   { id:'cs50.w6', t:'Week 6 — Python', nota:'Você já programa. Aqui é tradução de sintaxe e o contraste com C.', filhos:[
-    { id:'cs50.w6.sin', t:'Sintaxe e tipos do Python', min:20,
-      saber:['tipagem dinâmica, listas, dicionários, fatiamento'] },
-    { id:'cs50.w6.contr', t:'O que o Python esconde que o C mostrava', min:20, pre:['cs50.w6.sin'],
+    { id:'cs50.w6.contr', t:'O que o Python esconde que o C mostrava', min:20,
       nota:'A lição real da semana: gerência de memória, tipos e tamanho automáticos.',
       saber:['nomear 4 coisas que o Python faz por você'] },
-    { id:'cs50.w6.lab', t:'Lab 6 — World Cup', min:60, pre:['cs50.w6.sin'],
+    { id:'cs50.w6.lab', t:'Lab 6 — World Cup', min:60,
       saber:['submetido e aprovado'] },
     { id:'cs50.w6.sent', t:'Pset 6 — Sentimental (reescrita em Python)', min:90, pre:['cs50.w6.lab'],
       saber:['submetidos com nota ≥70%'] },
@@ -116,14 +113,10 @@ export const CS50: Trilha = {
   ]},
 
   { id:'cs50.w7', t:'Week 7 — SQL', nota:'Se você já escreve SQL, a aula é revisão. Fiftyville vale por si.', filhos:[
-    { id:'cs50.w7.rel', t:'Modelo relacional e tipos', min:20,
-      saber:['chave primária e estrangeira, normalização básica'] },
-    { id:'cs50.w7.q', t:'SELECT, JOIN, GROUP BY, subconsulta', min:20, pre:['cs50.w7.rel'],
-      saber:['escrever join de 3 tabelas com agregação'] },
-    { id:'cs50.w7.idx', t:'Índices, transações e condição de corrida', min:20, pre:['cs50.w7.q'],
+    { id:'cs50.w7.idx', t:'Índices, transações e condição de corrida', min:20,
       nota:'É o pedaço que o CS50 dá e que aparece em entrevista de backend.',
       saber:['por que índice acelera leitura e custa escrita','o que ACID garante','como injeção de SQL acontece'] },
-    { id:'cs50.w7.lab', t:'Lab 7 — Songs', min:60, pre:['cs50.w7.q'],
+    { id:'cs50.w7.lab', t:'Lab 7 — Songs', min:60,
       saber:['submetido e aprovado'] },
     { id:'cs50.w7.mov', t:'Pset 7 — Movies', min:90, pre:['cs50.w7.lab'],
       saber:['as 13 consultas submetidas com nota ≥70%'] },
@@ -135,18 +128,14 @@ export const CS50: Trilha = {
     { id:'cs50.w8.web', t:'Como a web funciona: TCP/IP, HTTP, DNS', min:20,
       nota:'Isto sim vale a atenção — é pergunta de entrevista e você provavelmente nunca formalizou.',
       saber:['descrever o caminho de uma requisição do navegador ao servidor','citar 5 códigos de status e o que significam'] },
-    { id:'cs50.w8.dom', t:'DOM, eventos e regex', min:20, pre:['cs50.w8.web'],
-      saber:['manipular DOM sem framework'] },
-    { id:'cs50.w8.pset', t:'Pset 8 — Homepage', min:90, pre:['cs50.w8.dom'],
+    { id:'cs50.w8.pset', t:'Pset 8 — Homepage', min:90, pre:['cs50.w8.web'],
       saber:['site com 4+ páginas, responsivo, submetido'] },
   ]},
 
   { id:'cs50.w9', t:'Week 9 — Flask', nota:'Padrão MVC e sessão. Finance é o pset mais longo do curso.', filhos:[
-    { id:'cs50.w9.flask', t:'Rotas, templates e requisições', min:20, pre:['cs50.w8.web'],
-      saber:['GET vs POST na prática','renderizar template com contexto'] },
-    { id:'cs50.w9.sess', t:'Sessão, cookies e autenticação', min:20, pre:['cs50.w9.flask'],
+    { id:'cs50.w9.sess', t:'Sessão, cookies e autenticação', min:20,
       saber:['como a sessão é mantida','onde a senha deve ser guardada e como'] },
-    { id:'cs50.w9.lab', t:'Lab 9 — Birthdays', min:60, pre:['cs50.w9.flask'],
+    { id:'cs50.w9.lab', t:'Lab 9 — Birthdays', min:60,
       saber:['submetido e aprovado'] },
     { id:'cs50.w9.fin1', t:'Pset 9 — Finance: cadastro, cotação e compra', min:90, pre:['cs50.w9.sess'],
       saber:['registro, login e compra funcionando'] },

@@ -169,7 +169,7 @@ export function useJournal() {
   }, [mutate]);
 
   const toggleFlag = useCallback(
-    (group: 'tracks' | 'checks' | 'ms' | 'reduced', key: string) => {
+    (group: 'units' | 'tracks' | 'checks' | 'ms' | 'reduced', key: string) => {
       mutate((d) => {
         if (d[group][key]) delete d[group][key];
         else d[group][key] = true;
@@ -195,7 +195,8 @@ export function useJournal() {
   const reset = useCallback(() => {
     mutate((d) => {
       stampAll(d); // carimba antes de apagar: a remoção precisa propagar
-      d.day = {}; d.tracks = {}; d.checks = {}; d.ms = {}; d.reduced = {}; d.monthly = {};
+      d.day = {}; d.units = {}; d.tracks = {}; d.checks = {};
+      d.ms = {}; d.reduced = {}; d.monthly = {};
     });
   }, [mutate]);
 

@@ -5,6 +5,7 @@ import {
   Brain,
   CalendarDays,
   Compass,
+  BookOpen,
   FileText,
   GitBranch,
   Layers,
@@ -41,6 +42,7 @@ const VIEW_ICON: Record<ViewId, LucideIcon> = {
   mes: CalendarDays,
   ano: LayoutGrid,
   jornada: Route,
+  estudar: BookOpen,
 };
 
 /** Seções de referência: âncoras na mesma página, na ordem em que aparecem. */

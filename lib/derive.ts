@@ -178,3 +178,24 @@ export function curTrack(st: JournalState, tr: Track): { i: number; txt: string 
 export function trackById(id: string): Track | null {
   return TRACKS.find((t) => t.id === id) ?? null;
 }
+
+/* --- blocos × currículo --------------------------------------------------- */
+
+/**
+ * Minutos utilizáveis de um bloco, a partir do rótulo em `plan.ts`.
+ *
+ * Os rótulos são escritos para humano ('25min', '2h', '15–20min', '—'), e é
+ * assim que devem continuar. Quem precisa do número é o currículo, para saber
+ * quantas folhas cabem na sessão — daí a conversão viver aqui e não lá.
+ *
+ * Faixa devolve o topo: '15–20min' são 20 minutos disponíveis. Rótulo sem
+ * duração ('—', usado por sono) devolve 0, e quem consome trata isso como
+ * "cabe uma folha" — nunca como "não cabe nada".
+ */
+export function blockMinutes(d: string): number {
+  const horas = d.match(/(\d+(?:[.,]\d+)?)\s*h/);
+  if (horas) return Math.round(parseFloat(horas[1].replace(',', '.')) * 60);
+  const mins = d.match(/(\d+)\s*min/g);
+  if (mins) return Math.max(...mins.map((m) => parseInt(m, 10)));
+  return 0;
+}

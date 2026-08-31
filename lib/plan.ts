@@ -8,7 +8,7 @@
 
 export type AreaKey = 'ingles' | 'codigo' | 'corpo' | 'carreira' | 'base';
 export type MsType = 'cap' | 'cred' | 'exp';
-export type ViewId = 'hoje' | 'semana' | 'mes' | 'ano' | 'jornada';
+export type ViewId = 'hoje' | 'semana' | 'mes' | 'ano' | 'jornada' | 'estudar';
 
 export interface Area { n: string; c: string; t: string[] }
 export interface Track { id: string; name: string; color: string; items: string[] }
@@ -161,7 +161,7 @@ export const MCQ: Mcq[] =[
 {id:'travou',q:'O que mais travou?',o:['Cansaço físico','Fuga para o celular','Falta de tempo','Nada travou muito']},
 {id:'ajuste',q:'O que ajustar no mês que vem?',o:['Manter como está','Reduzir a carga','Trocar o horário dos blocos','Mudar o foco de área']}
 ];
-export const VIEWS: View[] =[{id:'hoje',n:'Hoje',q:'o que eu faço agora?'},{id:'semana',n:'Semana',q:'estou mantendo o ritmo?'},{id:'mes',n:'Mês',q:'o mês foi bom?'},{id:'ano',n:'Ano',q:'estou saindo do lugar?'},{id:'jornada',n:'Jornada',q:'onde estou na jornada?'}];
+export const VIEWS: View[] =[{id:'hoje',n:'Hoje',q:'o que eu faço agora?'},{id:'semana',n:'Semana',q:'estou mantendo o ritmo?'},{id:'mes',n:'Mês',q:'o mês foi bom?'},{id:'ano',n:'Ano',q:'estou saindo do lugar?'},{id:'jornada',n:'Jornada',q:'onde estou na jornada?'},{id:'estudar',n:'Estudar',q:'o que eu estudo?'}];
 export const PLANO =[
 {area:'Inglês',color:'--chart-1',freq:'diário + 50min domingo',acoes:['Escrita de ~150 palavras com revisão e cards (seg/qua/ter-almoço)','Shadowing + monólogo gravado (ter/qui/sex)','Tutor 1:1 semanal no domingo','Anki todo dia com os próprios erros','Simulados IELTS a partir de 2027','Lazer em inglês com legenda em inglês']},
 {area:'Programação',color:'--chart-4',freq:'~5h/semana',acoes:['Trilha do roadmap.sh construindo código a cada conceito','CS50 como sprint de certificado','DSA por padrões com revisão espaçada','Deep work no projeto no sábado','Commit em toda sessão']},

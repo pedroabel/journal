@@ -90,7 +90,15 @@ export default function Hoje({
       {lunch ? (
         <div className="space-y-3">
           <Rule>Janela do almoço · uma atividade só</Rule>
-          <Task b={lunch} win="l" isToday={isToday} dstr={dstr} state={state} onToggle={toggleTask} />
+          <Task
+            b={lunch}
+            win="l"
+            isToday={isToday}
+            dstr={dstr}
+            state={state}
+            onToggle={toggleTask}
+            onToggleUnit={toggleFlag}
+          />
         </div>
       ) : (
         !red &&
@@ -113,7 +121,16 @@ export default function Hoje({
           {selDay === 6 || selDay === 0 ? 'Janela principal' : 'Janela da noite · 20:00 → 23:00'}
         </Rule>
         {blocks.map((b, i) => (
-          <Task key={i} b={b} win="n" isToday={isToday} dstr={dstr} state={state} onToggle={toggleTask} />
+          <Task
+            key={i}
+            b={b}
+            win="n"
+            isToday={isToday}
+            dstr={dstr}
+            state={state}
+            onToggle={toggleTask}
+            onToggleUnit={toggleFlag}
+          />
         ))}
       </div>
     </Section>

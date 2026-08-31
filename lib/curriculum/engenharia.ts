@@ -1,30 +1,17 @@
 /**
  * Engenharia e portfólio — o que transforma "sei programar" em "dá para contratar".
  *
- * Esta trilha NÃO é a trilha do roadmap.sh. Ela é a camada que o roadmap não
- * cobre e que a entrevista cobra: qualidade, teste, deploy, operação e a prova
- * pública disso em três projetos no ar. O roadmap escolhido entra como um ramo
- * ao lado (`ROADMAP_ATUAL`) e é substituído quando você
- * terminar um e começar o próximo.
- */
-import type { Node, Trilha } from './types';
-
-/**
- * O roadmap.sh em curso.
+ * O bloco `roadmap` da rotina tem duas metades: estudar o tópico atual e
+ * aplicá-lo no projeto. A primeira metade NÃO está aqui de propósito — o
+ * roadmap.sh já traz o conteúdo detalhado e na ordem, e duplicá-lo aqui só
+ * criaria uma segunda versão para manter, pior e desatualizada. Você segue o
+ * roadmap escolhido lá, um por vez, do começo ao fim.
  *
- * Você faz um por vez, do começo ao fim, e só então começa o próximo. Este nó
- * é o ponto de troca: quando terminar um, substitua os filhos pelo próximo
- * roadmap — o histórico do anterior fica preservado pelos ids já marcados.
+ * O que esta trilha cobre é a outra metade — a que nenhum roadmap ensina e a
+ * entrevista cobra: qualidade, teste, deploy, operação, e a prova pública
+ * disso em três projetos no ar.
  */
-export const ROADMAP_ATUAL: Node = {
-  id: 'rm', t: 'Roadmap em curso',
-  nota: 'A definir: escolha UM roadmap salvo e ele vira esta subárvore, quebrado nos mesmos moldes (tema → subtema → folha com critério).',
-  filhos: [
-    { id:'rm.escolha', t:'Escolher o roadmap e recortá-lo', min:60,
-      nota:'Roadmap inteiro é maratona de tutorial. O recorte é o trabalho: o que serve ao alvo fica, o resto sai.',
-      saber:['um roadmap escolhido, escrito','os nós marcados como "já sei", "vou estudar" e "não serve agora"','a lista de "vou estudar" quebrada em folhas de 60–120min'] },
-  ],
-};
+import type { Trilha } from './types';
 
 export const ENGENHARIA: Trilha = {
   id: 'eng', t: 'Engenharia e portfólio', tipos: ['roadmap'], cor: '--chart-4',
@@ -164,7 +151,5 @@ export const ENGENHARIA: Trilha = {
         saber:['publicado com post em inglês','pelo menos 1 retorno de estranho'] },
     ]},
   ]},
-
-  ROADMAP_ATUAL,
 ]};
 

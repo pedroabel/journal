@@ -19,6 +19,8 @@ export const STATE_SEP = String.fromCharCode(31);
 
 export interface JournalState {
   day: Record<string, Record<string, true>>;
+  /** Folhas da árvore de temas já concluídas — a chave é o id do nó. */
+  units: Record<string, true>;
   tracks: Record<string, true>;
   checks: Record<string, true>;
   ms: Record<string, true>;
@@ -29,7 +31,7 @@ export interface JournalState {
 }
 
 export function emptyState(): JournalState {
-  return { day: {}, tracks: {}, checks: {}, ms: {}, reduced: {}, monthly: {}, t: {}, view: 'hoje' };
+  return { day: {}, units: {}, tracks: {}, checks: {}, ms: {}, reduced: {}, monthly: {}, t: {}, view: 'hoje' };
 }
 
 /** Aceita qualquer objeto vindo do disco ou de um backup, sem confiar nele. */
@@ -37,6 +39,7 @@ export function adopt(raw: unknown, fallbackView: ViewId = 'hoje'): JournalState
   const d = (raw ?? {}) as Partial<JournalState>;
   return {
     day: d.day ?? {},
+    units: d.units ?? {},
     tracks: d.tracks ?? {},
     checks: d.checks ?? {},
     ms: d.ms ?? {},
@@ -73,7 +76,7 @@ export function stamp(state: JournalState, ...path: string[]): void {
 /** Carimba tudo que existe agora — usado ao restaurar backup e ao reiniciar. */
 export function stampAll(state: JournalState): void {
   const n = Date.now();
-  for (const g of ['tracks', 'checks', 'ms', 'reduced'] as const) {
+  for (const g of ['units', 'tracks', 'checks', 'ms', 'reduced'] as const) {
     for (const k of Object.keys(state[g])) state.t[g + STATE_SEP + k] = n;
   }
   for (const g of ['day', 'monthly'] as const) {

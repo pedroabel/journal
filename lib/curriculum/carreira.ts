@@ -7,11 +7,11 @@
 import type { Trilha } from './types';
 
 export const CARREIRA: Trilha = {
-  id: 'car', t: 'Carreira', tipos: ['carreira'], cor: '--chart-4',
+  id: 'car', t: 'Carreira', tipos: ['carreira'], cor: '--chart-4', marco: 'job', fecha: false,
   nota: 'Entrevista se aprende entrevistando. O funil precisa estar rodando antes de você se sentir pronto.',
   filhos: [
 
-  { id:'car.mat', t:'Material de candidatura', nota:'Feito uma vez, ajustado sempre. Enquanto não existe, cada candidatura custa uma hora.', filhos:[
+  { id:'car.mat', t:'Material de candidatura', marco:'linkedin', nota:'Feito uma vez, ajustado sempre. Enquanto não existe, cada candidatura custa uma hora.', filhos:[
     { id:'car.mat.cv', t:'CV em formato internacional', min:60,
       nota:'Uma página, sem foto, sem data de nascimento, sem estado civil — o padrão BR reprova lá.',
       saber:['1 página, em inglês, sem dado pessoal desnecessário','cada bullet no formato ação + tecnologia + resultado mensurável'] },
@@ -44,7 +44,7 @@ export const CARREIRA: Trilha = {
       saber:['mensagem de follow-up depois de 7 dias','pedir feedback numa recusa sem soar ressentido'] },
   ]},
 
-  { id:'car.ent', t:'Entrevista', nota:'Quatro etapas, cada uma com preparo próprio. Cruza com a trilha de inglês em todas.', filhos:[
+  { id:'car.ent', t:'Entrevista', marco:'interview1', nota:'Quatro etapas, cada uma com preparo próprio. Cruza com a trilha de inglês em todas.', filhos:[
     { id:'car.ent.rh', t:'Triagem com RH', min:45, pre:['car.mat.cv'],
       saber:['pitch de 90 segundos em inglês','resposta pronta para pretensão e disponibilidade'] },
     { id:'car.ent.hist', t:'Banco de histórias STAR', min:60, pre:['car.ent.rh'],

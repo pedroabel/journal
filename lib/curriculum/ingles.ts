@@ -8,7 +8,7 @@
 import type { Trilha } from './types';
 
 export const INGLES: Trilha = {
-  id: 'en', t: 'Inglês — produção', tipos: ['en_write', 'en_speak', 'en_tutor'], cor: '--chart-1',
+  id: 'en', t: 'Inglês — produção', tipos: ['en_write', 'en_speak', 'en_tutor'], cor: '--chart-1', marco: 'ielts', fecha: false,
   nota: 'Compreensão está pronta. O trabalho inteiro é output: escrever, falar, e ser corrigido.',
   filhos: [
 

@@ -11,7 +11,7 @@
 import type { Trilha } from './types';
 
 export const ALGORITMOS: Trilha = {
-  id: 'dsa', t: 'Algoritmos e estruturas', tipos: ['dsa'], cor: '--chart-3',
+  id: 'dsa', t: 'Algoritmos e estruturas', tipos: ['dsa'], cor: '--chart-3', marco: 'job', fecha: false,
   nota: 'Não são 150 problemas: são ~18 padrões. O problema é o exercício; o padrão é o conteúdo.',
   filhos: [
 

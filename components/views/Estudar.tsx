@@ -15,6 +15,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Progress } from '@/components/ui/progress';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { ritmo } from '@/lib/ritmo';
+import { RitmoBadge, RitmoLinha, RitmoResumo } from '../Ritmo';
 import { Section, SectionTitle } from '../Section';
 import type { Journal } from '../useJournal';
 import { tone } from '../tone';
@@ -63,6 +65,8 @@ export default function Estudar({ journal }: { journal: Journal }) {
           <Progress value={total.pct} aria-label={`${total.pct}% do percurso`} />
         </CardContent>
       </Card>
+
+      <RitmoResumo state={state} />
 
       <div className="space-y-3">
         <SectionTitle hint="para quando sobrar tempo solto">Quanto tempo você tem?</SectionTitle>
@@ -133,6 +137,7 @@ function TrilhaCard({
   const pr = progresso(trilha, state.units);
   const atual = proxima(trilha, state.units);
   const c = contar(trilha);
+  const r = ritmo(trilha, trilha, state);
 
   return (
     <Collapsible
@@ -152,14 +157,19 @@ function TrilhaCard({
               </span>
             </div>
             <Progress value={pr.pct} indicatorClassName="bg-[var(--tone)]" />
-            {atual && (
-              <p className="text-muted-foreground flex items-start gap-1.5 text-xs leading-relaxed">
-                <MapPin className="text-[var(--tone)] mt-0.5 size-3 shrink-0" />
-                <span className="min-w-0">
-                  você está em <b className="text-foreground font-medium">{atual.t}</b>
-                </span>
-              </p>
-            )}
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+              {atual && (
+                <p className="text-muted-foreground flex min-w-0 items-start gap-1.5 text-xs leading-relaxed">
+                  <MapPin className="text-[var(--tone)] mt-0.5 size-3 shrink-0" />
+                  <span className="min-w-0">
+                    você está em <b className="text-foreground font-medium">{atual.t}</b>
+                  </span>
+                </p>
+              )}
+              <span className="ml-auto shrink-0">
+                <RitmoBadge r={r} />
+              </span>
+            </div>
           </div>
         </div>
       </CollapsibleTrigger>
@@ -169,6 +179,7 @@ function TrilhaCard({
           {trilha.nota && (
             <p className="text-muted-foreground pb-2 text-xs leading-relaxed">{trilha.nota}</p>
           )}
+          <RitmoLinha r={r} className="border-y py-2.5" />
           {(trilha.filhos ?? []).map((f) => (
             <TreeNode
               key={f.id}

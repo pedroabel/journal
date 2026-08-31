@@ -8,7 +8,7 @@
 import type { Trilha } from './types';
 
 export const CORPO: Trilha = {
-  id: 'corpo', t: 'Corpo', tipos: ['calistenia', 'caminhada'], cor: '--chart-3',
+  id: 'corpo', t: 'Corpo', tipos: ['calistenia', 'caminhada'], cor: '--chart-3', marco: 'pullup',
   nota: 'Progressão, não repetição. Se a semana não ficou mais difícil que a anterior, não houve treino.',
   filhos: [
 
@@ -40,7 +40,7 @@ export const CORPO: Trilha = {
       saber:['3x8 com ombro estável e amplitude completa'] },
   ]},
 
-  { id:'corpo.pull', t:'Puxar — a rota até a barra fixa', nota:'Marco `pullup`, alvo jul/2027. Esta é a coluna vertebral do treino.', filhos:[
+  { id:'corpo.pull', t:'Puxar — a rota até a barra fixa', marco:'pullup', nota:'Marco `pullup`, alvo jul/2027. Esta é a coluna vertebral do treino.', filhos:[
     { id:'corpo.pull.1', t:'Pendurar (dead hang)', min:25, pre:['corpo.fund.esc'],
       saber:['30s pendurado, ombros ativos'] },
     { id:'corpo.pull.2', t:'Remada australiana (barra baixa)', min:25, pre:['corpo.pull.1'],

@@ -23,7 +23,7 @@
 import type { Trilha } from './types';
 
 export const CS50: Trilha = {
-  id: 'cs50', t: 'CS50', tipos: ['cs50', 'cs50_light'], cor: '--chart-2',
+  id: 'cs50', t: 'CS50', tipos: ['cs50', 'cs50_light'], cor: '--chart-2', marco: 'cs50c',
   nota: 'Sprint de certificado. Acelere a aula, concentre esforço no pset — é o pset que o certificado exige.',
   filhos: [
 

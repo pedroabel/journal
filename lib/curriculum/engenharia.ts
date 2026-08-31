@@ -14,7 +14,7 @@
 import type { Trilha } from './types';
 
 export const ENGENHARIA: Trilha = {
-  id: 'eng', t: 'Engenharia e portfólio', tipos: ['roadmap'], cor: '--chart-4',
+  id: 'eng', t: 'Engenharia e portfólio', tipos: ['roadmap'], cor: '--chart-4', marco: 'proj23',
   nota: 'Um projeto sem teste, sem README e sem deploy não é portfólio — é rascunho público.',
   filhos: [
 
@@ -108,7 +108,7 @@ export const ENGENHARIA: Trilha = {
 
   { id:'eng.proj', t:'Os três projetos', nota:'O portfólio é o argumento. Cada projeto tem um papel diferente — não faça três vezes o mesmo.', filhos:[
 
-    { id:'eng.proj.p1', t:'Projeto 1 — pequeno, resolve um problema real', nota:'Alvo: abr/2027. Pequeno de propósito: o valor é estar no ar e ser seu.', filhos:[
+    { id:'eng.proj.p1', t:'Projeto 1 — pequeno, resolve um problema real', marco:'proj1', nota:'Alvo: abr/2027. Pequeno de propósito: o valor é estar no ar e ser seu.', filhos:[
       { id:'eng.proj.p1.esc', t:'Escopo e problema', min:60,
         saber:['problema que VOCÊ tem','escopo entregável em 3 semanas de sábado'] },
       { id:'eng.proj.p1.b', t:'Construir o núcleo', min:120, pre:['eng.proj.p1.esc'],

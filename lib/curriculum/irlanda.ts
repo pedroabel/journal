@@ -11,11 +11,11 @@
 import type { Trilha } from './types';
 
 export const IRLANDA: Trilha = {
-  id: 'irl', t: 'Irlanda', tipos: [], cor: '--chart-1',
+  id: 'irl', t: 'Irlanda', tipos: [], cor: '--chart-1', marco: 'firstday',
   nota: 'Intake alvo set/2028, plano B jan/2029. O que tem prazo longo começa cedo: passaporte e cães.',
   filhos: [
 
-  { id:'irl.map', t:'Mapear o terreno', nota:'2026–2027. Barato, e evita descobrir em 2028 que a rota estava errada.', filhos:[
+  { id:'irl.map', t:'Mapear o terreno', marco:'costs', nota:'2026–2027. Barato, e evita descobrir em 2028 que a rota estava errada.', filhos:[
     { id:'irl.map.pass', t:'Passaporte válido além de 2030', min:60,
       nota:'O item mais urgente do plano hoje: é o de maior tempo de espera e trava tudo depois.',
       saber:['validade conferida','se vence antes de 2030, renovação protocolada'] },
@@ -56,7 +56,7 @@ export const IRLANDA: Trilha = {
       saber:['modelo de cobrança definido','primeira receita recorrente entrando'] },
   ]},
 
-  { id:'irl.app', t:'Aplicação', nota:'Alvo: submeter até mar/2028, aceite até jun/2028.', filhos:[
+  { id:'irl.app', t:'Aplicação', marco:'apps3', nota:'Alvo: submeter até mar/2028, aceite até jun/2028.', filhos:[
     { id:'irl.app.doc', t:'Histórico escolar e diploma', min:60, pre:['irl.map.short'],
       saber:['originais em mãos','confirmado se a escola exige avaliação de equivalência'] },
     { id:'irl.app.trad', t:'Tradução juramentada', min:60, pre:['irl.app.doc'],
@@ -75,7 +75,7 @@ export const IRLANDA: Trilha = {
       saber:['offer letter no seu nome','depósito pago e comprovante guardado'] },
   ]},
 
-  { id:'irl.visa', t:'Visto', nota:'Só depois do aceite. Bloqueante absoluto — não antecipe.', filhos:[
+  { id:'irl.visa', t:'Visto', marco:'visa', nota:'Só depois do aceite. Bloqueante absoluto — não antecipe.', filhos:[
     { id:'irl.visa.tipo', t:'Qual visto e qual formulário', min:60, pre:['irl.app.dep'],
       saber:['tipo correto para estudo de longa duração','checklist oficial impresso e conferido item a item'] },
     { id:'irl.visa.seg', t:'Seguro-saúde privado', min:60, pre:['irl.visa.tipo'],
@@ -89,7 +89,7 @@ export const IRLANDA: Trilha = {
       saber:['visto emitido — ou recurso protocolado dentro do prazo'] },
   ]},
 
-  { id:'irl.dog', t:'Os cachorros', nota:'Começa 6+ meses antes. É a parte mais fácil de subestimar e a mais impossível de acelerar.', filhos:[
+  { id:'irl.dog', t:'Os cachorros', marco:'dogs', nota:'Começa 6+ meses antes. É a parte mais fácil de subestimar e a mais impossível de acelerar.', filhos:[
     { id:'irl.dog.reg', t:'Regras de entrada de animais na Irlanda', min:60,
       saber:['a sequência exigida e a ordem obrigatória entre as etapas','se há exigência de titulação de anticorpos para o Brasil'] },
     { id:'irl.dog.chip', t:'Microchip antes da vacina', min:60, pre:['irl.dog.reg'],
@@ -106,7 +106,7 @@ export const IRLANDA: Trilha = {
       saber:['moradia que aceita animais confirmada ANTES do voo','veterinário local mapeado'] },
   ]},
 
-  { id:'irl.sai', t:'Saída do Brasil', filhos:[
+  { id:'irl.sai', t:'Saída do Brasil', marco:'ticket', filhos:[
     { id:'irl.sai.mor', t:'Moradia inicial reservada', min:60, pre:['irl.visa.dec'],
       nota:'Aluguel na Irlanda é o gargalo real. Moradia inicial garantida antes de embarcar, mesmo que temporária.',
       saber:['acomodação das primeiras semanas paga e confirmada'] },
@@ -118,7 +118,7 @@ export const IRLANDA: Trilha = {
       saber:['o que vende, o que doa, o que guarda e com quem'] },
   ]},
 
-  { id:'irl.che', t:'Chegada', nota:'As primeiras seis semanas têm uma ordem própria — cada item destrava o próximo.', filhos:[
+  { id:'irl.che', t:'Chegada', marco:'firstday', nota:'As primeiras seis semanas têm uma ordem própria — cada item destrava o próximo.', filhos:[
     { id:'irl.che.imig', t:'Passar pela imigração', min:60, pre:['irl.sai.pass'],
       saber:['documentos que o oficial pede, na mão e não na mala'] },
     { id:'irl.che.ppsn', t:'PPSN', min:60, pre:['irl.che.imig'],

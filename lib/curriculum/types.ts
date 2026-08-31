@@ -29,6 +29,16 @@ export interface Node {
   saber?: string[];
   /** Ids que precisam estar feitos antes. Vazio = pode começar a qualquer momento. */
   pre?: string[];
+  /**
+   * Id do marco em `MS` (lib/plan.ts) que este ramo precisa alimentar.
+   *
+   * É o que permite cruzar conteúdo com prazo: quantas horas faltam aqui
+   * contra quantas semanas faltam até lá. Vive no nó e não só na raiz porque
+   * uma trilha pode ter prazos internos diferentes — a Irlanda tem custos em
+   * 2026, aplicações em 2028 e visto em ago/2028, e a média entre eles não
+   * significaria nada.
+   */
+  marco?: string;
   /** Subtemas. Ausente na folha. */
   filhos?: Node[];
 }
@@ -39,6 +49,22 @@ export interface Trilha extends Node {
   tipos: string[];
   /** Token de cor, como em lib/plan.ts — nome, nunca valor. */
   cor: string;
+  /**
+   * Concluir a árvore fecha o marco?
+   *
+   * Em CS50 sim: os psets SÃO o certificado. Em inglês não — estudar os 76
+   * temas é condição necessária para a banda 7, nunca suficiente, porque o
+   * que move a banda é volume de prática e a prova. Em algoritmos idem: a
+   * árvore ensina os 18 padrões, e a entrevista cobra os ~150 problemas de
+   * treino em cima deles.
+   *
+   * A distinção existe para o ritmo não mentir. Sem ela, "termina em nov/2026
+   * com 68 semanas de folga" apareceria para o inglês — um número correto
+   * sobre o conteúdo e completamente falso sobre o marco.
+   *
+   * Ausente = true.
+   */
+  fecha?: boolean;
 }
 
 /** É folha quando não tem filhos. `min` e `saber` só fazem sentido aqui. */

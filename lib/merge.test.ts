@@ -88,6 +88,8 @@ function mulberry32(seed: number): () => number {
 // Poucos caminhos e poucos carimbos distintos, de propósito: é o que faz
 // colisão e empate acontecerem de verdade, que é onde mora o bug.
 const PATHS = [
+  `units${SEP}dsa.pad.win`,
+  `units${SEP}en.w.frase.art`,
   `tracks${SEP}roadmap`,
   `tracks${SEP}cs50`,
   `checks${SEP}docs-3`,

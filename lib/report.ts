@@ -5,6 +5,7 @@
  * é ser lido por um humano ou por um modelo, não processado por máquina.
  */
 import { CHECKS, MCQ, MS, PLAN_CTX, TRACKS, TYPE_LABEL } from './plan';
+import { hm, ritmos } from './ritmo';
 import {
   addDays, blockedBy, curQuarter, curTrack, ds, expectedPerWeek, isReduced,
   monthKey, msDone, msState, msTitle, nextMS, typeStreak,
@@ -88,6 +89,39 @@ export function buildReport(st: JournalState, nDays = 30): string {
   }
 
   out.push('');
+  out.push('RITMO \u2014 conte\u00fado que falta \u00d7 prazo do marco');
+  out.push(
+    'Tr\u00eas velocidades: PRECISA (o prazo exige), ROTINA (os blocos oferecem), ' +
+    'FAZ (o observado nos \u00faltimos 28 dias). Rotina < precisa \u00e9 problema de desenho da ' +
+    'semana; ' +
+    'faz < rotina \u00e9 problema de execu\u00e7\u00e3o.'
+  );
+  for (const { trilha, no, r } of ritmos(st)) {
+    const nome = no.id === trilha.id ? trilha.t : trilha.t + ' / ' + no.t;
+    if (r.veredito === 'concluida') { out.push(`- ${nome}: CONCLU\u00cdDA`); continue; }
+
+    const vel = [
+      `precisa ${r.precisa !== null ? hm(r.precisa) + '/sem' : '-'}`,
+      `rotina ${r.capacidade ? hm(r.capacidade) + '/sem' : 'nenhum bloco'}`,
+      `faz ${r.real !== null ? hm(r.real) + '/sem' : 'sem dados'}`,
+    ].join(' - ');
+
+    const fim = r.fimNoReal ?? r.fimNaCapacidade;
+    const situacao =
+      r.veredito === 'sem-ritmo' ? 'SEM RITMO PARA PROJETAR'
+      : r.margem === null ? 'ALVO VENCIDO'
+      : r.margem < 0 ? `ATRASA ${Math.abs(Math.round(r.margem))} semanas (termina ${fim})`
+      : r.veredito === 'no-limite' ? `no limite (termina ${fim})`
+      : `folga de ${Math.round(r.margem)} semanas (termina ${fim})`;
+
+    out.push(
+      `- ${nome}: ${r.feitas}/${r.total} temas, restam ${hm(r.restanteMin)}, ` +
+      `alvo ${r.alvo}, ${vel}, ${situacao}` +
+      (r.suficiente ? '' : ' [concluir a \u00e1rvore n\u00e3o basta para este marco]')
+    );
+  }
+
+  out.push('');
   out.push('CHECKLISTS');
   for (const cl of CHECKS) {
     let dc = 0;
@@ -120,7 +154,7 @@ export function analysisPrompt(report: string): string {
     '\n\nRelatório gerado pelo sistema dele:\n\n' + report +
     '\n\nAnalise em português do Brasil, direto e crítico (não elogie por elogiar). ' +
     'Máximo 250 palavras: (1) o que está funcionando, (2) o que está em risco e por quê, ' +
-    '(3) 2-3 ajustes concretos. Se um bloco é pulado repetidamente, diga que o problema é o ' +
+    '(3) 2-3 ajustes concretos. Use a seção RITMO: se a rotina oferece menos do que o prazo exige, o problema está no desenho da semana e o ajuste é remanejar blocos \u2014 diga quais. Se a rotina basta e o observado não, o problema é execução. Se um bloco é pulado repetidamente, diga que o problema é o ' +
     'desenho da rotina e sugira a mudança. Se houver marco atrasado, priorize falar dele. ' +
     'Se não houver dados suficientes, diga isso em vez de inventar. Parágrafos curtos, sem markdown.'
   );

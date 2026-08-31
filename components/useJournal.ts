@@ -166,7 +166,7 @@ export function useJournal() {
   }, [mutate]);
 
   const toggleFlag = useCallback(
-    (group: 'tracks' | 'checks' | 'ms' | 'reduced', key: string) => {
+    (group: 'units' | 'tracks' | 'checks' | 'ms' | 'reduced', key: string) => {
       mutate((d) => {
         if (d[group][key]) delete d[group][key];
         else d[group][key] = true;

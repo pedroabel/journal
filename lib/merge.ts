@@ -29,8 +29,8 @@
  */
 import { STATE_SEP, emptyState, type JournalState } from './state';
 
-/** Grupos com um nível: `tracks␟roadmap`. O valor só pode ser `true`. */
-const FLAT = ['tracks', 'checks', 'ms', 'reduced'] as const;
+/** Grupos com um nível: `units␟dsa.pad.win`. O valor só pode ser `true`. */
+const FLAT = ['units', 'tracks', 'checks', 'ms', 'reduced'] as const;
 
 /** Grupos com dois níveis: `day␟2026-08-23␟sono`, `monthly␟2026-08␟q1`. */
 const NESTED = ['day', 'monthly'] as const;

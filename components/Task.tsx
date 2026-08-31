@@ -1,20 +1,23 @@
 'use client';
 
 import { PROTO, type Block } from '@/lib/plan';
-import { curTrack, trackById } from '@/lib/derive';
 import type { JournalState } from '@/lib/state';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import ProtoDetails from './Proto';
+import StudyNext from './StudyNext';
 import { tone } from './tone';
 
 /**
  * Um bloco da rotina. Só o dia de hoje é marcável — os outros são
  * pré-visualização, com a caixa desabilitada e sem interação.
+ *
+ * O bloco não diz só QUANDO e COMO: `StudyNext` resolve O QUE, puxando da
+ * árvore de temas o próximo assunto que cabe nesta sessão.
  */
 export default function Task({
-  b, win, isToday, dstr, state, onToggle,
+  b, win, isToday, dstr, state, onToggle, onToggleUnit,
 }: {
   b: Block;
   win: 'l' | 'n';
@@ -22,12 +25,11 @@ export default function Task({
   dstr: string;
   state: JournalState;
   onToggle: (dstr: string, key: string) => void;
+  onToggleUnit: (group: 'units', key: string) => void;
 }) {
   const p = PROTO[b.t];
   const key = `${win}:${b.t}`;
   const dn = isToday && !!state.day[dstr]?.[key];
-  const tr = b.track ? trackById(b.track) : null;
-  const cur = tr ? curTrack(state, tr) : null;
 
   return (
     <div
@@ -66,20 +68,13 @@ export default function Task({
             {b.label || p.title}
           </h4>
 
-          {tr && (
-            <div className="bg-muted/60 mt-2 rounded-md px-3 py-2">
-              <span className="text-muted-foreground block font-mono text-[0.625rem] tracking-wider uppercase">
-                Foco de hoje
-              </span>
-              <span className="text-sm">
-                {cur ? (
-                  <b className="text-[var(--tone)] font-medium">{cur.txt}</b>
-                ) : (
-                  'Trilha concluída ✓'
-                )}
-              </span>
-            </div>
-          )}
+          <StudyNext
+            tipo={b.t}
+            dur={b.d}
+            state={state}
+            podeMarcar={isToday}
+            onToggle={onToggleUnit}
+          />
         </div>
       </div>
 

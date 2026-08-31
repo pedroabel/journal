@@ -19,6 +19,8 @@ export const STATE_SEP = String.fromCharCode(31);
 
 export interface JournalState {
   day: Record<string, Record<string, true>>;
+  /** Folhas da árvore de temas já concluídas — a chave é o id do nó. */
+  units: Record<string, true>;
   tracks: Record<string, true>;
   checks: Record<string, true>;
   ms: Record<string, true>;
@@ -29,7 +31,7 @@ export interface JournalState {
 }
 
 export function emptyState(): JournalState {
-  return { day: {}, tracks: {}, checks: {}, ms: {}, reduced: {}, monthly: {}, t: {}, view: 'hoje' };
+  return { day: {}, units: {}, tracks: {}, checks: {}, ms: {}, reduced: {}, monthly: {}, t: {}, view: 'hoje' };
 }
 
 /**
@@ -117,6 +119,7 @@ export function adopt(raw: unknown, fallbackView: ViewId = 'hoje'): JournalState
   const d = (raw ?? {}) as Partial<JournalState>;
   return migrate({
     day: d.day ?? {},
+    units: d.units ?? {},
     tracks: { ...(d.tracks ?? {}) },
     checks: { ...(d.checks ?? {}) },
     ms: d.ms ?? {},

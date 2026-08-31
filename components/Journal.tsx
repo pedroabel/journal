@@ -16,6 +16,7 @@ import Semana from './views/Semana';
 import Mes from './views/Mes';
 import Ano from './views/Ano';
 import Jornada from './views/Jornada';
+import Estudar from './views/Estudar';
 import Marcos from './sections/Marcos';
 import Norte from './sections/Norte';
 import Fases from './sections/Fases';
@@ -106,8 +107,10 @@ export default function Journal() {
             />
           ) : view === 'ano' ? (
             <Ano journal={journal} selYear={selYear} onShift={(d) => setSelYear(selYear + d)} />
-          ) : (
+          ) : view === 'jornada' ? (
             <Jornada journal={journal} />
+          ) : (
+            <Estudar journal={journal} />
           )}
 
           <Separator />

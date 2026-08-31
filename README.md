@@ -17,6 +17,8 @@ app/
 proxy.ts                barreira: valida a sessão antes de qualquer rota
 lib/
   plan.ts               CONTEÚDO do plano — rotina, marcos, trilhas, checklists
+  curriculum/           CONTEÚDO do percurso — a árvore de temas a estudar
+  ritmo.ts              conteúdo que falta × prazo do marco
   derive.ts             cálculos: sequências, taxas, situação dos marcos
   state.ts              estado local e a migração das chaves antigas
   merge.ts              fusão entre aparelhos, chave a chave
@@ -27,13 +29,51 @@ lib/
 components/
   ui/                   componentes do shadcn/ui (não editar à mão)
   layout/               barra lateral e navegação
-  views/                hoje, semana, mês, ano, jornada
+  views/                hoje, semana, mês, ano, jornada, estudar
   sections/             seções de referência
   Section.tsx           casca única de seção: rótulo, título, apoio
 ```
 
-A separação que importa: **`lib/plan.ts` é o conteúdo** (o que o plano diz),
-o resto é maquinaria. Quase toda atualização futura é só nesse arquivo.
+A separação que importa: **o conteúdo vive em dois lugares e o resto é
+maquinaria.** `lib/plan.ts` diz *quando* (a rotina da semana, os marcos, as
+checklists); `lib/curriculum/` diz *o quê* (os temas, na ordem de estudo).
+Quase toda atualização futura é só nesses dois.
+
+## O percurso
+
+`lib/curriculum/` é uma árvore de profundidade livre: trilha → módulo → tema →
+subtema → ... → folha. A folha é a unidade estudável — cabe num bloco da
+rotina e termina num critério binário (`saber`), o que você tem que conseguir
+fazer, sem olhar, para marcá-la.
+
+São oito trilhas e ~380 folhas: inglês, CS50, algoritmos, engenharia e
+portfólio, carreira, corpo, Irlanda e base.
+
+**A árvore não guarda links, e isso é a regra, não um esquecimento:**
+
+> A árvore guarda o que o site precisa para **agendar e cobrar** — não o que a
+> fonte já ensina.
+
+Por ela o roadmap.sh ficou de fora inteiro: ele já traz o conteúdo detalhado e
+na ordem, e não tem entregável com data para o site agendar. O CS50 ficou só
+com os psets, os labs e os conceitos que o trabalho dele não dá — o sumário das
+aulas saiu. Link apodrece em três anos; taxonomia não.
+
+`Trilha.tipos` casa com o `t` dos blocos em `WEEK`: é o que faz um bloco da
+rotina resolver sozinho qual tema estudar hoje, e quanto dele cabe na sessão.
+
+`lib/ritmo.ts` cruza as duas metades — quantas horas faltam num ramo contra
+quando vence o marco que ele alimenta (`Node.marco`). Devolve três velocidades
+separadas de propósito: o que o **prazo exige**, o que a **rotina oferece** e o
+que você **fez de fato** nos últimos 28 dias. Rotina abaixo do necessário é
+problema de desenho da semana; real abaixo da rotina é problema de execução, e
+a correção de cada um é diferente.
+
+`Trilha.fecha: false` marca as trilhas em que concluir a árvore é condição
+necessária e não suficiente — inglês, algoritmos e carreira. Sem essa marca o
+ritmo projetaria o inglês pronto em nov/2026 com folga larga: um número correto
+sobre o conteúdo e falso sobre a banda 7, que depende de prática repetida e de
+uma prova.
 
 ## Interface
 
@@ -67,7 +107,7 @@ Três peças evitam que telas de mesma finalidade divirjam:
 ```bash
 npm install
 npm run dev         # http://localhost:3000
-npm test            # fusão entre aparelhos e migração de chaves
+npm test            # fusão, migração de chaves, a árvore e o ritmo
 ```
 
 O `.env.local` precisa de:

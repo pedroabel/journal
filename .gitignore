@@ -1,13 +1,5 @@
 .DS_Store
 Thumbs.db
-
-# Backups do progresso (botão "baixar backup"): dados pessoais em texto claro.
-sistema-unificado-*.json
-
-# Wrangler: estado local, credenciais e segredos de desenvolvimento.
-.wrangler/
-.dev.vars
-.dev.vars.*
 node_modules/
 
 # Next.js
@@ -15,12 +7,9 @@ node_modules/
 /out/
 next-env.d.ts
 
-# Variaveis de ambiente: AUTH_SECRET e o hash da senha vivem aqui.
-.env
-.env.local
-.env*.local
+# Variáveis de ambiente: AUTH_SECRET e as credenciais do Google vivem aqui.
+.env*
 
 # TypeScript incremental build
 *.tsbuildinfo
 .vercel
-.env*

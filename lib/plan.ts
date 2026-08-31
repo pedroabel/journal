@@ -177,7 +177,7 @@ export const PLANO =[
 {area:'Programação',color:'--chart-4',freq:'~5h/semana',acoes:['Trilha do roadmap.sh construindo código a cada conceito','CS50 como sprint de certificado','DSA por padrões com revisão espaçada','Deep work no projeto no sábado','Commit em toda sessão']},
 {area:'Carreira',color:'--chart-4',freq:'1h/semana (sexta)',acoes:['2–3 candidaturas por semana (BR + remoto internacional)','LinkedIn em inglês e posts de progresso','Respostas STAR gravadas em inglês','Funil de candidaturas atualizado']},
 {area:'Saúde & Energia',color:'--chart-3',freq:'diário / 3x semana',acoes:['Dormir ~23:00, acordar 06:30','Cochilo no máximo 15–20min','Calistenia 3x/semana + caminhada no almoço de quinta']},
-{area:'Finanças',color:'--chart-2',freq:'mensal',acoes:['Reserva pessoal de R$10.000 — prioridade, antes de tudo','R$2.500/mês automático no dia do salário (retoma quando a reserva fechar)','Investimentos 30min no 1º domingo do mês','SinPro virando receita recorrente com os primos']},
+{area:'Finanças',color:'--chart-2',freq:'mensal',acoes:['R$2.500/mês automático no dia do salário','R$1.200/mês para a reserva pessoal — ao lado, não no lugar','Investimentos 30min no 1º domingo do mês','SinPro virando receita recorrente com os primos']},
 {area:'Intercâmbio',color:'--chart-1',freq:'por fase',acoes:['Agora: passaporte + planilha de custos reais','2027: escolher escolas e levantar exigências','2028: aplicações, aceite, fundos, visto','Cachorras: iniciar documentação 6+ meses antes']},
 {area:'Vida & Prazer',color:'--chart-5',freq:'livre',acoes:['Leitura antes de dormir','Desenho no fim de semana','Passeio com as cachorras','Ver gente — sem hora marcada, mas sem deixar zerar','Um marco de experiência por trimestre — obrigatório']}
 ];
@@ -187,7 +187,7 @@ export const DEPS =[
 {chain:['Carta de aceite','Fundos','Visto','Passagem'],note:'Bloqueante absoluto: fundos e seguro só fazem sentido depois do aceite. Não antecipe.',b:true},
 {chain:['Passaporte válido','Visto'],note:'Maior tempo de espera e o único item urgente hoje.',b:true},
 {chain:['CS50 + Portfólio + DSA','Entrevistas','Emprego novo'],note:'Três frentes convergindo. Aplicar cedo acelera, porque entrevista se aprende entrevistando.',b:false},
-{chain:['SinPro','Renda recorrente','Fundos comprovados'],note:'Roda no expediente, não compete com o tempo pessoal — mas é o que torna a conta viável. É também o único jeito de fechar a reserva de R$10.000 sem parar a poupança do visto.',b:false}
+{chain:['SinPro','Renda recorrente','Fundos comprovados'],note:'Roda no expediente, não compete com o tempo pessoal — mas é o que torna a conta viável. Com R$3.700/mês saindo até mai/2027, é a folga que impede a reserva de comer a poupança do visto.',b:false}
 ];
 export const METHODS =[
 ['Prática espaçada','Doses pequenas ao longo do tempo batem sessões longas concentradas. Por isso inglês e código aparecem quase todo dia, em blocos curtos.'],
@@ -208,7 +208,7 @@ export const ANTIPROC =[
 ['Progresso público','Postar avanços cobra você publicamente e constrói o perfil ao mesmo tempo.']
 ];
 export const DECISOES =[
-['A reserva pessoal vem antes da escada','Os R$10.000 são tratados como dívida: enquanto não fecharem, a poupança da Irlanda não anda. Por isso os marcos financeiros deixaram de ter data e passaram a contar meses — <b>a data real depende de quando a reserva acabar</b>. Saindo dos R$2.500/mês são 4 meses parados, e os R$60.000 caem para depois do visto: o intake vira o de jan/2029. Saindo do SinPro, a escada não se move.'],
+['A reserva corre ao lado da escada, não na frente dela','Os R$10.000 são dívida pessoal e têm dinheiro próprio: R$1.200/mês, além dos R$2.500 do intercâmbio. <b>Por isso a escada do visto não se move</b> — as datas dela seguem valendo e o intake de set/2028 continua de pé. O custo trocou de lugar: não está no prazo, está no mês. São R$3.700/mês saindo até ~mai/2027, e é essa folga, não a data, que aperta se algo der errado.'],
 ['Streak só até a visão semanal','Diária e semanal mostram corrente e sequência. <b>Mensal mostra percentual, anual mostra marcos.</b> Streak em escala de ano só destaca as quebras — mede o que te desmotiva em vez do que você construiu.'],
 ['Cada visão responde uma pergunta diferente','Sem isso as cinco viram a mesma tabela em zooms diferentes. Diária: o que faço agora. Semanal: mantive o ritmo. Mensal: o mês foi bom. Anual: saí do lugar. Jornada: onde estou.'],
 ['Contagem regressiva só para o próximo marco','Nunca para a data da Irlanda. Faltar 34 meses desmotiva; faltar 5 semanas move.'],
@@ -218,7 +218,7 @@ export const DECISOES =[
 ['Marcos precisam de critério binário','"Ser fluente" não é marco. "Gravar 10 min falando sem travar" é: ou você tem a gravação ou não tem. Todo marco aqui depende só de você.'],
 ['Datas derivam do intake de set/2028','Aceite até jun/2028, visto e passagem no meio do ano, aula em setembro. O plano B de jan/2029 usa a mesma cadeia deslocada — e a Fase 3 cobre as duas.']
 ];
-export const PLAN_CTX ='Abel, dev full-stack (eng. computação), Brasil. Objetivo: emigrar para a Irlanda via curso nível 9 (PgDip/mestrado), intake alvo setembro/2028 com plano B janeiro/2029, usando o Stamp 1G de 24 meses. Rotina: janela do almoço (~20min, máx 3 dias/semana) e janela da noite 20:00-22:40 (chega 19h, dorme ~23h). Inglês: C2 na compreensão, gargalo é produção e vergonha de falar. CS50 pelo certificado. DSA para entrevistas. Poupança R$2.500/mês, hoje suspensa: precisa juntar antes uma reserva pessoal de R$10.000, tratada como dívida, e a escada do visto só recomeça depois. SinPro roda no expediente. Mora acompanhado: não tem mais tarefa fixa de casa nem marmita, mas ganhou demanda de convívio e ainda não sabe quanto vai ajudar em casa. Tem cachorras, nunca sustentou hábitos antes — consistência é o maior risco. Tem modo reduzido para semanas atípicas e um marco de experiência obrigatório por trimestre.';
+export const PLAN_CTX ='Abel, dev full-stack (eng. computação), Brasil. Objetivo: emigrar para a Irlanda via curso nível 9 (PgDip/mestrado), intake alvo setembro/2028 com plano B janeiro/2029, usando o Stamp 1G de 24 meses. Rotina: janela do almoço (~20min, máx 3 dias/semana) e janela da noite 20:00-22:40 (chega 19h, dorme ~23h). Inglês: C2 na compreensão, gargalo é produção e vergonha de falar. CS50 pelo certificado. DSA para entrevistas. Poupança R$2.500/mês para o intercâmbio, mais R$1.200/mês para uma reserva pessoal de R$10.000 tratada como dívida (fecha ~mai/2027). As duas correm juntas: R$3.700/mês saindo, e a escada do visto não atrasa. SinPro roda no expediente. Mora acompanhado: não tem mais tarefa fixa de casa nem marmita, mas ganhou demanda de convívio e ainda não sabe quanto vai ajudar em casa. Tem cachorras, nunca sustentou hábitos antes — consistência é o maior risco. Tem modo reduzido para semanas atípicas e um marco de experiência obrigatório por trimestre.';
 export const CHECKS: Checklist[] =[
 {id:'docs',name:'Documentos — por fase',color:'--chart-1',items:[
 ['passport','Conferir validade do passaporte','AGORA — renove se vence antes de 2030'],['costs','Planilha de custos reais (curso, visto, vida)','set/2026'],
@@ -229,11 +229,12 @@ export const CHECKS: Checklist[] =[
 ['insurance','Seguro-saúde privado','jul/2028'],['visa','Pedido de visto submetido','jul–ago/2028'],
 ['dogs','Documentação das cachorras (microchip, antirrábica, exames)','iniciar 6+ meses antes']]},
 {id:'fin',name:'Financeiro — marcos de poupança',color:'--chart-2',items:[
-['reserva','Reserva pessoal de R$10.000','PRIMEIRO — a escada abaixo só começa depois'],
-['auto','R$2.500/mês automatizado','configurar uma vez'],['k12','R$12.500 acumulados','5 meses de poupança cheia'],
-['k25','R$25.000 acumulados','10 meses'],['k42','R$42.000 acumulados','17 meses'],
-['k60','R$60.000 acumulados','24 meses — é o valor dos fundos do visto'],
-['sinpro','SinPro gerando receita recorrente','a alavanca que fecha a conta — e que encurta a reserva'],
+['auto','R$2.500/mês automatizado','configurar uma vez'],
+['reserva5','Reserva pessoal — metade (R$5.000)','~jan/2027'],
+['reserva','Reserva pessoal quitada (R$10.000)','~mai/2027 · R$1.200/mês, em paralelo à escada'],
+['k12','R$12.500 acumulados','~dez/2026'],['k25','R$25.000 acumulados','~jun/2027'],
+['k42','R$42.000 acumulados','~dez/2027'],['k60','R$60.000 acumulados','~ago/2028 — o valor dos fundos'],
+['sinpro','SinPro gerando receita recorrente','a alavanca que fecha a conta — e a folga dos R$3.700/mês'],
 ['bolsas','Pesquisar bolsas (Government of Ireland Scholarship)','2027']]}
 ];
 

@@ -170,7 +170,7 @@ export function msTitle(id: string): string {
 /** Primeiro item ainda não concluído — o "você está aqui" da trilha. */
 export function curTrack(st: JournalState, tr: Track): { i: number; txt: string } | null {
   for (let i = 0; i < tr.items.length; i++) {
-    if (!st.tracks[tr.id + '#' + i]) return { i, txt: tr.items[i] };
+    if (!st.tracks[tr.id + '#' + tr.items[i][0]]) return { i, txt: tr.items[i][1] };
   }
   return null;
 }

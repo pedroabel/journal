@@ -16,11 +16,11 @@ export default function Checklists({ journal }: { journal: Journal }) {
           title={cl.name}
           colorToken={cl.color}
           onToggle={(key) => toggleFlag('checks', key)}
-          entries={cl.items.map((it, i) => ({
-            key: `${cl.id}#${i}`,
-            label: it[0],
-            hint: it[1],
-            done: !!state.checks[`${cl.id}#${i}`],
+          entries={cl.items.map(([k, label, when]) => ({
+            key: `${cl.id}#${k}`,
+            label,
+            hint: when,
+            done: !!state.checks[`${cl.id}#${k}`],
           }))}
         />
       ))}

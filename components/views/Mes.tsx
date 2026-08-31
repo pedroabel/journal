@@ -1,7 +1,17 @@
 'use client';
 
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+
 import { AREAS, MCQ, MONTH_NAMES, MS, TYPE_LABEL, areaOf, type AreaKey } from '@/lib/plan';
 import { ds, isReduced, monthKey, monthStats, rateFor, today } from '@/lib/derive';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Empty, EmptyDescription, EmptyTitle } from '@/components/ui/empty';
+import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Section, SectionTitle } from '../Section';
 import type { Journal } from '../useJournal';
 import DayDetail from '../DayDetail';
 import Milestone from '../Milestone';
@@ -36,126 +46,190 @@ export default function Mes({
     .filter((x) => x.r && x.r.exp > 0);
 
   return (
-    <section>
-      <div className="eyebrow-row">
-        <span className="idx">03</span>
-        <span className="tag">Mensal · o mês foi bom</span>
-      </div>
-      <h2 className="sec">Mês</h2>
-
-      <div className="mnav">
-        <button className="arrow" onClick={() => onShift(-1)} aria-label="mês anterior">←</button>
-        <span className="mlabel">{MONTH_NAMES[selMonth]} {selYear}</span>
-        <button className="arrow" onClick={() => onShift(1)} aria-label="próximo mês">→</button>
-      </div>
-
-      <div className="card">
-        <div className="hmgrid">
-          {['S', 'T', 'Q', 'Q', 'S', 'S', 'D'].map((x, i) => (
-            <div key={i} className="hmhead">{x}</div>
-          ))}
-          {Array.from({ length: lead }, (_, i) => <div key={'e' + i} className="hmcell empty" />)}
-          {Array.from({ length: lastD }, (_, i) => {
-            const dnum = i + 1;
-            const d = new Date(selYear, selMonth, dnum);
-            const dstr = ds(d);
-            const log = state.day[dstr] || {};
-            const areas: Partial<Record<AreaKey, boolean>> = {};
-            for (const k of Object.keys(log)) areas[areaOf(k.slice(2))] = true;
-            const cls =
-              'hmcell' +
-              (dstr === today() ? ' today' : '') +
-              (isReduced(state, d) ? ' red' : '') +
-              (selDetail === dstr ? ' sel' : '');
-            return (
-              <button
-                key={dstr}
-                className={cls}
-                aria-pressed={selDetail === dstr}
-                onClick={() => onSelDetail(selDetail === dstr ? null : dstr)}
-              >
-                <span className="dn">{dnum}</span>
-                <span className="hmdots">
-                  {areaKeys.map((a) => areas[a] && <i key={a} style={{ background: `var(${AREAS[a].c})` }} />)}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="legend">
-          {areaKeys.map((a) => (
-            <span key={a}>
-              <i style={{ background: `var(${AREAS[a].c})` }} />
-              {AREAS[a].n}
-            </span>
-          ))}
-          <span>
-            <i style={{ background: 'none', border: '1px dashed var(--violet)' }} />
-            reduzida
+    <Section
+      index="03"
+      eyebrow="Mensal · o mês foi bom"
+      title="Mês"
+      actions={
+        <div className="flex items-center gap-1.5">
+          <Button variant="outline" size="icon-sm" onClick={() => onShift(-1)} aria-label="mês anterior">
+            <ChevronLeft />
+          </Button>
+          <span className="min-w-36 text-center text-sm font-medium capitalize">
+            {MONTH_NAMES[selMonth]} {selYear}
           </span>
+          <Button variant="outline" size="icon-sm" onClick={() => onShift(1)} aria-label="próximo mês">
+            <ChevronRight />
+          </Button>
         </div>
-
-        <DayDetail dstr={selDetail} state={state} onClose={() => onSelDetail(null)} />
-      </div>
-
-      <h3>Taxa de consistência</h3>
-      <div className="card">
-        {rates.map(({ t, r }) => {
-          const pct = r!.pct;
-          const c = pct >= 80 ? '--accent' : pct >= 50 ? '--ink-dim' : '--ink-faint';
-          return (
-            <div key={t} className="rate" style={{ ['--rc' as string]: `var(${c})` }}>
-              <span className="rn">{TYPE_LABEL[t]}</span>
-              <span className="rbar"><i style={{ width: pct + '%' }} /></span>
-              <span className="rv">{r!.did}/{r!.exp} · {pct}%</span>
-            </div>
-          );
-        })}
-        {rates.length === 0 && (
-          <p className="body" style={{ margin: 0, fontSize: 13 }}>Sem dados ainda neste mês.</p>
-        )}
-        {stats.redDays > 0 && (
-          <p className="body" style={{ margin: '10px 0 0', fontSize: 12, color: 'var(--violet)' }}>
-            {stats.redDays} dia(s) em semana reduzida — fora do cálculo, sem penalidade.
-          </p>
-        )}
-      </div>
-
-      <h3>Marcos deste mês</h3>
-      {msThisMonth.length === 0 ? (
-        <div className="card">
-          <p className="body" style={{ margin: 0, fontSize: 13 }}>Nenhum marco com alvo neste mês.</p>
-        </div>
-      ) : (
-        msThisMonth.map((m) => (
-          <Milestone key={m.id} m={m} state={state} onToggle={toggleFlag} />
-        ))
-      )}
-
-      <h3>Fechamento do mês</h3>
-      <div className="card">
-        <p className="body" style={{ fontSize: 13, marginBottom: 14 }}>Três toques e o mês está fechado.</p>
-        {MCQ.map((q) => {
-          const cur = state.monthly[mk]?.[q.id];
-          return (
-            <div key={q.id} className="mcq">
-              <div className="qq">{q.q}</div>
-              <div className="mcqopts">
-                {q.o.map((o) => (
-                  <button
-                    key={o}
-                    className={'opt' + (cur === o ? ' on' : '')}
-                    onClick={() => setMonthly(mk, q.id, o)}
-                  >
-                    {o}
-                  </button>
-                ))}
+      }
+    >
+      <Card>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-7 gap-1 sm:gap-1.5">
+            {['S', 'T', 'Q', 'Q', 'S', 'S', 'D'].map((x, i) => (
+              <div
+                key={i}
+                className="text-muted-foreground pb-1 text-center font-mono text-[0.625rem]"
+              >
+                {x}
               </div>
-            </div>
-          );
-        })}
+            ))}
+
+            {Array.from({ length: lead }, (_, i) => <div key={'e' + i} />)}
+
+            {Array.from({ length: lastD }, (_, i) => {
+              const dnum = i + 1;
+              const d = new Date(selYear, selMonth, dnum);
+              const dstr = ds(d);
+              const log = state.day[dstr] || {};
+              const areas: Partial<Record<AreaKey, boolean>> = {};
+              for (const k of Object.keys(log)) areas[areaOf(k.slice(2))] = true;
+              const isToday = dstr === today();
+              const isSel = selDetail === dstr;
+              return (
+                <button
+                  key={dstr}
+                  aria-pressed={isSel}
+                  aria-label={d.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' })}
+                  onClick={() => onSelDetail(isSel ? null : dstr)}
+                  className={cn(
+                    'bg-card hover:border-ring/60 focus-visible:ring-ring/50 flex h-13 cursor-pointer flex-col justify-between rounded-md border p-1.5 text-left transition-colors outline-none focus-visible:ring-[3px] sm:h-16',
+                    isReduced(state, d) && 'border-dashed',
+                    isToday && 'border-primary/50',
+                    isSel && 'ring-primary ring-2'
+                  )}
+                >
+                  <span className="text-muted-foreground font-mono text-[0.6875rem] leading-none">
+                    {dnum}
+                  </span>
+                  <span className="flex flex-wrap gap-[2px]">
+                    {areaKeys.map(
+                      (a) =>
+                        areas[a] && (
+                          <i
+                            key={a}
+                            className="block size-1.5 rounded-[2px]"
+                            style={{ background: `var(${AREAS[a].c})` }}
+                          />
+                        )
+                    )}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+            {areaKeys.map((a) => (
+              <span
+                key={a}
+                className="text-muted-foreground flex items-center gap-1.5 font-mono text-[0.6875rem]"
+              >
+                <i
+                  className="block size-2 rounded-[2px]"
+                  style={{ background: `var(${AREAS[a].c})` }}
+                />
+                {AREAS[a].n}
+              </span>
+            ))}
+            <span className="text-muted-foreground flex items-center gap-1.5 font-mono text-[0.6875rem]">
+              <i className="border-muted-foreground/60 block size-2 rounded-[2px] border border-dashed" />
+              reduzida
+            </span>
+          </div>
+
+          <Separator />
+
+          <DayDetail dstr={selDetail} state={state} onClose={() => onSelDetail(null)} />
+        </CardContent>
+      </Card>
+
+      <div className="space-y-3">
+        <SectionTitle>Taxa de consistência</SectionTitle>
+        <Card>
+          <CardContent className="space-y-3">
+            {rates.length === 0 ? (
+              <Empty className="border-0 py-6">
+                <EmptyTitle>Sem dados ainda neste mês</EmptyTitle>
+                <EmptyDescription>
+                  As taxas aparecem conforme os blocos do mês forem marcados.
+                </EmptyDescription>
+              </Empty>
+            ) : (
+              rates.map(({ t, r }) => (
+                <div key={t} className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                  <span className="min-w-32 flex-1 text-sm">{TYPE_LABEL[t]}</span>
+                  <Progress
+                    value={r!.pct}
+                    className="w-full flex-1 sm:w-28 sm:flex-none"
+                    indicatorClassName={
+                      r!.pct >= 80 ? 'bg-success' : r!.pct >= 50 ? 'bg-primary' : 'bg-muted-foreground/50'
+                    }
+                  />
+                  <span className="text-muted-foreground w-24 text-right font-mono text-xs tabular-nums">
+                    {r!.did}/{r!.exp} · {r!.pct}%
+                  </span>
+                </div>
+              ))
+            )}
+
+            {stats.redDays > 0 && (
+              <p className="text-muted-foreground border-t pt-3 text-xs">
+                {stats.redDays} dia(s) em semana reduzida — fora do cálculo, sem penalidade.
+              </p>
+            )}
+          </CardContent>
+        </Card>
       </div>
-    </section>
+
+      <div className="space-y-3">
+        <SectionTitle>Marcos deste mês</SectionTitle>
+        {msThisMonth.length === 0 ? (
+          <Empty>
+            <EmptyTitle>Nenhum marco com alvo neste mês</EmptyTitle>
+            <EmptyDescription>Navegue entre os meses para ver os próximos alvos.</EmptyDescription>
+          </Empty>
+        ) : (
+          <div className="space-y-3">
+            {msThisMonth.map((m) => (
+              <Milestone key={m.id} m={m} state={state} onToggle={toggleFlag} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="space-y-3">
+        <SectionTitle>Fechamento do mês</SectionTitle>
+        <Card>
+          <CardContent className="space-y-6">
+            <p className="text-muted-foreground text-sm">Três toques e o mês está fechado.</p>
+            {MCQ.map((q) => {
+              const cur = state.monthly[mk]?.[q.id];
+              return (
+                <div key={q.id} className="space-y-2.5">
+                  <p className="text-sm font-medium">{q.q}</p>
+                  <ToggleGroup
+                    type="single"
+                    variant="outline"
+                    size="sm"
+                    value={cur ?? ''}
+                    // Sem valor = clique na opção já marcada. Manter a resposta:
+                    // desmarcar não é uma ação que o fechamento do mês oferece.
+                    onValueChange={(v) => v && setMonthly(mk, q.id, v)}
+                  >
+                    {q.o.map((o) => (
+                      <ToggleGroupItem key={o} value={o} className="rounded-full">
+                        {o}
+                      </ToggleGroupItem>
+                    ))}
+                  </ToggleGroup>
+                </div>
+              );
+            })}
+          </CardContent>
+        </Card>
+      </div>
+    </Section>
   );
 }

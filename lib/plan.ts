@@ -25,26 +25,26 @@ export interface Mcq { id: string; q: string; o: string[] }
 export interface View { id: ViewId; n: string; q: string }
 
 export const AREAS: Record<AreaKey, Area> ={
-ingles:{n:'Inglês',c:'--flag',t:['en_write','en_speak','en_tutor']},
-codigo:{n:'Programação',c:'--blue',t:['roadmap','cs50','cs50_light','dsa']},
-corpo:{n:'Corpo',c:'--sage',t:['calistenia','caminhada']},
-carreira:{n:'Carreira',c:'--accent',t:['carreira']},
-base:{n:'Base',c:'--ink-dim',t:['sono','leitura','review']}
+ingles:{n:'Inglês',c:'--chart-1',t:['en_write','en_speak','en_tutor']},
+codigo:{n:'Programação',c:'--chart-2',t:['roadmap','cs50','cs50_light','dsa']},
+corpo:{n:'Corpo',c:'--chart-3',t:['calistenia','caminhada']},
+carreira:{n:'Carreira',c:'--chart-4',t:['carreira']},
+base:{n:'Base',c:'--chart-5',t:['sono','leitura','review']}
 };
 export const TYPE_LABEL: Record<string, string> ={sono:'Sono',calistenia:'Calistenia',caminhada:'Caminhada',en_speak:'Inglês fala',en_write:'Inglês escrita',en_tutor:'Tutor inglês',roadmap:'Programação',cs50:'CS50',cs50_light:'CS50 leve',dsa:'DSA',carreira:'Carreira',leitura:'Leitura',review:'Revisão'};
 export const TRACKS: Track[] =[
-{id:'ingles',name:'Inglês — do C2 passivo ao ativo',color:'--flag',items:[
+{id:'ingles',name:'Inglês — do C2 passivo ao ativo',color:'--chart-1',items:[
 'Rotina diária de output rodando (fala + escrita)','Gravação e auto-avaliação viraram hábito',
 'Tutor 1:1 semanal contratado e constante','Escrita com correção → cards de erro no Anki',
 'Simulados IELTS — foco Speaking e Writing','IELTS feito — banda exigida atingida']},
-{id:'cs50',name:'CS50 — sprint do certificado',color:'--blue',items:[
+{id:'cs50',name:'CS50 — sprint do certificado',color:'--chart-2',items:[
 'Week 0 — Scratch','Week 1 — C','Week 2 — Arrays','Week 3 — Algorithms','Week 4 — Memory',
 'Week 5 — Data Structures','Week 6 — Python','Week 7 — SQL','Week 8 — HTML/CSS/JS','Week 9 — Flask',
 'Projeto Final → Certificado emitido']},
-{id:'dsa',name:'DSA — preparação de entrevista',color:'--sage',items:[
+{id:'dsa',name:'DSA — preparação de entrevista',color:'--chart-3',items:[
 'Arrays & Hashing','Two Pointers','Sliding Window','Stack','Binary Search','Linked List',
 'Trees','Heap / Priority Queue','Backtracking','Graphs','Dynamic Programming (intro)']},
-{id:'portfolio',name:'Portfólio & Presença profissional',color:'--accent',items:[
+{id:'portfolio',name:'Portfólio & Presença profissional',color:'--chart-4',items:[
 'LinkedIn reformulado em inglês','GitHub organizado com README de perfil',
 'Projeto 1 — pequeno, resolve um problema real','Projeto 2 — médio, com testes e documentação',
 'Projeto 3 — com deploy online funcionando','CV em inglês, formato internacional',
@@ -81,64 +81,64 @@ export const MS: Milestone[] =[
 {id:'local',t:'Conversa longa com um local, fora do ambiente acadêmico',ty:'exp',d:'2029-03-31',crit:'30+ minutos, em inglês, com alguém de lá.',dep:['firstday']},
 {id:'europe',t:'Primeira viagem dentro da Europa',ty:'exp',d:'2029-06-30',crit:'Você foi a outro país.',dep:['firstday']}
 ];
-export const MSTYPE: Record<MsType, { n: string; c: string }> ={cap:{n:'Capacidade',c:'--sage'},cred:{n:'Credencial',c:'--blue'},exp:{n:'Experiência',c:'--accent'}};
+export const MSTYPE: Record<MsType, { n: string; c: string }> ={cap:{n:'Capacidade',c:'--chart-3'},cred:{n:'Credencial',c:'--chart-2'},exp:{n:'Experiência',c:'--chart-4'}};
 export const QUARTERS =['2026Q3','2026Q4','2027Q1','2027Q2','2027Q3','2027Q4','2028Q1','2028Q2','2028Q3','2028Q4','2029Q1','2029Q2'];
 export const QLABEL: Record<string, string> ={'2026Q3':'ago–set 26','2026Q4':'out–dez 26','2027Q1':'jan–mar 27','2027Q2':'abr–jun 27','2027Q3':'jul–set 27','2027Q4':'out–dez 27','2028Q1':'jan–mar 28','2028Q2':'abr–jun 28','2028Q3':'jul–set 28','2028Q4':'out–dez 28','2029Q1':'jan–mar 29','2029Q2':'abr–jun 29'};
 export const JPHASES: Phase[] =[
-{n:'Fase 1 — Fundação e credencial',d:'ago/2026 → jul/2027',c:'--sage',qs:['2026Q3','2026Q4','2027Q1','2027Q2']},
-{n:'Fase 2 — Prova e aplicação',d:'ago/2027 → jul/2028',c:'--blue',qs:['2027Q3','2027Q4','2028Q1','2028Q2']},
-{n:'Fase 3 — Saída e chegada',d:'ago/2028 → jun/2029',c:'--accent',qs:['2028Q3','2028Q4','2029Q1','2029Q2']}
+{n:'Fase 1 — Fundação e credencial',d:'ago/2026 → jul/2027',c:'--chart-3',qs:['2026Q3','2026Q4','2027Q1','2027Q2']},
+{n:'Fase 2 — Prova e aplicação',d:'ago/2027 → jul/2028',c:'--chart-2',qs:['2027Q3','2027Q4','2028Q1','2028Q2']},
+{n:'Fase 3 — Saída e chegada',d:'ago/2028 → jun/2029',c:'--chart-4',qs:['2028Q3','2028Q4','2029Q1','2029Q2']}
 ];
 export const PROTO: Record<string, Proto> ={
-calistenia:{title:'Calistenia',color:'--sage',
+calistenia:{title:'Calistenia',color:'--chart-3',
 steps:[['5min','<b>Aquecimento</b> — mobilidade articular + 2min de polichinelos.'],['18min','<b>Treino do dia</b> do programa de 12 semanas. Forma acima de repetições.'],['2min','<b>Registre</b> séries e reps.']],
 metodo:'Sobrecarga progressiva, 3x/semana.',porque:'Base de energia do sistema. Sem corpo funcionando, os blocos da noite não se sustentam.',
 recursos:['Programa de 12 semanas','Caderno de registro'],sucesso:'Treino completo com boa forma + progressão anotada.',revisao:'A cada semana, aumente reps ou dificuldade.'},
-caminhada:{title:'Caminhada (descanso ativo)',color:'--sage',
+caminhada:{title:'Caminhada (descanso ativo)',color:'--chart-3',
 steps:[['15–20min','<b>Ande</b> depois de comer, sem pressa e sem fone de estudo. É pausa, não treino.']],
 metodo:'Descanso ativo + luz natural.',porque:'Cai bem justamente na quinta, dia sem calistenia: movimenta o corpo, ajuda a digestão e melhora a energia da tarde sem gastar disciplina.',
 recursos:['Nada além de sapato confortável'],sucesso:'Você andou 15min.',revisao:'—'},
-en_write:{title:'Inglês — Escrita',color:'--flag',
+en_write:{title:'Inglês — Escrita',color:'--chart-1',
 steps:[['2min','<b>Anki</b> — revise os cards de erro anteriores.'],['13min','<b>Escreva ~150 palavras</b> direto em inglês, sem traduzir do português.'],['5min','<b>Revise</b> no Grammarly/LanguageTool. Cada correção vira um card.']],
 metodo:'Output ativo + recuperação espaçada dos próprios erros.',porque:'Você é C2 na compreensão — gramática e listening seriam desperdício. O gargalo é produção, e escrever força construção ativa de frases.',
 recursos:['Grammarly ou LanguageTool','Anki'],sucesso:'~150 palavras sem traduzir + 3 correções viradas em cards.',revisao:'Os cards voltam sozinhos no Anki.'},
-en_speak:{title:'Inglês — Fala',color:'--flag',
+en_speak:{title:'Inglês — Fala',color:'--chart-1',
 steps:[['2min','<b>Anki em voz alta</b> — responda falando.'],['8min','<b>Shadowing</b>: 1–2min de áudio nativo, repetido por cima 3–4x.'],['10min','<b>Monólogo gravado</b>: ~5min falando sozinho. Ouça e anote 2 pontos.']],
 metodo:'Shadowing + fala privada + auto-avaliação por gravação.',porque:'Sua barreira é vergonha, não conhecimento. Falar sozinho e gravar remove a plateia: constrói fluência sem julgamento.',
 recursos:['Podcasts / YouTube / séries','Gravador do celular','Anki'],sucesso:'Shadowing 3–4x + 5min gravados + 2 pontos anotados.',revisao:'Os 2 pontos viram foco do shadowing seguinte.'},
-en_tutor:{title:'Inglês — Tutor 1:1',color:'--flag',
+en_tutor:{title:'Inglês — Tutor 1:1',color:'--chart-1',
 steps:[['5min','<b>Prepare</b> 3 temas.'],['40min','<b>Sessão</b> só em inglês. Peça correções anotadas ao final.'],['5min','<b>Transforme</b> as correções em cards.']],
 metodo:'Prática deliberada com feedback + exposição real.',porque:'Falar com pessoa real é o que mata a vergonha de vez, e feedback direcionado acelera muito mais que praticar sozinho.',
 recursos:['italki ou Cambly','Lista de temas','Anki'],sucesso:'40min inteiros em inglês + correções viradas em cards.',revisao:'As correções direcionam a semana.'},
-roadmap:{title:'Programação — Estudo + Build',color:'--accent',
+roadmap:{title:'Programação — Estudo + Build',color:'--chart-4',
 steps:[['5min','<b>Recuperação</b>: sem olhar, explique em voz alta a última sessão.'],['40min','<b>Estude o tópico atual da sua trilha no roadmap.sh sempre construindo</b> — código para cada conceito.'],['5min','micro-pausa.'],['35min','<b>Aplique no projeto</b>: uma feature usando o que aprendeu.'],['5min','<b>Feche</b> anotando o que dominou e o que ficou confuso.']],
 metodo:'Aprender construindo + active recall + espaçamento. IA como copiloto, nunca gerador.',porque:'Roadmap vira maratona de tutorial se você só assiste. Construir a cada conceito é retenção ativa e gera portfólio pelo mesmo tempo.',
 recursos:['roadmap.sh — sua trilha atual','Documentação oficial','Seu GitHub'],sucesso:'Código funcionando + 1 feature + commit.',revisao:'Conceitos difíceis viram cards.'},
-cs50:{title:'CS50',color:'--blue',
+cs50:{title:'CS50',color:'--chart-2',
 steps:[['5min','<b>Recall</b> do último pset em voz alta.'],['35min','<b>Aula da semana</b> — em velocidade maior, pulando o que já domina.'],['5min','pausa.'],['40min','<b>Problem set</b> — é aqui que está o valor.'],['5min','Anote onde parou.']],
 metodo:'Prática ativa via psets + espaçamento.',porque:'Para você o CS50 vale pelo certificado, não pelo conteúdo. É sprint: acelere as aulas, concentre esforço nos psets.',
 recursos:['cs50.harvard.edu','CS50.dev'],sucesso:'Aula vista + progresso concreto no pset.',revisao:'Cada pset revisita o anterior.'},
-cs50_light:{title:'CS50 — vídeo ou leitura leve',color:'--blue',
+cs50_light:{title:'CS50 — vídeo ou leitura leve',color:'--chart-2',
 steps:[['20min','<b>Assista a aula ou leia o material</b> da semana atual do CS50. Só consumo — o pset fica para a noite.']],
 metodo:'Fragmentação: consumo agora, prática depois.',porque:'Almoço não dá para pset (exige foco longo e ambiente), mas dá perfeitamente para a aula. Assim a sexta à noite fica livre para carreira sem o CS50 travar.',
 recursos:['cs50.harvard.edu','YouTube'],sucesso:'Você avançou na aula da semana.',revisao:'O pset correspondente entra no domingo.'},
-dsa:{title:'DSA — Preparação de entrevista',color:'--sage',
+dsa:{title:'DSA — Preparação de entrevista',color:'--chart-3',
 steps:[['10min','<b>Revise 1 padrão</b> e recite a ideia central sem olhar.'],['35min','<b>Resolva 1–2 problemas</b>. Tente 20min sozinho antes de ver a solução.'],['10min','Se olhou, feche e <b>reimplemente do zero</b>.'],['5min','Registre na <b>planilha de revisão</b> (3, 7 e 21 dias).']],
 metodo:'Padrões + dificuldade desejável + repetição espaçada.',porque:'Entrevista técnica é reconhecimento de padrões. Tentar antes de ver a resposta é o que fixa o aprendizado.',
 recursos:['NeetCode 150','LeetCode','Blind 75'],sucesso:'1–2 problemas resolvidos E reimplementáveis sem olhar.',revisao:'Planilha espaçada 3/7/21.'},
-carreira:{title:'Carreira — Aplicações & Presença',color:'--accent',
+carreira:{title:'Carreira — Aplicações & Presença',color:'--chart-4',
 steps:[['15min','<b>Aplique para 2–3 vagas</b> — BR e remoto internacional. Personalize 1 linha.'],['15min','<b>Melhore 1 seção</b> do LinkedIn/CV ou publique 1 post do que construiu.'],['15min','<b>1 pergunta comportamental em inglês</b>, gravada no método STAR.'],['15min','<b>Acompanhe</b> o funil de candidaturas.']],
 metodo:'Ação constante + prova social + integração entrevista/inglês.',porque:'Emprego remoto internacional é o maior atalho do plano: adianta dinheiro e imigração juntos. Entrevista se aprende entrevistando.',
 recursos:['LinkedIn, Landing.jobs, RemoteOK, Wellfound, Otta','Método STAR'],sucesso:'2–3 aplicações + 1 melhoria + 1 resposta STAR gravada.',revisao:'Ajuste CV pelo feedback.'},
-leitura:{title:'Leitura (descompressão)',color:'--ink-dim',
+leitura:{title:'Leitura (descompressão)',color:'--chart-5',
 steps:[['15–20min','<b>Leia</b> longe de telas brilhantes. Sem meta de páginas.']],
 metodo:'Hábito de baixo atrito + higiene de sono.',porque:'Camada de prazer, sem cobrança. Ajuda a desligar e protege o sono.',
 recursos:['Livro físico ou e-reader'],sucesso:'Leu ~15min.',revisao:'—'},
-sono:{title:'Desligar e dormir',color:'--sage',
+sono:{title:'Desligar e dormir',color:'--chart-3',
 steps:[['22:40','<b>Desligue as telas</b>, celular fora do quarto.'],['23:00','<b>Dormir.</b> ~7h30 até as 06:30.'],['—','<b>Cochilo</b>: no máximo 15–20min. Longo quebra a noite.']],
 metodo:'Horário regular + higiene de sono.',porque:'Maior retorno do sistema. Seu ciclo hoje (irregular → cansaço → cochilo → dormir tarde) é o que drena as noites.',
 recursos:['Alarme fixo 06:30'],sucesso:'Telas off 22:40, cama ~23:00.',revisao:'Compare dias com e sem cochilo.'},
-review:{title:'Revisão Semanal',color:'--accent',
+review:{title:'Revisão Semanal',color:'--chart-4',
 steps:[['7min','<b>Revise a semana</b>: feito, travado, por quê.'],['7min','<b>Cheque trilhas e marcos</b> + poupança.'],['6min','<b>Ajuste a semana seguinte</b> e reconheça 1 vitória.']],
 metodo:'Ciclo de revisão estruturada.',porque:'Sistema sem revisão vira documento esquecido.',
 recursos:['Este documento'],sucesso:'Semana revisada e próxima ajustada.',revisao:'—'}
@@ -163,13 +163,13 @@ export const MCQ: Mcq[] =[
 ];
 export const VIEWS: View[] =[{id:'hoje',n:'Hoje',q:'o que eu faço agora?'},{id:'semana',n:'Semana',q:'estou mantendo o ritmo?'},{id:'mes',n:'Mês',q:'o mês foi bom?'},{id:'ano',n:'Ano',q:'estou saindo do lugar?'},{id:'jornada',n:'Jornada',q:'onde estou na jornada?'}];
 export const PLANO =[
-{area:'Inglês',color:'--flag',freq:'diário + 50min domingo',acoes:['Escrita de ~150 palavras com revisão e cards (seg/qua/ter-almoço)','Shadowing + monólogo gravado (ter/qui/sex)','Tutor 1:1 semanal no domingo','Anki todo dia com os próprios erros','Simulados IELTS a partir de 2027','Lazer em inglês com legenda em inglês']},
-{area:'Programação',color:'--accent',freq:'~5h/semana',acoes:['Trilha do roadmap.sh construindo código a cada conceito','CS50 como sprint de certificado','DSA por padrões com revisão espaçada','Deep work no projeto no sábado','Commit em toda sessão']},
-{area:'Carreira',color:'--accent',freq:'1h/semana (sexta)',acoes:['2–3 candidaturas por semana (BR + remoto internacional)','LinkedIn em inglês e posts de progresso','Respostas STAR gravadas em inglês','Funil de candidaturas atualizado']},
-{area:'Saúde & Energia',color:'--sage',freq:'diário / 3x semana',acoes:['Dormir ~23:00, acordar 06:30','Cochilo no máximo 15–20min','Calistenia 3x/semana + caminhada no almoço de quinta','Marmitas no fim de semana']},
-{area:'Finanças',color:'--blue',freq:'mensal',acoes:['R$2.500/mês automático no dia do salário','Investimentos 30min no 1º domingo do mês','SinPro virando receita recorrente com os primos']},
-{area:'Intercâmbio',color:'--flag',freq:'por fase',acoes:['Agora: passaporte + planilha de custos reais','2027: escolher escolas e levantar exigências','2028: aplicações, aceite, fundos, visto','Cães: iniciar documentação 6+ meses antes']},
-{area:'Vida & Prazer',color:'--ink-dim',freq:'livre',acoes:['Leitura antes de dormir','Desenho no fim de semana','Passeio com os cães','Um marco de experiência por trimestre — obrigatório']}
+{area:'Inglês',color:'--chart-1',freq:'diário + 50min domingo',acoes:['Escrita de ~150 palavras com revisão e cards (seg/qua/ter-almoço)','Shadowing + monólogo gravado (ter/qui/sex)','Tutor 1:1 semanal no domingo','Anki todo dia com os próprios erros','Simulados IELTS a partir de 2027','Lazer em inglês com legenda em inglês']},
+{area:'Programação',color:'--chart-4',freq:'~5h/semana',acoes:['Trilha do roadmap.sh construindo código a cada conceito','CS50 como sprint de certificado','DSA por padrões com revisão espaçada','Deep work no projeto no sábado','Commit em toda sessão']},
+{area:'Carreira',color:'--chart-4',freq:'1h/semana (sexta)',acoes:['2–3 candidaturas por semana (BR + remoto internacional)','LinkedIn em inglês e posts de progresso','Respostas STAR gravadas em inglês','Funil de candidaturas atualizado']},
+{area:'Saúde & Energia',color:'--chart-3',freq:'diário / 3x semana',acoes:['Dormir ~23:00, acordar 06:30','Cochilo no máximo 15–20min','Calistenia 3x/semana + caminhada no almoço de quinta','Marmitas no fim de semana']},
+{area:'Finanças',color:'--chart-2',freq:'mensal',acoes:['R$2.500/mês automático no dia do salário','Investimentos 30min no 1º domingo do mês','SinPro virando receita recorrente com os primos']},
+{area:'Intercâmbio',color:'--chart-1',freq:'por fase',acoes:['Agora: passaporte + planilha de custos reais','2027: escolher escolas e levantar exigências','2028: aplicações, aceite, fundos, visto','Cães: iniciar documentação 6+ meses antes']},
+{area:'Vida & Prazer',color:'--chart-5',freq:'livre',acoes:['Leitura antes de dormir','Desenho no fim de semana','Passeio com os cães','Um marco de experiência por trimestre — obrigatório']}
 ];
 export const DEPS =[
 {chain:['Sono regular','Energia','Todos os hábitos'],note:'A raiz. Se o sono não estabilizar, os blocos da noite não se sustentam.',b:true},
@@ -209,7 +209,7 @@ export const DECISOES =[
 ];
 export const PLAN_CTX ='Abel, dev full-stack (eng. computação), Brasil. Objetivo: emigrar para a Irlanda via curso nível 9 (PgDip/mestrado), intake alvo setembro/2028 com plano B janeiro/2029, usando o Stamp 1G de 24 meses. Rotina: janela do almoço (~20min, máx 3 dias/semana) e janela da noite 20:00-22:40 (chega 19h, dorme ~23h). Inglês: C2 na compreensão, gargalo é produção e vergonha de falar. CS50 pelo certificado. DSA para entrevistas. Poupança R$2.500/mês. SinPro roda no expediente. Mora sozinho, tem cachorros, nunca sustentou hábitos antes — consistência é o maior risco. Tem modo reduzido para semanas atípicas e um marco de experiência obrigatório por trimestre.';
 export const CHECKS: Checklist[] =[
-{id:'docs',name:'Documentos — por fase',color:'--flag',items:[
+{id:'docs',name:'Documentos — por fase',color:'--chart-1',items:[
 ['Conferir validade do passaporte','AGORA — renove se vence antes de 2030'],['Planilha de custos reais (curso, visto, vida)','set/2026'],
 ['Pesquisar programas nível 9 e exigências','2027'],['Histórico escolar e diploma em mãos','2027–2028'],
 ['Traduções juramentadas para o inglês','2027–2028'],['Personal statement / carta de motivação','2027–2028'],
@@ -217,7 +217,7 @@ export const CHECKS: Checklist[] =[
 ['Carta de aceite recebida','até jun/2028'],['Comprovação de fundos','jul/2028'],
 ['Seguro-saúde privado','jul/2028'],['Pedido de visto submetido','jul–ago/2028'],
 ['Documentação dos cães (microchip, antirrábica, exames)','iniciar 6+ meses antes']]},
-{id:'fin',name:'Financeiro — marcos de poupança',color:'--blue',items:[
+{id:'fin',name:'Financeiro — marcos de poupança',color:'--chart-2',items:[
 ['R$2.500/mês automatizado','configurar uma vez'],['R$12.500 acumulados','~dez/2026'],
 ['R$25.000 acumulados','~jun/2027'],['R$42.000 acumulados','~dez/2027'],
 ['R$60.000 acumulados','~ago/2028'],['SinPro gerando receita recorrente','a alavanca que fecha a conta'],

@@ -1,8 +1,13 @@
 'use client';
 
+import { Check, Circle, X } from 'lucide-react';
+
 import { PROTO, REDUCED_BLOCKS, TYPE_LABEL, WEEK, type Block } from '@/lib/plan';
 import { isReduced, parseD } from '@/lib/derive';
 import type { JournalState } from '@/lib/state';
+import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 /** O que foi feito num dia específico do heatmap. */
 export default function DayDetail({
@@ -14,9 +19,7 @@ export default function DayDetail({
 }) {
   if (!dstr) {
     return (
-      <p className="body" style={{ fontSize: 12, color: 'var(--ink-faint)', margin: '10px 0 0' }}>
-        Toque em um dia para ver o que foi feito.
-      </p>
+      <p className="text-muted-foreground text-xs">Toque em um dia para ver o que foi feito.</p>
     );
   }
 
@@ -38,39 +41,77 @@ export default function DayDetail({
   const extra = Object.keys(log).filter((k) => !rows.some((r) => r.w + ':' + r.b.t === k));
 
   return (
-    <div className="ddet">
-      <div className="dh">
-        <span className="dt">
+    <div className="bg-muted/40 rounded-lg border">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b px-4 py-3">
+        <span className="text-sm font-semibold capitalize">
           {d.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}
-          {red && <span className="redbadge">reduzida</span>}
         </span>
-        <span className="dc">{doneCount}/{rows.length} feitos</span>
-        <button className="closex" onClick={onClose}>fechar ✕</button>
+        {red && (
+          <Badge variant="warning" className="rounded-full">
+            reduzida
+          </Badge>
+        )}
+        <span className="text-muted-foreground font-mono text-xs">
+          {doneCount}/{rows.length} feitos
+        </span>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          className="ml-auto -mr-1"
+          onClick={onClose}
+          aria-label="fechar detalhe do dia"
+        >
+          <X />
+        </Button>
       </div>
 
       {d > new Date() ? (
-        <p className="empty-note">Dia futuro — nada registrado ainda.</p>
+        <p className="text-muted-foreground px-4 py-3 text-sm">
+          Dia futuro — nada registrado ainda.
+        </p>
       ) : (
-        <>
+        <ul className="divide-border divide-y">
           {rows.map((r, i) => {
             const ok = !!log[r.w + ':' + r.b.t];
             return (
-              <div key={i} className={'di ' + (ok ? 'ok' : 'no')}>
-                <span className="mk">{ok ? '✓' : '○'}</span>
-                <span>{r.b.label || PROTO[r.b.t].title}</span>
-                {r.lab && <span className="wtag">{r.lab}</span>}
-              </div>
+              <Row key={i} ok={ok} tag={r.lab}>
+                {r.b.label || PROTO[r.b.t].title}
+              </Row>
             );
           })}
           {extra.map((k) => (
-            <div key={k} className="di ok">
-              <span className="mk">✓</span>
-              <span>{TYPE_LABEL[k.slice(2)] || k.slice(2)}</span>
-              <span className="wtag">extra</span>
-            </div>
+            <Row key={k} ok tag="extra">
+              {TYPE_LABEL[k.slice(2)] || k.slice(2)}
+            </Row>
           ))}
-        </>
+        </ul>
       )}
     </div>
+  );
+}
+
+function Row({
+  ok, tag, children,
+}: {
+  ok: boolean;
+  tag?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <li className="flex items-center gap-2.5 px-4 py-2 text-sm">
+      {ok ? (
+        <Check className="text-success size-3.5 shrink-0" />
+      ) : (
+        <Circle className="text-muted-foreground/50 size-3.5 shrink-0" />
+      )}
+      <span className={cn('min-w-0 flex-1', ok ? 'text-foreground' : 'text-muted-foreground')}>
+        {children}
+      </span>
+      {tag && (
+        <Badge variant="outline" className="text-muted-foreground rounded-full font-mono">
+          {tag}
+        </Badge>
+      )}
+    </li>
   );
 }

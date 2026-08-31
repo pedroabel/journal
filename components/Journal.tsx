@@ -1,25 +1,31 @@
 'use client';
 
 import { useState } from 'react';
+
 import { VIEWS, type ViewId } from '@/lib/plan';
-import { PROSE, PROSE_IDS } from '@/lib/prose';
-import { useJournal } from './useJournal';
+import { cn } from '@/lib/utils';
+import { Separator } from '@/components/ui/separator';
+import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import AppSidebar from './layout/AppSidebar';
 import Footer from './Footer';
+import { useJournal } from './useJournal';
+import ViewSkeleton from './ViewSkeleton';
 import Hoje from './views/Hoje';
 import Semana from './views/Semana';
 import Mes from './views/Mes';
 import Ano from './views/Ano';
 import Jornada from './views/Jornada';
 import Marcos from './sections/Marcos';
+import Norte from './sections/Norte';
+import Fases from './sections/Fases';
+import Dependencias from './sections/Dependencias';
+import PlanoDeAcao from './sections/PlanoDeAcao';
 import Trilhas from './sections/Trilhas';
 import Checklists from './sections/Checklists';
 import Relatorio from './sections/Relatorio';
-
-const REF_LINKS: [string, string][] = [
-  ['marcos', 'Marcos'], ['norte', 'O Norte'], ['fases', 'Fases'], ['deps', 'Dependências'],
-  ['plano', 'Plano de Ação'], ['trilhas', 'Trilhas'], ['checklists', 'Checklists'],
-  ['relatorio', 'Relatório'], ['metodos', 'Métodos'], ['decisoes', 'Decisões'],
-];
+import Metodos from './sections/Metodos';
+import Decisoes from './sections/Decisoes';
 
 export default function Journal() {
   const journal = useJournal();
@@ -29,7 +35,6 @@ export default function Journal() {
   const [selMonth, setSelMonth] = useState(() => new Date().getMonth());
   const [selYear, setSelYear] = useState(() => new Date().getFullYear());
   const [selDetail, setSelDetail] = useState<string | null>(null);
-  const [navOpen, setNavOpen] = useState(false);
 
   function shiftMonth(delta: number) {
     setSelDetail(null);
@@ -47,111 +52,100 @@ export default function Journal() {
   }
 
   const view = state.view;
+  const current = VIEWS.find((v) => v.id === view);
 
   return (
-    <div className="app">
-      <nav className="nav">
-        <button className="navtoggle" onClick={() => setNavOpen((o) => !o)} aria-expanded={navOpen}>
-          <span>Sistema Unificado</span>
-          <span className="bars">≡</span>
-        </button>
-        <div id="navBody" className={navOpen ? 'open' : undefined}>
-          <div className="brand">
-            <span className="kicker">Fonte única de referência</span>
-            <h1>Sistema Unificado</h1>
-            <div className="yr">2026 — 2029 · Irlanda</div>
-          </div>
-          <div className="navsec">Visões</div>
-          <ul className="navlist">
-            {VIEWS.map((v, i) => (
-              <li key={v.id}>
-                <button
-                  className={v.id === view ? 'active' : undefined}
-                  onClick={() => { pickView(v.id); setNavOpen(false); }}
-                >
-                  <span className="n">{String(i + 1).padStart(2, '0')}</span> {v.n}
-                </button>
-              </li>
-            ))}
-          </ul>
-          <div className="navsec">Referência</div>
-          <ul className="navlist">
-            {REF_LINKS.map(([id, label]) => (
-              <li key={id}>
-                <a href={`#${id}`} onClick={() => setNavOpen(false)}>
-                  <span className="n">◆</span> {label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
+    <SidebarProvider>
+      <AppSidebar view={view} onPickView={pickView} />
 
-      <main className="main">
-        <header className="hero">
-          <div className="wrap">
-            <span className="eyebrow">Intake alvo: set/2028 · plano B: jan/2029</span>
-            <h1>Sistema Unificado</h1>
-            <span id="status" className={status ? 'show' : undefined}>{status}</span>
-            <div className="views">
-              {VIEWS.map((v) => (
-                <button
-                  key={v.id}
-                  className={'vtab' + (v.id === view ? ' sel' : '')}
-                  onClick={() => pickView(v.id)}
-                >
-                  {v.n}
-                  <span className="q">{v.q}</span>
-                </button>
-              ))}
+      <SidebarInset>
+        <header className="bg-background/85 supports-[backdrop-filter]:bg-background/70 sticky top-0 z-20 border-b backdrop-blur">
+          <div className="flex h-14 items-center gap-2 px-4 pt-[env(safe-area-inset-top)] sm:px-6 lg:px-10">
+            <SidebarTrigger className="-ml-2" />
+            <div className="flex min-w-0 items-baseline gap-2">
+              <span className="truncate text-sm font-semibold tracking-tight">
+                {current?.n ?? 'Sistema Unificado'}
+              </span>
+              <span className="text-muted-foreground hidden truncate text-xs sm:inline">
+                {current?.q}
+              </span>
             </div>
+            <div className="ml-auto pl-2">
+              <SyncStatus status={status} />
+            </div>
+          </div>
+
+          <div className="no-scrollbar overflow-x-auto px-4 pb-2.5 sm:px-6 lg:px-10">
+            <Tabs value={view} onValueChange={(v) => pickView(v as ViewId)}>
+              <TabsList className="w-max">
+                {VIEWS.map((v) => (
+                  <TabsTrigger key={v.id} value={v.id} className="px-3">
+                    {v.n}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
           </div>
         </header>
 
-        <div className="wrap">
-          <div id="view">
-            {!ready ? (
-              <div className="loading">carregando…</div>
-            ) : view === 'hoje' ? (
-              <Hoje journal={journal} selDay={selDay} onSelDay={setSelDay} />
-            ) : view === 'semana' ? (
-              <Semana journal={journal} />
-            ) : view === 'mes' ? (
-              <Mes
-                journal={journal}
-                selYear={selYear}
-                selMonth={selMonth}
-                onShift={shiftMonth}
-                selDetail={selDetail}
-                onSelDetail={setSelDetail}
-              />
-            ) : view === 'ano' ? (
-              <Ano journal={journal} selYear={selYear} onShift={(d) => setSelYear(selYear + d)} />
-            ) : (
-              <Jornada journal={journal} />
-            )}
-          </div>
+        <div className="mx-auto w-full max-w-4xl px-4 pb-[max(4rem,env(safe-area-inset-bottom))] sm:px-6 lg:px-10">
+          {!ready ? (
+            <ViewSkeleton />
+          ) : view === 'hoje' ? (
+            <Hoje journal={journal} selDay={selDay} onSelDay={setSelDay} />
+          ) : view === 'semana' ? (
+            <Semana journal={journal} />
+          ) : view === 'mes' ? (
+            <Mes
+              journal={journal}
+              selYear={selYear}
+              selMonth={selMonth}
+              onShift={shiftMonth}
+              selDetail={selDetail}
+              onSelDetail={setSelDetail}
+            />
+          ) : view === 'ano' ? (
+            <Ano journal={journal} selYear={selYear} onShift={(d) => setSelYear(selYear + d)} />
+          ) : (
+            <Jornada journal={journal} />
+          )}
 
-          <div id="doc">
+          <Separator />
+
+          <div className="divide-border divide-y">
             <Marcos journal={journal} />
-            <Prose id="norte" />
-            <Prose id="fases" />
-            <Prose id="deps" />
-            <Prose id="plano" />
+            <Norte />
+            <Fases />
+            <Dependencias />
+            <PlanoDeAcao />
             <Trilhas journal={journal} />
             <Checklists journal={journal} />
             <Relatorio journal={journal} />
-            <Prose id="metodos" />
-            <Prose id="decisoes" />
-            <Footer journal={journal} />
+            <Metodos />
+            <Decisoes />
           </div>
+
+          <Footer journal={journal} />
         </div>
-      </main>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
 
-/** Seção de texto do plano, preservada verbatim da versão anterior. */
-function Prose({ id }: { id: (typeof PROSE_IDS)[number] }) {
-  return <div dangerouslySetInnerHTML={{ __html: PROSE[id] }} />;
+/**
+ * Sinal de sincronização. Ocupa espaço fixo mesmo vazio para o cabeçalho não
+ * saltar quando a mensagem aparece e some.
+ */
+function SyncStatus({ status }: { status: string }) {
+  return (
+    <span
+      aria-live="polite"
+      className={cn(
+        'text-muted-foreground inline-flex h-6 items-center gap-1.5 rounded-full px-2.5 font-mono text-[0.6875rem] transition-opacity duration-300',
+        status ? 'bg-muted opacity-100' : 'opacity-0'
+      )}
+    >
+      {status}
+    </span>
+  );
 }

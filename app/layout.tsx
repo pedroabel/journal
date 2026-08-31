@@ -1,5 +1,18 @@
 import type { Metadata, Viewport } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+
+const sans = Geist({
+  subsets: ['latin'],
+  variable: '--font-geist-sans',
+  display: 'swap',
+});
+
+const mono = Geist_Mono({
+  subsets: ['latin'],
+  variable: '--font-geist-mono',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Sistema Unificado · 2026–2029',
@@ -11,8 +24,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0D1B2A',
-  colorScheme: 'dark',
+  // Duas cores porque o tema segue a preferência do sistema.
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#111318' },
+  ],
+  colorScheme: 'light dark',
   width: 'device-width',
   initialScale: 1,
   // Sem isto a tela não vai até a borda em aparelhos com entalhe, e
@@ -22,15 +39,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="pt-BR" className={`${sans.variable} ${mono.variable}`}>
       <body>{children}</body>
     </html>
   );

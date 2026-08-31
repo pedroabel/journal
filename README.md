@@ -9,23 +9,56 @@ válida.
 ```
 app/
   layout.tsx            casca HTML, fontes, metadados
+  globals.css           tokens do tema (cor, raio, tipografia)
   page.tsx              a aplicação (protegida)
   login/                tela de entrada
   api/login|logout/     sessão
 proxy.ts                barreira: valida a sessão antes de qualquer rota
 lib/
   plan.ts               CONTEÚDO do plano — rotina, marcos, trilhas, checklists
-  prose.ts              seções de texto, preservadas da versão anterior
   derive.ts             cálculos: sequências, taxas, situação dos marcos
   state.ts              estado e persistência local
   report.ts             relatório em texto e prompt de análise
   auth.ts / password.ts sessão JWT e verificação da senha
-components/             views (hoje, semana, mês, ano, jornada) e seções
+  utils.ts              `cn()` — junção de classes do shadcn/ui
+components/
+  ui/                   componentes do shadcn/ui (não editar à mão)
+  layout/               barra lateral e navegação
+  views/                hoje, semana, mês, ano, jornada
+  sections/             seções de referência
+  Section.tsx           casca única de seção: rótulo, título, apoio
 scripts/hash-password.mjs   gera as variáveis de ambiente
 ```
 
 A separação que importa: **`lib/plan.ts` é o conteúdo** (o que o plano diz),
 o resto é maquinaria. Quase toda atualização futura é só nesse arquivo.
+
+## Interface
+
+**shadcn/ui sobre Tailwind CSS v4.** Os componentes vivem em `components/ui/` e
+saem do registro do shadcn — para acrescentar outro, `npx shadcn@latest add
+<nome>` (a configuração está em `components.json`). Não edite esses arquivos
+para resolver um caso específico: a variação certa vira `variant` ou vem por
+`className` no ponto de uso, senão o sistema se desfaz componente a componente.
+
+Nenhum componente escolhe cor própria. Tudo consome os tokens de
+`app/globals.css`, que é onde o tema inteiro cabe numa tela — inclusive o
+escuro, que segue a preferência do sistema com os **mesmos nomes de token**.
+
+As cores das áreas do plano (inglês, programação, corpo, carreira, base) são
+`--chart-1` a `--chart-5`. `lib/plan.ts` guarda só o **nome** do token, nunca um
+valor: `components/tone.ts` transforma esse nome na variável local `--tone`, que
+os componentes leem. É por isso que trocar a paleta em `globals.css` repinta
+marcos, trilhas, blocos e legendas de uma vez — e por que conteúdo e tema não se
+misturam.
+
+Três peças evitam que telas de mesma finalidade divirjam:
+
+| Peça | O que padroniza |
+|---|---|
+| `components/Section.tsx` | espaçamento e hierarquia de toda seção e visão |
+| `components/ChecklistCard.tsx` | trilhas e checklists — mesma lista marcável |
+| `components/ui/empty.tsx` | todo estado vazio, com a mesma forma |
 
 ## Rodar localmente
 

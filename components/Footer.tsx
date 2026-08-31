@@ -1,7 +1,11 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { Download, LogOut, RotateCcw, Upload } from 'lucide-react';
+
 import { today } from '@/lib/derive';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import type { Journal } from './useJournal';
 
 /**
@@ -50,29 +54,52 @@ export default function Footer({ journal }: { journal: Journal }) {
   }
 
   return (
-    <div className="footer">
-      <span>Fonte única de referência · revisar a cada trimestre · privado, atrás de login</span>
-      <span style={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
-        <button className="reset" onClick={onExport}>baixar backup</button>
-        <button className="reset" onClick={() => fileRef.current?.click()}>restaurar backup</button>
-        <input
-          ref={fileRef}
-          type="file"
-          accept="application/json,.json"
-          hidden
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) onImport(f);
-            e.target.value = '';
-          }}
-        />
-        <button className={'reset' + (armed ? ' armed' : '')} onClick={onReset}>
-          {armed ? 'Confirmar reset?' : 'reiniciar progresso'}
-        </button>
-        <form action="/api/logout" method="post">
-          <button className="reset" type="submit">sair</button>
-        </form>
-      </span>
-    </div>
+    <footer className="py-10">
+      <Separator className="mb-6" />
+      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
+        <p className="text-muted-foreground text-xs leading-relaxed">
+          Fonte única de referência · revisar a cada trimestre · privado, atrás de login
+        </p>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" size="sm" onClick={onExport}>
+            <Download />
+            Baixar backup
+          </Button>
+
+          <Button variant="outline" size="sm" onClick={() => fileRef.current?.click()}>
+            <Upload />
+            Restaurar backup
+          </Button>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="application/json,.json"
+            hidden
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) onImport(f);
+              e.target.value = '';
+            }}
+          />
+
+          <Button
+            variant={armed ? 'destructive' : 'outline'}
+            size="sm"
+            onClick={onReset}
+          >
+            <RotateCcw />
+            {armed ? 'Confirmar reset?' : 'Reiniciar progresso'}
+          </Button>
+
+          <form action="/api/logout" method="post">
+            <Button variant="ghost" size="sm" type="submit">
+              <LogOut />
+              Sair
+            </Button>
+          </form>
+        </div>
+      </div>
+    </footer>
   );
 }

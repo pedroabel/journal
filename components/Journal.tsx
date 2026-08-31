@@ -125,7 +125,7 @@ export default function Journal() {
             <Decisoes />
           </div>
 
-          <Footer journal={journal} />
+          <Footer />
         </div>
       </SidebarInset>
     </SidebarProvider>

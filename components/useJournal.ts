@@ -3,10 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ViewId } from '@/lib/plan';
 import { canonical, merge } from '@/lib/merge';
-import {
-  adopt, emptyState, load, save, stamp, stampAll,
-  type JournalState,
-} from '@/lib/state';
+import { adopt, emptyState, load, save, stamp, type JournalState } from '@/lib/state';
 
 /**
  * Estado do diário: local primeiro, servidor logo atrás.
@@ -192,25 +189,7 @@ export function useJournal() {
     mutate((d) => { d.view = view; }, { local: true });
   }, [mutate]);
 
-  const reset = useCallback(() => {
-    mutate((d) => {
-      stampAll(d); // carimba antes de apagar: a remoção precisa propagar
-      d.day = {}; d.tracks = {}; d.checks = {}; d.ms = {}; d.reduced = {}; d.monthly = {};
-    });
-  }, [mutate]);
-
-  const importBackup = useCallback((raw: unknown) => {
-    mutate((d) => {
-      const next = adopt(raw, d.view);
-      Object.assign(d, next);
-      stampAll(d); // o backup restaurado vence o que estiver em outro aparelho
-    });
-  }, [mutate]);
-
-  return {
-    state, ready, status, flash,
-    toggleTask, toggleFlag, setMonthly, setView, reset, importBackup,
-  };
+  return { state, ready, status, toggleTask, toggleFlag, setMonthly, setView };
 }
 
 export type Journal = ReturnType<typeof useJournal>;

@@ -149,16 +149,3 @@ export function save(state: JournalState): boolean {
 export function stamp(state: JournalState, ...path: string[]): void {
   state.t[path.join(STATE_SEP)] = Date.now();
 }
-
-/** Carimba tudo que existe agora — usado ao restaurar backup e ao reiniciar. */
-export function stampAll(state: JournalState): void {
-  const n = Date.now();
-  for (const g of ['tracks', 'checks', 'ms', 'reduced'] as const) {
-    for (const k of Object.keys(state[g])) state.t[g + STATE_SEP + k] = n;
-  }
-  for (const g of ['day', 'monthly'] as const) {
-    for (const a of Object.keys(state[g])) {
-      for (const b of Object.keys(state[g][a])) state.t[g + STATE_SEP + a + STATE_SEP + b] = n;
-    }
-  }
-}

@@ -12,7 +12,7 @@ const FREIOS: { c: string; title: string; body: React.ReactNode }[] = [
     title: 'Freio físico',
     body: (
       <>
-        Não lute com força de vontade. Rotina de pouso fixa ao chegar (janta, cães, banho), e só
+        Não lute com força de vontade. Rotina de pouso fixa ao chegar (janta, cachorras, banho), e só
         então comece pequeno. Em dia esgotado, <B>dia mínimo viável</B>.
       </>
     ),

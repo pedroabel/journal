@@ -23,7 +23,7 @@ export type Step = [k: string, t: string];
 export type Check = [k: string, t: string, when: string];
 export interface Track { id: string; name: string; color: string; items: Step[] }
 export interface Milestone { id: string; t: string; ty: MsType; d: string; crit: string; dep: string[] }
-export interface Phase { n: string; d: string; c: string; qs: string[] }
+export interface Phase { n: string; d: string; c: string; qs: string[]; prioridade: string; itens: string[] }
 export interface Proto {
   title: string; color: string; steps: string[][];
   metodo: string; porque: string; recursos: string[]; sucesso: string; revisao: string;
@@ -95,9 +95,20 @@ export const MSTYPE: Record<MsType, { n: string; c: string }> ={cap:{n:'Capacida
 export const QUARTERS =['2026Q3','2026Q4','2027Q1','2027Q2','2027Q3','2027Q4','2028Q1','2028Q2','2028Q3','2028Q4','2029Q1','2029Q2'];
 export const QLABEL: Record<string, string> ={'2026Q3':'ago–set 26','2026Q4':'out–dez 26','2027Q1':'jan–mar 27','2027Q2':'abr–jun 27','2027Q3':'jul–set 27','2027Q4':'out–dez 27','2028Q1':'jan–mar 28','2028Q2':'abr–jun 28','2028Q3':'jul–set 28','2028Q4':'out–dez 28','2029Q1':'jan–mar 29','2029Q2':'abr–jun 29'};
 export const JPHASES: Phase[] =[
-{n:'Fase 1 — Fundação e credencial',d:'ago/2026 → jul/2027',c:'--chart-3',qs:['2026Q3','2026Q4','2027Q1','2027Q2']},
-{n:'Fase 2 — Prova e aplicação',d:'ago/2027 → jul/2028',c:'--chart-2',qs:['2027Q3','2027Q4','2028Q1','2028Q2']},
-{n:'Fase 3 — Saída e chegada',d:'ago/2028 → jun/2029',c:'--chart-4',qs:['2028Q3','2028Q4','2029Q1','2029Q2']}
+{n:'Fase 1 — Fundação e credencial',d:'ago/2026 → jul/2027',c:'--chart-3',qs:['2026Q3','2026Q4','2027Q1','2027Q2'],
+prioridade:'Consistência e destravar a fala. Nada mais importa se a rotina não pegar.',
+itens:['Rotina (almoço + noite) rodando de forma estável','Sono regular: ~23:00 / 06:30, cochilo curto',
+'Inglês: output diário + tutor até o 3º mês','CS50 em sprint · 1º projeto no ar · LinkedIn em inglês',
+'Poupança iniciada · reserva pessoal quitada · planilha de custos reais','Passaporte conferido']},
+{n:'Fase 2 — Prova e aplicação',d:'ago/2027 → jul/2028',c:'--chart-2',qs:['2027Q3','2027Q4','2028Q1','2028Q2'],
+prioridade:'Gerar as provas: uma nota, um certificado, aplicações enviadas, emprego novo.',
+itens:['IELTS feito com a banda exigida','3 escolas escolhidas e aplicações submetidas',
+'Carta de aceite até jun/2028','2º e 3º projeto no ar · DSA coberto',
+'Emprego novo assinado (ideal: remoto internacional)','SinPro faturando']},
+{n:'Fase 3 — Saída e chegada',d:'ago/2028 → jun/2029',c:'--chart-4',qs:['2028Q3','2028Q4','2029Q1','2029Q2'],
+prioridade:'Logística, não aprendizado. Começa quando o visto sai: se o intake escorregar, a fase inteira escorrega junto — e isso não é atraso.',
+itens:['Fundos comprovados · visto aprovado','Passagem comprada · casa e cachorras resolvidas',
+'Primeiro dia de aula','Explorar o país e viver a experiência','Iniciar a janela de 24 meses do Stamp 1G']}
 ];
 export const PROTO: Record<string, Proto> ={
 calistenia:{title:'Calistenia',color:'--chart-3',
@@ -216,9 +227,9 @@ export const DECISOES =[
 ['Modo reduzido é parte do sistema, não exceção','Semanas atípicas existem. Declarada com antecedência, a semana sai do denominador das estatísticas e aparece marcada — em vez de virar uma falha que quebra a motivação.'],
 ['Almoço: uma atividade, no máximo 3 dias','O almoço é sua única pausa real. Cada atividade tapa o buraco da noite daquele dia: escrita na terça (noite sem escrita), caminhada na quinta (dia sem calistenia), CS50 leve na sexta (noite de carreira). Seg e qua ficam livres — são as noites mais cheias.'],
 ['Marcos precisam de critério binário','"Ser fluente" não é marco. "Gravar 10 min falando sem travar" é: ou você tem a gravação ou não tem. Todo marco aqui depende só de você.'],
-['A data da Irlanda escorrega; o hábito não','Aceite até jun/2028, visto e passagem no meio do ano, aula em setembro, com o plano B de jan/2029 usando a mesma cadeia deslocada — a Fase 3 cobre as duas. Mas <b>o intake é alvo, não compromisso</b>: se o dinheiro não fechar, adiar é a saída combinada, e não uma falha a recuperar correndo. O que não escorrega é a ordem (aceite antes de fundos, fundos antes de visto) e o prazo de hábito — depósito do mês, bloco da noite. A diferença é de quem depende: a data depende de dinheiro e de escola, o hábito depende só de você, e é justamente por isso que ele não pode herdar a folga do outro.'],
+['A data da Irlanda escorrega; o hábito não','Aceite até jun/2028, visto e passagem no meio do ano, aula em setembro, e o intake seguinte, jan/2029, usa a mesma cadeia deslocada — a Fase 3 cobre qualquer um deles. Mas <b>o intake é alvo, não compromisso</b>: se o dinheiro não fechar, adiar é a saída combinada, e não uma falha a recuperar correndo. O que não escorrega é a ordem (aceite antes de fundos, fundos antes de visto) e o prazo de hábito — depósito do mês, bloco da noite. A diferença é de quem depende: a data depende de dinheiro e de escola, o hábito depende só de você, e é justamente por isso que ele não pode herdar a folga do outro.'],
 ];
-export const PLAN_CTX ='Abel, dev full-stack (eng. computação), Brasil. Objetivo: emigrar para a Irlanda via curso nível 9 (PgDip/mestrado), intake alvo setembro/2028 com plano B janeiro/2029, usando o Stamp 1G de 24 meses. A data é alvo e pode ser adiada sem isso contar como falha — o que não escorrega é a ordem da cadeia e o prazo dos hábitos. Rotina: janela do almoço (~20min, máx 3 dias/semana) e janela da noite 20:00-22:40 (chega 19h, dorme ~23h). Inglês: C2 na compreensão, gargalo é produção e vergonha de falar. CS50 pelo certificado. DSA para entrevistas. Poupança R$2.500/mês para o intercâmbio, mais R$1.200/mês para uma reserva pessoal de R$10.000 tratada como dívida (fecha ~mai/2027). As duas correm juntas: R$3.700/mês saindo, e em mês normal a escada do visto não atrasa. Em mês apertado a dívida tem prioridade e quem cede é o intercâmbio — e como a escada não tem folga (24 depósitos cheios batem os R$60.000 em cima da data de comprovar fundos), cada mês assim empurra o visto. SinPro roda no expediente. Mora acompanhado: não tem mais tarefa fixa de casa nem marmita, mas ganhou demanda de convívio e ainda não sabe quanto vai ajudar em casa. Tem cachorras, nunca sustentou hábitos antes — consistência é o maior risco. Tem modo reduzido para semanas atípicas e um marco de experiência obrigatório por trimestre.';
+export const PLAN_CTX ='Abel, dev full-stack (eng. computação), Brasil. Objetivo: emigrar para a Irlanda via curso nível 9 (PgDip/mestrado), intake alvo setembro/2028, ou o seguinte (jan/2029) se a conta não fechar, usando o Stamp 1G de 24 meses. A data é alvo e pode ser adiada sem isso contar como falha — o que não escorrega é a ordem da cadeia e o prazo dos hábitos. Rotina: janela do almoço (~20min, máx 3 dias/semana) e janela da noite 20:00-22:40 (chega 19h, dorme ~23h). Inglês: C2 na compreensão, gargalo é produção e vergonha de falar. CS50 pelo certificado. DSA para entrevistas. Poupança R$2.500/mês para o intercâmbio, mais R$1.200/mês para uma reserva pessoal de R$10.000 tratada como dívida (fecha ~mai/2027). As duas correm juntas: R$3.700/mês saindo, e em mês normal a escada do visto não atrasa. Em mês apertado a dívida tem prioridade e quem cede é o intercâmbio — e como a escada não tem folga (24 depósitos cheios batem os R$60.000 em cima da data de comprovar fundos), cada mês assim empurra o visto. SinPro roda no expediente. Mora acompanhado: não tem mais tarefa fixa de casa nem marmita, mas ganhou demanda de convívio e ainda não sabe quanto vai ajudar em casa. Tem cachorras, nunca sustentou hábitos antes — consistência é o maior risco. Tem modo reduzido para semanas atípicas e um marco de experiência obrigatório por trimestre.';
 export const CHECKS: Checklist[] =[
 {id:'docs',name:'Documentos — por fase',color:'--chart-1',items:[
 ['passport','Conferir validade do passaporte','AGORA — renove se vence antes de 2030'],['costs','Planilha de custos reais (curso, visto, vida)','set/2026'],

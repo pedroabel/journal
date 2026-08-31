@@ -131,7 +131,7 @@ export default function AppSidebar({
         <p className="text-muted-foreground px-2 font-mono text-[0.6875rem] leading-relaxed">
           Intake alvo: set/2028
           <br />
-          Plano B: jan/2029
+          adiar é previsto
         </p>
       </SidebarFooter>
     </Sidebar>

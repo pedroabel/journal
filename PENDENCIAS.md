@@ -46,6 +46,11 @@ aninhada no celular é onde eu apostaria num ajuste de espaçamento.
 
 ## Pela metade
 
+**8b. A capacidade de um ramo interno usa os blocos da trilha inteira.**
+`lib/ritmo.ts` chama `capacidadeSemanal(trilha.tipos)` mesmo para um módulo
+que responde por um tipo só. Agora que `Node.tipos` existe, dá para usar os
+tipos efetivos do ramo — `corpo.pull` está contando os 20min da caminhada.
+
 **9. O bloco `roadmap` não sabe onde você está.** O roadmap.sh ficou fora da
 árvore de propósito (ele já traz conteúdo e ordem). Mas o bloco continua sem
 registrar **qual** roadmap está em curso nem **onde parou** — que é a metade

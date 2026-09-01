@@ -24,7 +24,7 @@ export const INGLES: Trilha = {
       saber:['listou os 10 erros que mais repete','classificou cada um em gramática, léxico ou pronúncia','virou os 10 em cards'] },
   ]},
 
-  { id:'en.w', t:'Escrita', nota:'Quatro sessões por semana. É onde a banda 7 se ganha ou se perde.', filhos:[
+  { id:'en.w', t:'Escrita', tipos:['en_write'], nota:'Quatro sessões por semana. É onde a banda 7 se ganha ou se perde.', filhos:[
 
     { id:'en.w.frase', t:'Mecânica da frase', nota:'O nível onde o português vaza sem você perceber.', filhos:[
       { id:'en.w.frase.ordem', t:'Ordem de palavras e ênfase', min:20,
@@ -149,7 +149,7 @@ export const INGLES: Trilha = {
 
   { id:'en.s', t:'Fala', nota:'Sua barreira é vergonha, não conhecimento. A árvore trata as duas coisas separadamente.', filhos:[
 
-    { id:'en.s.pron', t:'Pronúncia', nota:'Não é sotaque — é inteligibilidade. Banda 7 exige ser entendido sem esforço.', filhos:[
+    { id:'en.s.pron', t:'Pronúncia', tipos:['en_speak'], nota:'Não é sotaque — é inteligibilidade. Banda 7 exige ser entendido sem esforço.', filhos:[
       { id:'en.s.pron.voc', t:'Vogais que o português não tem', min:20,
         nota:'/ɪ/ vs /iː/ (ship/sheep), /æ/ (cat), schwa /ə/.',
         saber:['produzir os 3 pares mínimos mais críticos','ouvir a própria gravação e identificar qual saiu errada'] },
@@ -170,7 +170,7 @@ export const INGLES: Trilha = {
         saber:['produzir 10 ligações naturais (an apple, want to → wanna)','usar contrações sem soar informal demais'] },
     ]},
 
-    { id:'en.s.flu', t:'Fluência', nota:'Falar sem travar. Treinado sozinho, sem plateia — que é o que remove a vergonha.', filhos:[
+    { id:'en.s.flu', t:'Fluência', tipos:['en_speak'], nota:'Falar sem travar. Treinado sozinho, sem plateia — que é o que remove a vergonha.', filhos:[
       { id:'en.s.flu.shad', t:'Shadowing: método e progressão', min:20,
         saber:['acompanhar 1min de áudio nativo com atraso de meia frase','fazer 3 passadas com foco diferente: som, ritmo, entonação'] },
       { id:'en.s.flu.mono', t:'Monólogo cronometrado', min:20, pre:['en.s.flu.shad'],
@@ -187,7 +187,7 @@ export const INGLES: Trilha = {
         saber:['sustentar ritmo constante por 3min','desacelerar de propósito num ponto importante'] },
     ]},
 
-    { id:'en.s.int', t:'Interação', nota:'Falar sozinho é metade. A outra metade só existe com outra pessoa — é o bloco do tutor.', filhos:[
+    { id:'en.s.int', t:'Interação', tipos:['en_tutor'], nota:'Falar sozinho é metade. A outra metade só existe com outra pessoa — é o bloco do tutor.', filhos:[
       { id:'en.s.int.turn', t:'Tomar e ceder turno', min:20,
         saber:['entrar numa fala sem ser rude, 3 formas diferentes','devolver a palavra explicitamente'] },
       { id:'en.s.int.dis', t:'Discordar educadamente', min:20, pre:['en.s.int.turn'],
@@ -202,7 +202,7 @@ export const INGLES: Trilha = {
         saber:['fazer uma proposta com justificativa em 30s','resumir o que foi decidido ao fim'] },
     ]},
 
-    { id:'en.s.ielts', t:'IELTS Speaking', nota:'Formato fixo. Decorado, ele deixa de consumir atenção.', filhos:[
+    { id:'en.s.ielts', t:'IELTS Speaking', tipos:['en_speak','en_tutor'], nota:'Formato fixo. Decorado, ele deixa de consumir atenção.', filhos:[
       { id:'en.s.ielts.p1', t:'Part 1 — perguntas pessoais', min:20, pre:['en.diag.desc'],
         saber:['responder em 2–3 frases, nunca monossílabo','estender com razão ou exemplo sem enrolar'] },
       { id:'en.s.ielts.p2', t:'Part 2 — cue card, 1min prep + 2min fala', min:40, pre:['en.s.ielts.p1'],
@@ -212,7 +212,7 @@ export const INGLES: Trilha = {
         saber:['sustentar posição com 2 razões e 1 exemplo','considerar o contra-argumento sem perder a posição'] },
     ]},
 
-    { id:'en.s.job', t:'Inglês de entrevista', nota:'Liga a trilha de inglês com a de carreira. As duas cobram a mesma coisa.', filhos:[
+    { id:'en.s.job', t:'Inglês de entrevista', tipos:['en_speak','en_tutor'], nota:'Liga a trilha de inglês com a de carreira. As duas cobram a mesma coisa.', filhos:[
       { id:'en.s.job.star', t:'STAR em inglês', min:20, pre:['en.s.flu.mono'],
         saber:['contar uma história de trabalho em 2min no formato STAR','sem pular o Resultado, que é o que todo mundo pula'] },
       { id:'en.s.job.code', t:'Explicar código e arquitetura em voz alta', min:20, pre:['en.w.lex.tec'],
@@ -227,7 +227,7 @@ export const INGLES: Trilha = {
     ]},
   ]},
 
-  { id:'en.ex', t:'Exame', nota:'A fase final: forma, cronômetro e logística.', filhos:[
+  { id:'en.ex', t:'Exame', tipos:['en_write','en_speak'], nota:'A fase final: forma, cronômetro e logística.', filhos:[
     { id:'en.ex.form', t:'Formato completo e gestão de tempo', min:40, pre:['en.w.gen.t1proc','en.s.ielts.p3'],
       saber:['saber a duração de cada seção de cabeça','ter um plano de minutagem para Task 1 e Task 2'] },
     { id:'en.ex.sim1', t:'Simulado completo nº1', min:60, pre:['en.ex.form'],

@@ -1,7 +1,7 @@
 'use client';
 
 import { blockMinutes } from '@/lib/derive';
-import { caminho, folhas, progresso, proximas, trilhaParaBloco } from '@/lib/curriculum';
+import { caminho, folhasDoTipo, proximas, trilhaParaBloco } from '@/lib/curriculum';
 import type { JournalState } from '@/lib/state';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
@@ -31,9 +31,14 @@ export default function StudyNext({
   const trilha = trilhaParaBloco(tipo);
   if (!trilha) return null;
 
+  // Filtrado pelo tipo do bloco: a trilha de inglês atende escrita, fala e
+  // tutor, e a próxima folha de escrita não é o que fazer num bloco de fala.
   const orcamento = blockMinutes(dur) || 20;
-  const proxs = proximas(trilha, state.units, orcamento);
-  const pr = progresso(trilha, state.units);
+  const proxs = proximas(trilha, state.units, orcamento, tipo);
+  const doTipo = folhasDoTipo(trilha, tipo);
+  const feitas = doTipo.filter((f) => state.units[f.id]).length;
+  const pr = { feitas, total: doTipo.length, pct: doTipo.length ? Math.round((feitas / doTipo.length) * 100) : 0 };
+  if (!doTipo.length) return null;
 
   return (
     <div className="bg-muted/60 mt-2 space-y-2.5 rounded-md px-3 py-2.5">

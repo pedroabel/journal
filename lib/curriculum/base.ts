@@ -12,7 +12,7 @@ export const BASE: Trilha = {
   nota: 'Poucas folhas, feitas uma vez. Depois é hábito, não estudo.',
   filhos: [
 
-  { id:'base.sono', t:'Sono', nota:'A raiz da cadeia de dependências do plano.', filhos:[
+  { id:'base.sono', t:'Sono', tipos:['sono'], nota:'A raiz da cadeia de dependências do plano.', filhos:[
     { id:'base.sono.ciclo', t:'Ritmo circadiano e por que o horário fixo importa', min:20,
       saber:['por que acordar sempre no mesmo horário regula mais que dormir cedo','o efeito da luz da manhã'] },
     { id:'base.sono.hig', t:'Higiene de sono aplicada à sua noite', min:20, pre:['base.sono.ciclo'],
@@ -27,7 +27,7 @@ export const BASE: Trilha = {
       saber:['por que dormir 12h no sábado não zera a semana'] },
   ]},
 
-  { id:'base.foco', t:'Foco e antiprocrastinação', nota:'O plano já lista as táticas. Aqui elas viram prática, uma vez cada.', filhos:[
+  { id:'base.foco', t:'Foco e antiprocrastinação', tipos:['review'], nota:'O plano já lista as táticas. Aqui elas viram prática, uma vez cada.', filhos:[
     { id:'base.foco.impl', t:'Intenção de implementação', min:20,
       saber:['escrever "depois de X, eu faço Y no lugar Z" para os 3 blocos que você mais pula'] },
     { id:'base.foco.pilha', t:'Empilhamento de hábitos', min:20, pre:['base.foco.impl'],
@@ -41,7 +41,7 @@ export const BASE: Trilha = {
       saber:['versão de 5min escrita para cada tipo de bloco'] },
   ]},
 
-  { id:'base.rev', t:'Revisão', nota:'Sistema sem revisão vira documento esquecido.', filhos:[
+  { id:'base.rev', t:'Revisão', tipos:['review'], nota:'Sistema sem revisão vira documento esquecido.', filhos:[
     { id:'base.rev.sem', t:'A revisão semanal de domingo', min:20,
       saber:['20min: feito, travado, por quê','trilhas e marcos conferidos','semana seguinte ajustada e 1 vitória reconhecida'] },
     { id:'base.rev.mes', t:'O fechamento do mês', min:20, pre:['base.rev.sem'],
@@ -51,7 +51,7 @@ export const BASE: Trilha = {
       saber:['datas de marco revistas contra a realidade','um marco de experiência do trimestre cumprido'] },
   ]},
 
-  { id:'base.din', t:'Dinheiro do dia a dia', filhos:[
+  { id:'base.din', t:'Dinheiro do dia a dia', tipos:['review'], filhos:[
     { id:'base.din.orc', t:'Orçamento que sobrevive ao mês', min:20,
       saber:['gasto fixo, variável e a poupança automática separados'] },
     { id:'base.din.res', t:'A reserva pessoal como dívida', min:20, pre:['base.din.orc'],
@@ -64,7 +64,7 @@ export const BASE: Trilha = {
       saber:['aporte feito e conferido','nada de renda variável para dinheiro com data marcada'] },
   ]},
 
-  { id:'base.ler', t:'Leitura', nota:'Camada de prazer, sem cobrança. Existe para desligar e proteger o sono.', filhos:[
+  { id:'base.ler', t:'Leitura', tipos:['leitura'], nota:'Camada de prazer, sem cobrança. Existe para desligar e proteger o sono.', filhos:[
     { id:'base.ler.hab', t:'Leitura sem meta de páginas', min:20,
       saber:['15–20min antes de dormir, longe de tela brilhante','abandonar livro chato sem culpa'] },
     { id:'base.ler.en', t:'Migrar a leitura para o inglês', min:20, pre:['base.ler.hab'],

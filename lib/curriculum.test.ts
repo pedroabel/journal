@@ -15,7 +15,8 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import {
-  TRILHAS, contar, ehFolha, folhas, nos, porId, progresso, proxima, proximas, trilhaParaBloco,
+  TRILHAS, contar, ehFolha, folhas, folhasDoTipo, nos, porId, progresso, proxima, proximas,
+  tiposDe, trilhaParaBloco,
 } from './curriculum/index';
 
 const TODOS = TRILHAS.flatMap(nos);
@@ -120,6 +121,56 @@ describe('ligação com a rotina', () => {
       for (const tipo of t.tipos) {
         assert.equal(trilhaParaBloco(tipo)?.id, t.id, `tipo ${tipo} não resolve`);
       }
+    }
+  });
+
+  it('todo tipo de bloco alcança pelo menos uma folha', () => {
+    // A regressão que isto pega: afinar `tipos` num ramo interno e deixar um
+    // tipo sem nenhuma folha — o bloco abriria dizendo "trilha concluída" no
+    // primeiro dia, sem erro nenhum na tela.
+    for (const t of TRILHAS) {
+      for (const tipo of t.tipos) {
+        assert.ok(folhasDoTipo(t, tipo).length > 0, `tipo sem folha: ${t.id}/${tipo}`);
+      }
+    }
+  });
+
+  it('cada folha responde por pelo menos um tipo da sua trilha', () => {
+    for (const t of TRILHAS) {
+      if (!t.tipos.length) continue; // Irlanda não tem bloco na semana
+      for (const f of folhas(t)) {
+        const seus = tiposDe(t, f.id);
+        assert.ok(
+          seus.some((x) => t.tipos.includes(x)),
+          `folha inalcançável por qualquer bloco: ${f.id}`
+        );
+      }
+    }
+  });
+
+  it('tipos diferentes da mesma trilha veem folhas diferentes', () => {
+    // Escrita e fala são o mesmo currículo e não o mesmo tema.
+    const en = TRILHAS.find((t) => t.id === 'en')!;
+    const escrita = proxima(en, {}, 'en_write');
+    const fala = proxima(en, {}, 'en_speak');
+    assert.ok(escrita && fala);
+    assert.notEqual(
+      folhasDoTipo(en, 'en_write').length,
+      folhasDoTipo(en, 'en_speak').length
+    );
+  });
+
+  it('a caminhada não puxa treino de calistenia', () => {
+    const corpo = TRILHAS.find((t) => t.id === 'corpo')!;
+    const cam = folhasDoTipo(corpo, 'caminhada');
+    assert.equal(cam.length, 1, 'a caminhada tem uma folha só — ela é pausa');
+    assert.equal(cam[0].id, 'corpo.per.cam');
+  });
+
+  it('o bloco leve de CS50 só recebe folha que cabe nele', () => {
+    const cs50 = TRILHAS.find((t) => t.id === 'cs50')!;
+    for (const f of folhasDoTipo(cs50, 'cs50_light')) {
+      assert.ok(f.min! <= 20, `não cabe no almoço de sexta: ${f.id} (${f.min}min)`);
     }
   });
 

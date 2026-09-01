@@ -39,13 +39,24 @@ export interface Node {
    * significaria nada.
    */
   marco?: string;
+  /**
+   * Tipos de bloco da `WEEK` que estudam ESTE ramo. Herdado pelos filhos que
+   * não declaram o seu.
+   *
+   * Existe porque uma trilha atende blocos diferentes com conteúdos
+   * diferentes: em inglês, a escrita de segunda e a fala de terça são o mesmo
+   * currículo e não são o mesmo tema. Sem esta divisão, o bloco de fala puxava
+   * a próxima folha de escrita — o site mandava fazer a coisa errada na hora
+   * certa, que é pior do que não mandar nada.
+   */
+  tipos?: string[];
   /** Subtemas. Ausente na folha. */
   filhos?: Node[];
 }
 
 /** Uma trilha inteira, com o tipo de bloco da rotina que a consome. */
 export interface Trilha extends Node {
-  /** Tipos de bloco em `WEEK` que estudam esta trilha (ex.: ['dsa']). */
+  /** Todos os tipos de bloco que a trilha atende. Ramos internos afinam. */
   tipos: string[];
   /** Token de cor, como em lib/plan.ts — nome, nunca valor. */
   cor: string;
@@ -76,6 +87,41 @@ export function ehFolha(n: Node): boolean {
 export function folhas(n: Node): Node[] {
   if (ehFolha(n)) return [n];
   return n.filhos!.flatMap(folhas);
+}
+
+/**
+ * Os tipos de bloco que alcançam um nó: o `tipos` dele, ou o do ancestral mais
+ * próximo que declarou um. Declarar afina; não declarar herda.
+ */
+export function tiposDe(raiz: Node, id: string): string[] {
+  const caminho: Node[] = [];
+  const achar = (n: Node): boolean => {
+    caminho.push(n);
+    if (n.id === id) return true;
+    for (const f of n.filhos ?? []) if (achar(f)) return true;
+    caminho.pop();
+    return false;
+  };
+  if (!achar(raiz)) return [];
+  for (let i = caminho.length - 1; i >= 0; i--) {
+    if (caminho[i].tipos?.length) return caminho[i].tipos!;
+  }
+  return [];
+}
+
+/** As folhas que um tipo de bloco estuda, na ordem da árvore. */
+export function folhasDoTipo(raiz: Node, tipo: string): Node[] {
+  const out: Node[] = [];
+  const desce = (n: Node, herdado: string[]) => {
+    const meus = n.tipos?.length ? n.tipos : herdado;
+    if (ehFolha(n)) {
+      if (meus.includes(tipo)) out.push(n);
+      return;
+    }
+    for (const f of n.filhos!) desce(f, meus);
+  };
+  desce(raiz, raiz.tipos ?? []);
+  return out;
 }
 
 /** Todos os nós, incluindo os internos. */
@@ -109,10 +155,15 @@ export function travadaPor(n: Node, feito: Record<string, true>): string[] {
  * 60 ou duas de 30. Pula o que está travado por pré-requisito, nunca pula por
  * dificuldade — a ordem da árvore é a ordem de estudo.
  */
-export function proximas(raiz: Node, feito: Record<string, true>, minutos: number): Node[] {
+export function proximas(
+  raiz: Node,
+  feito: Record<string, true>,
+  minutos: number,
+  tipo?: string,
+): Node[] {
   const out: Node[] = [];
   let resta = minutos;
-  for (const f of folhas(raiz)) {
+  for (const f of tipo ? folhasDoTipo(raiz, tipo) : folhas(raiz)) {
     if (feito[f.id]) continue;
     if (travadaPor(f, feito).length) continue;
     const custo = f.min ?? 0;
@@ -128,9 +179,9 @@ export function proximas(raiz: Node, feito: Record<string, true>, minutos: numbe
   return out;
 }
 
-/** A única próxima folha — o "você está aqui" da trilha. */
-export function proxima(raiz: Node, feito: Record<string, true>): Node | null {
-  return proximas(raiz, feito, Number.MAX_SAFE_INTEGER).slice(0, 1)[0] ?? null;
+/** A única próxima folha — o "você está aqui" da trilha, ou de um bloco. */
+export function proxima(raiz: Node, feito: Record<string, true>, tipo?: string): Node | null {
+  return proximas(raiz, feito, Number.MAX_SAFE_INTEGER, tipo)[0] ?? null;
 }
 
 /** O caminho da raiz até um nó, para mostrar "Algoritmos › Ordenação › Merge sort". */

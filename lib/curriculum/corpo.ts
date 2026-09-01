@@ -12,7 +12,7 @@ export const CORPO: Trilha = {
   nota: 'Progressão, não repetição. Se a semana não ficou mais difícil que a anterior, não houve treino.',
   filhos: [
 
-  { id:'corpo.fund', t:'Fundamentos', nota:'Feitos uma vez, evitam a lesão que para o plano por 6 semanas.', filhos:[
+  { id:'corpo.fund', t:'Fundamentos', tipos:['calistenia'], nota:'Feitos uma vez, evitam a lesão que para o plano por 6 semanas.', filhos:[
     { id:'corpo.fund.mob', t:'Mobilidade de ombro, quadril e punho', min:25,
       nota:'Punho é o que mais para iniciante de calistenia. Ombro é o que permite a barra.',
       saber:['rotina de 5min decorada','fazer antes de todo treino, sem consultar'] },
@@ -25,7 +25,7 @@ export const CORPO: Trilha = {
       saber:['gravar uma série e avaliar a própria forma','preferir 5 boas a 12 ruins'] },
   ]},
 
-  { id:'corpo.push', t:'Empurrar — progressão', nota:'Sobe de nível quando fizer 3x8 com forma boa.', filhos:[
+  { id:'corpo.push', t:'Empurrar — progressão', tipos:['calistenia'], nota:'Sobe de nível quando fizer 3x8 com forma boa.', filhos:[
     { id:'corpo.push.1', t:'Flexão na parede e inclinada', min:25, pre:['corpo.fund.forma'],
       saber:['3x12 inclinada, corpo em linha'] },
     { id:'corpo.push.2', t:'Flexão com joelhos e negativa', min:25, pre:['corpo.push.1'],
@@ -40,7 +40,7 @@ export const CORPO: Trilha = {
       saber:['3x8 com ombro estável e amplitude completa'] },
   ]},
 
-  { id:'corpo.pull', t:'Puxar — a rota até a barra fixa', marco:'pullup', nota:'Marco `pullup`, alvo jul/2027. Esta é a coluna vertebral do treino.', filhos:[
+  { id:'corpo.pull', t:'Puxar — a rota até a barra fixa', marco:'pullup', tipos:['calistenia'], nota:'Marco `pullup`, alvo jul/2027. Esta é a coluna vertebral do treino.', filhos:[
     { id:'corpo.pull.1', t:'Pendurar (dead hang)', min:25, pre:['corpo.fund.esc'],
       saber:['30s pendurado, ombros ativos'] },
     { id:'corpo.pull.2', t:'Remada australiana (barra baixa)', min:25, pre:['corpo.pull.1'],
@@ -59,7 +59,7 @@ export const CORPO: Trilha = {
       saber:['3x5 com pausa completa entre séries'] },
   ]},
 
-  { id:'corpo.leg', t:'Pernas', filhos:[
+  { id:'corpo.leg', t:'Pernas', tipos:['calistenia'], filhos:[
     { id:'corpo.leg.1', t:'Agachamento livre e amplitude', min:25, pre:['corpo.fund.mob'],
       saber:['3x15 com calcanhar no chão e profundidade completa'] },
     { id:'corpo.leg.2', t:'Afundo e agachamento búlgaro', min:25, pre:['corpo.leg.1'],
@@ -71,7 +71,7 @@ export const CORPO: Trilha = {
       saber:['3x12 ponte unilateral'] },
   ]},
 
-  { id:'corpo.core', t:'Core', filhos:[
+  { id:'corpo.core', t:'Core', tipos:['calistenia'], filhos:[
     { id:'corpo.core.1', t:'Prancha e prancha lateral', min:25, pre:['corpo.fund.tens'],
       saber:['60s frontal e 30s de cada lado, sem quadril caído'] },
     { id:'corpo.core.2', t:'Hollow hold e arco', min:25, pre:['corpo.core.1'],
@@ -82,7 +82,7 @@ export const CORPO: Trilha = {
       saber:['3x10s com pernas estendidas'] },
   ]},
 
-  { id:'corpo.per', t:'Método e recuperação', nota:'O que faz a progressão continuar em vez de estagnar no mês 4.', filhos:[
+  { id:'corpo.per', t:'Método e recuperação', tipos:['calistenia'], nota:'O que faz a progressão continuar em vez de estagnar no mês 4.', filhos:[
     { id:'corpo.per.sob', t:'Sobrecarga progressiva na calistenia', min:25,
       nota:'Sem aumentar peso, você aumenta: repetição, tempo sob tensão, amplitude, alavanca.',
       saber:['as 4 variáveis de progressão','saber qual usar quando a repetição travar'] },
@@ -92,7 +92,7 @@ export const CORPO: Trilha = {
       saber:['reconhecer platô real vs semana ruim','reduzir volume por 1 semana sem culpa'] },
     { id:'corpo.per.dor', t:'Dor: normal, alerta e parada', min:25, pre:['corpo.fund.forma'],
       saber:['distinguir dor muscular tardia de dor articular','regra clara de quando não treinar'] },
-    { id:'corpo.per.cam', t:'Caminhada como descanso ativo', min:20,
+    { id:'corpo.per.cam', t:'Caminhada como descanso ativo', min:20, tipos:['caminhada'],
       nota:'Almoço de quinta, dia sem calistenia. É pausa, não treino — sem fone de estudo.',
       saber:['15–20min depois de comer','sem transformar em mais um bloco de produtividade'] },
     { id:'corpo.per.nut', t:'Proteína e refeição em torno do treino', min:25, pre:['corpo.per.reg'],

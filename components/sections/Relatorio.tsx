@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { Check, Copy, Sparkles } from 'lucide-react';
 
+import { copiar } from '@/lib/clipboard';
 import { analysisPrompt, buildReport } from '@/lib/report';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -12,25 +13,6 @@ import {
 } from '@/components/ui/select';
 import { Section } from '../Section';
 import type { Journal } from '../useJournal';
-
-/** Copia texto sem depender de permissão de clipboard moderna. */
-async function copy(text: string): Promise<boolean> {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    let ok = false;
-    try { ok = document.execCommand('copy'); } catch { ok = false; }
-    document.body.removeChild(ta);
-    return ok;
-  }
-}
 
 const QUANDO: [string, string][] = [
   ['Uma vez por mês', 'o ritmo padrão.'],
@@ -48,14 +30,14 @@ export default function Relatorio({ journal }: { journal: Journal }) {
   const report = useMemo(() => buildReport(state, range), [state, range]);
 
   async function onCopyReport() {
-    if (await copy(report)) {
+    if (await copiar(report)) {
       setCopied('report');
       setTimeout(() => setCopied('none'), 2000);
     }
   }
 
   async function onPreparePrompt() {
-    if (await copy(analysisPrompt(report))) {
+    if (await copiar(analysisPrompt(report))) {
       setCopied('prompt');
       setTimeout(() => setCopied('none'), 2000);
       setNote(

@@ -69,12 +69,21 @@ texto; nada mede o volume (minutos falados, palavras escritas, séries feitas).
 da árvore, mas a seção Trilhas e o relatório ainda leem `TRACKS`
 (`lib/plan.ts`). Duas fontes para a mesma pergunta — decidir qual fica.
 
+**12b. A sessão de inglês sai do site e não volta.** O botão "Copiar prompt da
+sessão" (`lib/prompt.ts`) leva tema, critério e protocolo para a conversa — e
+o que a conversa produz (as correções, os cards, o veredito sobre o "sei isso
+quando") fica lá. Volta só a marcação da caixa, que é um booleano. O caminho de
+volta é colar o resultado, e não existe campo para isso.
+
 ## Decidido e não construído
 
 **13. Modo sessão.** Os protocolos em `PROTO` já têm os passos cronometrados
 (5min recall, 40min estudo, 5min fecha) e ninguém os executa: é texto parado.
 Vira tela cheia com cronômetro, marca o bloco sozinho no fim e passa a medir
 **quanto tempo você estuda de verdade** — não quantas vezes clicou numa caixa.
+O prompt de inglês já leva esses passos para fora, e quem cronometra passou a
+ser a conversa — o que cobre os blocos de inglês e deixa os outros como
+estavam.
 
 **14. Fila de revisão 3/7/21.** O protocolo do DSA manda registrar numa
 planilha que não existe e não vai ser mantida. O "o que ficou confuso" do fim

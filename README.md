@@ -25,6 +25,8 @@ lib/
   db.ts / sql.ts        o progresso no Postgres (Neon)
   auth.ts / oauth.ts    sessão JWT e o handshake com o Google
   report.ts             relatório em texto e prompt de análise
+  prompt.ts             o prompt da sessão de hoje — só nos blocos de inglês
+  clipboard.ts          copiar texto, com o degrau para quando a API moderna falha
   utils.ts              `cn()` — junção de classes do shadcn/ui
 components/
   ui/                   componentes do shadcn/ui (não editar à mão)
@@ -61,6 +63,20 @@ aulas saiu. Link apodrece em três anos; taxonomia não.
 
 `Trilha.tipos` casa com o `t` dos blocos em `WEEK`: é o que faz um bloco da
 rotina resolver sozinho qual tema estudar hoje, e quanto dele cabe na sessão.
+
+Do tema sai a sessão. Nos blocos de inglês, `lib/prompt.ts` empacota o que a
+tela já está mostrando — o tema, o critério de conclusão e os passos do
+`PROTO` — num prompt para colar no Claude e fazer a sessão guiada. Como o
+relatório, ele só monta texto: o site não chama IA sozinho, então não há chave
+para vazar nem custo surpresa, e dá para ler o prompt antes de usá-lo.
+
+**Só inglês, e isso é decisão.** Ali o gargalo é produção e correção, que é
+exatamente o que um modelo faz bem. Em calistenia e leitura não há o que pedir.
+Em CS50, roadmap e DSA o próprio protocolo manda usar IA como copiloto e nunca
+como gerador — um botão que entrega o prompt pronto empurraria para o lado
+errado, e o CS50 ainda tem regra de honestidade acadêmica. Se um dia existir
+lá, terá que ser um prompt que se **recusa** a dar código: outro texto, não
+este com outro tema dentro.
 
 `lib/ritmo.ts` cruza as duas metades — quantas horas faltam num ramo contra
 quando vence o marco que ele alimenta (`Node.marco`). Devolve três velocidades
@@ -107,7 +123,7 @@ Três peças evitam que telas de mesma finalidade divirjam:
 ```bash
 npm install
 npm run dev         # http://localhost:3000
-npm test            # fusão, migração de chaves, a árvore e o ritmo
+npm test            # fusão, migração de chaves, a árvore, o ritmo e o prompt
 ```
 
 O `.env.local` precisa de:

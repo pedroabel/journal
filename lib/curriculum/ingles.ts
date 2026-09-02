@@ -14,8 +14,8 @@ export const INGLES: Trilha = {
 
   { id:'en.diag', t:'Diagnóstico e critério', nota:'Antes de treinar, saber onde você está e como isso é medido.', filhos:[
     { id:'en.diag.base', t:'Linha de base gravada e escrita', min:30,
-      nota:'A referência contra a qual você vai comparar daqui a um ano.',
-      saber:['gravou 5min falando sobre um tema livre, sem editar','escreveu 250 palavras cronometradas em 40min','arquivou os dois com a data'] },
+      nota:'A referência contra a qual você vai comparar daqui a um ano. Leitura em voz alta, e não fala livre: a linha de base precisa ser gravada, não adiada — e ler já registra som, ritmo e acento, que é onde a comparação de daqui a um ano vai aparecer.',
+      saber:['gravou 4–5min lendo um texto em voz alta, sem ensaiar antes','escreveu 250 palavras cronometradas em 40min','arquivou os dois com a data'] },
     { id:'en.diag.desc', t:'Descritores de banda do IELTS', min:40,
       nota:'Os quatro critérios que decidem sua nota. Sem isso você treina no escuro.',
       saber:['citar os 4 critérios de Writing e de Speaking','dizer o que separa banda 6 de banda 7 em cada um','apontar em qual critério a SUA linha de base cai'] },
@@ -170,10 +170,17 @@ export const INGLES: Trilha = {
         saber:['produzir 10 ligações naturais (an apple, want to → wanna)','usar contrações sem soar informal demais'] },
     ]},
 
-    { id:'en.s.flu', t:'Fluência', tipos:['en_speak'], nota:'Falar sem travar. Treinado sozinho, sem plateia — que é o que remove a vergonha.', filhos:[
-      { id:'en.s.flu.shad', t:'Shadowing: método e progressão', min:20,
+    { id:'en.s.flu', t:'Fluência', tipos:['en_speak'], nota:'Falar sem travar. Treinado sozinho, sem plateia — e em escada: ler, imitar, recontar, e só então falar livre.', filhos:[
+      { id:'en.s.flu.read', t:'Leitura em voz alta gravada', min:20,
+        nota:'O primeiro degrau, e o único que não exige inventar nada: o texto já está pronto, e a atenção inteira sobra para o som.',
+        saber:['ler 3min gravando, sem parar para recomeçar','ouvir e apontar 2 sons que saíram errados','reler a mesma passagem uma semana depois e ouvir a diferença'] },
+      { id:'en.s.flu.shad', t:'Shadowing: método e progressão', min:20, pre:['en.s.flu.read'],
         saber:['acompanhar 1min de áudio nativo com atraso de meia frase','fazer 3 passadas com foco diferente: som, ritmo, entonação'] },
-      { id:'en.s.flu.mono', t:'Monólogo cronometrado', min:20, pre:['en.s.flu.shad'],
+      { id:'en.s.flu.ret', t:'Recontar o que acabou de ler', min:20, pre:['en.s.flu.shad'],
+        nota:'A ponte entre ler e falar: as ideias vêm prontas do texto e só as palavras são suas. Tira metade do problema, que é ter o que dizer.',
+        saber:['resumir em 2min um texto que acabou de ler, sem olhar','parafrasear, sem devolver nenhuma frase decorada do original'] },
+      { id:'en.s.flu.mono', t:'Monólogo cronometrado', min:20, pre:['en.s.flu.ret'],
+        nota:'A linha de base de fala livre — a que a leitura não mede. É aqui que ela é gravada pela primeira vez.',
         saber:['falar 5min sobre tema sorteado sem trocar para português','ouvir a gravação e anotar 2 pontos'] },
       { id:'en.s.flu.pause', t:'Pausa e preenchimento natural', min:20, pre:['en.s.flu.mono'],
         nota:'Silêncio pensado soa melhor que "ééé". Nativos usam well, I mean, actually.',

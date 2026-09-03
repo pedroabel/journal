@@ -1,7 +1,7 @@
 'use client';
 
 import { DAYS, REDUCED_BLOCKS, WEEK } from '@/lib/plan';
-import { isReduced, today } from '@/lib/derive';
+import { addDays, ds, isReduced, parseD, today, weekKey } from '@/lib/derive';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -19,10 +19,21 @@ export default function Hoje({
   onSelDay: (n: number) => void;
 }) {
   const { state, toggleTask, toggleFlag } = journal;
-  const realDay = new Date().getDay();
-  const isToday = selDay === realDay;
-  const dstr = today();
-  const red = isReduced(state, new Date()) && isToday;
+  const now = new Date();
+  const realDay = now.getDay();
+  const todayStr = today();
+
+  // Cada aba é um dia REAL da semana corrente (segunda a domingo), não só um
+  // molde de rotina. É isso que permite marcar o que ficou para trás: quem
+  // esqueceu de marcar ontem marca ontem, na data de ontem. Só o futuro
+  // continua sendo pré-visualização — não há o que registrar lá ainda.
+  const mon = parseD(weekKey(now));
+  const selDate = addDays(mon, (selDay + 6) % 7);
+  const dstr = ds(selDate);
+  const isToday = dstr === todayStr;
+  const isFuture = dstr > todayStr;
+  const canMark = !isFuture;
+  const red = isReduced(state, selDate);
 
   const day = WEEK[selDay];
   const dayName = DAYS.find((x) => x.n === selDay)!.f;
@@ -31,7 +42,7 @@ export default function Hoje({
 
   const total = blocks.length + (lunch ? 1 : 0);
   let doneCount = 0;
-  if (isToday) {
+  if (canMark) {
     for (const b of blocks) if (state.day[dstr]?.['n:' + b.t]) doneCount++;
     if (lunch && state.day[dstr]?.['l:' + lunch.t]) doneCount++;
   }
@@ -60,6 +71,9 @@ export default function Hoje({
           <h3 className="text-lg font-semibold tracking-tight capitalize">
             {isToday ? 'Hoje · ' : ''}
             {dayName}
+            <span className="text-muted-foreground ml-2 font-mono text-xs font-normal normal-case tabular-nums">
+              {selDate.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' })}
+            </span>
           </h3>
           {red && (
             <Badge variant="warning" className="rounded-full">
@@ -67,11 +81,11 @@ export default function Hoje({
             </Badge>
           )}
           <span className="text-muted-foreground ml-auto font-mono text-xs">
-            {isToday ? `${doneCount}/${total} feitos` : 'pré-visualização'}
+            {canMark ? `${doneCount}/${total} feitos` : 'pré-visualização'}
           </span>
         </div>
 
-        {isToday && (
+        {canMark && (
           <Progress
             value={total ? (doneCount / total) * 100 : 0}
             aria-label={`${doneCount} de ${total} blocos feitos`}
@@ -93,7 +107,7 @@ export default function Hoje({
           <Task
             b={lunch}
             win="l"
-            isToday={isToday}
+            canMark={canMark}
             dstr={dstr}
             state={state}
             onToggle={toggleTask}
@@ -125,7 +139,7 @@ export default function Hoje({
             key={i}
             b={b}
             win="n"
-            isToday={isToday}
+            canMark={canMark}
             dstr={dstr}
             state={state}
             onToggle={toggleTask}

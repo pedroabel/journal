@@ -10,18 +10,19 @@ import StudyNext from './StudyNext';
 import { tone } from './tone';
 
 /**
- * Um bloco da rotina. Só o dia de hoje é marcável — os outros são
+ * Um bloco da rotina. Hoje e os dias que já passaram são marcáveis — o que
+ * ficou para trás pode ser registrado na data certa. Dias futuros são
  * pré-visualização, com a caixa desabilitada e sem interação.
  *
  * O bloco não diz só QUANDO e COMO: `StudyNext` resolve O QUE, puxando da
  * árvore de temas o próximo assunto que cabe nesta sessão.
  */
 export default function Task({
-  b, win, isToday, dstr, state, onToggle, onToggleUnit,
+  b, win, canMark, dstr, state, onToggle, onToggleUnit,
 }: {
   b: Block;
   win: 'l' | 'n';
-  isToday: boolean;
+  canMark: boolean;
   dstr: string;
   state: JournalState;
   onToggle: (dstr: string, key: string) => void;
@@ -29,7 +30,7 @@ export default function Task({
 }) {
   const p = PROTO[b.t];
   const key = `${win}:${b.t}`;
-  const dn = isToday && !!state.day[dstr]?.[key];
+  const dn = !!state.day[dstr]?.[key];
 
   return (
     <div
@@ -45,8 +46,8 @@ export default function Task({
         <Checkbox
           className="mt-0.5 size-5 rounded-md"
           checked={dn}
-          disabled={!isToday}
-          aria-hidden={!isToday}
+          disabled={!canMark}
+          aria-hidden={!canMark}
           aria-label={(b.label || p.title) + (dn ? ' — feito' : '')}
           onCheckedChange={() => onToggle(dstr, key)}
         />
@@ -72,7 +73,7 @@ export default function Task({
             tipo={b.t}
             dur={b.d}
             state={state}
-            podeMarcar={isToday}
+            podeMarcar={canMark}
             onToggle={onToggleUnit}
           />
         </div>
